@@ -1,44 +1,54 @@
 <!doctype html>
 <html>
-
 <head>
-  <title>Generic Games</title>
-  <link href="css/frame.css" media="screen" rel="stylesheet" type="text/css" />
-</head>
-
+  <title>Team Loading</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"></head>
+<link rel="stylesheet" href="css/frame.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <body>
-<div class="navbar">
-  <div>
-    <img src="img/logo1.png" alt="Team Logo" style = "float:left" width = "126.6px" height = "87.5px;" />
-  </div>
-  <div class = "generic">
-    <a href="index.html" > Generic Games </a>
-  </div>
-
-  <div class="dropdown" style="float:right;">
-    <button class="dropbtn">Assessment Two </button>
-    <div class="dropdown-content">
-      <a href="changereport.html"> Change Report </a>
-      <a href="implementation2.html"> Implementation</a>
-      <a href="testing.html"> Testing </a>
-      <a href="continuousint.html">Continuous Integration</a>
+<nav class="navbar navbar-expand-lg navbar navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">
+<img src="img/logo1.png" alt="Team Logo" width="87.5px" height="87.5px;" />
+      Team Loading
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Assessment One
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+            <a class="dropdown-item" href="planning.html">Planning</a>
+            <a class="dropdown-item" href="requirements.html">Requirements</a>
+            <a class="dropdown-item" href="risk.html">Risk</a>
+            <a class="dropdown-item" href="architecture.html">Architecture</a>
+            <a class="dropdown-item" href="implementation.html">Implementation</a>
+            <a class="dropdown-item" href="snapshots.html">Snapshots</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Assessment Two
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+            <a class="dropdown-item" href="changereport.html">Change Report</a>
+            <a class="dropdown-item" href="implementation2.html">Implementation</a>
+            <a class="dropdown-item" href="testing.html">Testing</a>
+            <a class="dropdown-item" href="continuousint.html">Continuous Integration</a>
+          </div>
+        </li>
+      </ul>
     </div>
-  </div> 
-
-
-  <div class="dropdown" style="float:right;">
-    <button class="dropbtn">Assessment One </button>
-    <div class="dropdown-content">
-      <a href="planning.html"> Planning</a>
-      <a href="requirements.html"> Requirements </a>
-      <a href="risk.html"> Risk </a>
-      <a href="architecture.html">Architecture</a>
-      <a href="implementation.html">Implementation</a>
-      <a href="snapshots.html">Snapshots</a>
-    </div>
-  </div> 
-</div>
-
+  </div>
+</nav>
 </div>
   </div>
   <div class="content-container">
@@ -52,13 +62,13 @@
             <img src="img/Plan1.jpeg" alt="gantt" style="width:50%">
             <p class="text">
             This was our first gantt chart. It started in the second week of the project and ended once we had our client meeting.
-            We felt this was a good time frame as this was our first big milestone, and we had to complete user requirements 
+            We felt this was a good time frame as this was our first big milestone, and we had to complete user requirements
             and questions beforehand. This plan was achievable and we most of the deliverables seen. We did not start the risk register
-            as we had not thought much about. 
+            as we had not thought much about.
             However, looking back on our process, it would have been beneficial to create this plan earlier as we made it mid-week.
           </div>
         </div>
-            
+
 
         <div class="flex-row">
           <div class="flex-item flex-column">
@@ -67,12 +77,12 @@
             <img src="img/plan2.png" alt="gantt" style="width:100%">
             <p class="text">
             This week we decided it was more beneficial to make a full representation of our full project in our gantt chart.
-            This plan is likely to change as we are unsure of times and completion dates. We have included some dependencies, 
+            This plan is likely to change as we are unsure of times and completion dates. We have included some dependencies,
             i.e. we cannot start the implementation without the architectural diagrams. By this point we had our client meeting
-            and we had finished the user requirements, after some guidance. 
-            Not all tasks have been assigned to a team member as of yet as the tasks have not been fully broken down. 
+            and we had finished the user requirements, after some guidance.
+            Not all tasks have been assigned to a team member as of yet as the tasks have not been fully broken down.
             This week we made this plan quickly which
-            was very beneficial. However, we need the plan to be more detailed. 
+            was very beneficial. However, we need the plan to be more detailed.
             </p>
           </div>
         </div>
@@ -98,11 +108,11 @@
             <h2 class="add-top-margin">Week commencing 05/12/2022</h2>
             <hr>
             <p class="text">
-            It was harder to plan this weeks workload as the team is now remote due to the holiday period. 
-            It was up to the individual groups to decide their course of action. The plan stayed the roughly same as in these weeks 
+            It was harder to plan this weeks workload as the team is now remote due to the holiday period.
+            It was up to the individual groups to decide their course of action. The plan stayed the roughly same as in these weeks
             there is just work to carry on with. The implementation team is nearer the beginning of their set of tasks. This means that the work
-            that they plan to do this week is slightly more ambiguous. They hope to be able to get the design of the game more concrete 
-            and then start to get some of the simple functionalities working. 
+            that they plan to do this week is slightly more ambiguous. They hope to be able to get the design of the game more concrete
+            and then start to get some of the simple functionalities working.
             </p>
           </div>
         </div>
@@ -112,9 +122,9 @@
             <h2 class="add-top-margin">Week commencing 12/12/2022</h2>
             <hr>
             <p class="text">
-            This week was focused on the implementation team as they started to implement some basic features. 
-            To do this they had their own meetings to discuss their individual tasks. 
-            The plan for this week is to make a start on more architectural diagrams and finalise the requirement tables. 
+            This week was focused on the implementation team as they started to implement some basic features.
+            To do this they had their own meetings to discuss their individual tasks.
+            The plan for this week is to make a start on more architectural diagrams and finalise the requirement tables.
             This is to make sure that the implementation is as clear as possible, and to help with the documentation.
             </p>
           </div>
@@ -125,7 +135,7 @@
             <h2 class="add-top-margin">Week commencing 19/12/2022</h2>
             <hr>
             <p class="text">
-            As this week was Christmas we don't not plan to do any work on this project. 
+            As this week was Christmas we don't not plan to do any work on this project.
             We believe this won't affect our project much as we are mostly up to date with our plan.
             </p>
           </div>
@@ -137,10 +147,10 @@
             <hr>
             <p class="text">
             We plan to do some work this week but we haven't structured it much as everyone still has holiday plans.
-            This week is more for individual work and catch-up rather than working within our smaller teams. 
-            The class diagram should have been completed but it is still in its initial stages, and needs more refinement. 
-            This will be possible once the implementation team have familiarised themselves with LibGDX and know the best and easiest 
-            ways to organise the code. 
+            This week is more for individual work and catch-up rather than working within our smaller teams.
+            The class diagram should have been completed but it is still in its initial stages, and needs more refinement.
+            This will be possible once the implementation team have familiarised themselves with LibGDX and know the best and easiest
+            ways to organise the code.
             </p>
           </div>
         </div>
@@ -150,10 +160,10 @@
             <h2 class="add-top-margin">Week commencing 02/01/2022</h2>
             <hr>
             <p class="text">
-            At this point the architectural diagrams should be all completed, however, we are behind schedule. 
-            The class diagrams need to be properly formatted and finalised but are otherwise completed. 
-            The CRC cards haven't been grouped into control styles, and we currently only have four state diagrams. 
-            It is very important we finish the diagrams by this week. To help with this we need to communicate with 
+            At this point the architectural diagrams should be all completed, however, we are behind schedule.
+            The class diagrams need to be properly formatted and finalised but are otherwise completed.
+            The CRC cards haven't been grouped into control styles, and we currently only have four state diagrams.
+            It is very important we finish the diagrams by this week. To help with this we need to communicate with
             the implementation team more.
             </p>
           </div>
@@ -164,9 +174,9 @@
             <h2 class="add-top-margin">Week commencing 09/01/2022</h2>
             <hr>
             <p class="text">
-            This was exam week so we did not plan to meet over this period. By the end of this week 
+            This was exam week so we did not plan to meet over this period. By the end of this week
             we realised we should have met up at least once, even remotely. This would have helped
-            communication between the inner teams. 
+            communication between the inner teams.
             </p>
           </div>
         </div>
@@ -177,13 +187,13 @@
             <hr>
             <img src="img/plan4.png" alt="gantt" style="width:100%">
             <p class="text">
-            On the 16th of January we had a whole team meeting as term had re-started. 
+            On the 16th of January we had a whole team meeting as term had re-started.
             We realised that the implementation was behind schedule and this needed prioritising.
-            The architecture is being finalised and the write-up has now started. We need to 
-            iterate the CRC cards again and check that the code matches the diagrams. By the end of this 
-            all the write-ups were well underway, the crc cards were iterated and grouped, and the 
+            The architecture is being finalised and the write-up has now started. We need to
+            iterate the CRC cards again and check that the code matches the diagrams. By the end of this
+            all the write-ups were well underway, the crc cards were iterated and grouped, and the
             state diagrams finalised. The class diagrams were refined once after discussions with the
-            implementation team about game screens and libGDX's own classes. 
+            implementation team about game screens and libGDX's own classes.
             </p>
           </div>
         </div>
@@ -195,7 +205,7 @@
             <img src="img/plan4.png" alt="gantt" style="width:100%">
             <p class="text">
             This weeks work mostly involved big fixes and checking the brief requirements. We found a few
-            bugs with the music and screen layering. Once these were fixed we collated all the documents together. 
+            bugs with the music and screen layering. Once these were fixed we collated all the documents together.
           </p>
           </div>
         </div>
