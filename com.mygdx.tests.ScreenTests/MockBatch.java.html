@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MockBatch.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.tests.ScreenTests</a> &gt; <span class="el_source">MockBatch.java</span></div><h1>MockBatch.java</h1><pre class="source lang-java linenums">package com.mygdx.tests.ScreenTests;
+
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Affine2;
+import com.badlogic.gdx.math.Matrix4;
+
+<span class="nc" id="L12">public class MockBatch implements Batch {</span>
+    @Override
+    public void begin() {
+<span class="nc" id="L15">    }</span>
+
+    @Override
+    public void end() {
+<span class="nc" id="L19">    }</span>
+
+    @Override
+    public void setColor(Color tint) {
+
+<span class="nc" id="L24">    }</span>
+
+    @Override
+    public void setColor(float r, float g, float b, float a) {
+<span class="nc" id="L28">    }</span>
+
+    @Override
+    public Color getColor() {
+<span class="nc" id="L32">        return null;</span>
+    }
+
+    @Override
+    public void setPackedColor(float packedColor) {
+
+<span class="nc" id="L38">    }</span>
+
+    @Override
+    public float getPackedColor() {
+<span class="nc" id="L42">        return 0;</span>
+    }
+
+    @Override
+    public void draw(Texture texture, float x, float y, float originX, float originY, float width, float height, float scaleX, float scaleY, float rotation, int srcX, int srcY, int srcWidth, int srcHeight, boolean flipX, boolean flipY) {
+
+<span class="nc" id="L48">    }</span>
+
+    @Override
+    public void draw(Texture texture, float x, float y, float width, float height, int srcX, int srcY, int srcWidth, int srcHeight, boolean flipX, boolean flipY) {
+
+<span class="nc" id="L53">    }</span>
+
+    @Override
+    public void draw(Texture texture, float x, float y, int srcX, int srcY, int srcWidth, int srcHeight) {
+
+<span class="nc" id="L58">    }</span>
+
+    @Override
+    public void draw(Texture texture, float x, float y, float width, float height, float u, float v, float u2, float v2) {
+
+<span class="nc" id="L63">    }</span>
+
+    @Override
+    public void draw(Texture texture, float x, float y) {
+
+<span class="nc" id="L68">    }</span>
+
+    @Override
+    public void draw(Texture texture, float x, float y, float width, float height) {
+
+<span class="nc" id="L73">    }</span>
+
+    @Override
+    public void draw(Texture texture, float[] spriteVertices, int offset, int count) {
+
+<span class="nc" id="L78">    }</span>
+
+    @Override
+    public void draw(TextureRegion region, float x, float y) {
+
+<span class="nc" id="L83">    }</span>
+
+    @Override
+    public void draw(TextureRegion region, float x, float y, float width, float height) {
+<span class="nc" id="L87">    }</span>
+
+    @Override
+    public void draw(TextureRegion region, float x, float y, float originX, float originY, float width, float height, float scaleX, float scaleY, float rotation) {
+
+<span class="nc" id="L92">    }</span>
+
+    @Override
+    public void draw(TextureRegion region, float x, float y, float originX, float originY, float width, float height, float scaleX, float scaleY, float rotation, boolean clockwise) {
+
+<span class="nc" id="L97">    }</span>
+
+    @Override
+    public void draw(TextureRegion region, float width, float height, Affine2 transform) {
+
+<span class="nc" id="L102">    }</span>
+
+    @Override
+    public void flush() {
+
+<span class="nc" id="L107">    }</span>
+
+    @Override
+    public void disableBlending() {
+
+<span class="nc" id="L112">    }</span>
+
+    @Override
+    public void enableBlending() {
+
+<span class="nc" id="L117">    }</span>
+
+    @Override
+    public void setBlendFunction(int srcFunc, int dstFunc) {
+
+<span class="nc" id="L122">    }</span>
+
+    @Override
+    public void setBlendFunctionSeparate(int srcFuncColor, int dstFuncColor, int srcFuncAlpha, int dstFuncAlpha) {
+
+<span class="nc" id="L127">    }</span>
+
+    @Override
+    public int getBlendSrcFunc() {
+<span class="nc" id="L131">        return 0;</span>
+    }
+
+    @Override
+    public int getBlendDstFunc() {
+<span class="nc" id="L136">        return 0;</span>
+    }
+
+    @Override
+    public int getBlendSrcFuncAlpha() {
+<span class="nc" id="L141">        return 0;</span>
+    }
+
+    @Override
+    public int getBlendDstFuncAlpha() {
+<span class="nc" id="L146">        return 0;</span>
+    }
+
+    @Override
+    public Matrix4 getProjectionMatrix() {
+<span class="nc" id="L151">        return null;</span>
+    }
+
+    @Override
+    public Matrix4 getTransformMatrix() {
+<span class="nc" id="L156">        return null;</span>
+    }
+
+    @Override
+    public void setProjectionMatrix(Matrix4 projection) {
+
+<span class="nc" id="L162">    }</span>
+
+    @Override
+    public void setTransformMatrix(Matrix4 transform) {
+
+<span class="nc" id="L167">    }</span>
+
+    @Override
+    public void setShader(ShaderProgram shader) {
+
+<span class="nc" id="L172">    }</span>
+
+    @Override
+    public ShaderProgram getShader() {
+<span class="nc" id="L176">        return null;</span>
+    }
+
+    @Override
+    public boolean isBlendingEnabled() {
+<span class="nc" id="L181">        return false;</span>
+    }
+
+    @Override
+    public boolean isDrawing() {
+<span class="nc" id="L186">        return false;</span>
+    }
+
+    @Override
+    public void dispose() {
+
+<span class="nc" id="L192">    }</span>
+
+    // Implement all other methods from the Batch interface
+    // ...
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

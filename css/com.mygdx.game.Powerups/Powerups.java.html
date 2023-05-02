@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Powerups.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Powerups</a> &gt; <span class="el_source">Powerups.java</span></div><h1>Powerups.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Powerups;
+
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.mygdx.game.Customer;
+import com.mygdx.game.Money;
+import com.mygdx.game.PiazzaPanic;
+import com.mygdx.game.Screens.GameScreen;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class Powerups {
+<span class="fc" id="L15">    public HashMap&lt;String, Powerup&gt; allPowerups = new HashMap&lt;String, Powerup&gt;();</span>
+
+    BitmapFont font;
+    Money money;
+    private PiazzaPanic game;
+    private Screen screen;
+    /*
+        * Constructor for the Powerups class
+        * @param _game the game
+        * @param _money the money
+        * @param _screen the screen
+        * @param difficulty the difficulty of the game
+        * @return none
+     */
+<span class="fc" id="L29">    public Powerups(PiazzaPanic _game, Money _money, Screen _screen, String difficulty) {</span>
+<span class="fc" id="L30">        this.game = _game;</span>
+        int priceIncrease;
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (difficulty.equals(&quot;Easy&quot;)) {</span>
+<span class="fc" id="L33">            priceIncrease = 0;</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        } else if (difficulty.equals(&quot;Medium&quot;)) {</span>
+<span class="nc" id="L35">            priceIncrease = 25;</span>
+        } else {
+<span class="fc" id="L37">            priceIncrease = 50;</span>
+        }
+<span class="fc" id="L39">        Powerup speedPowerup = new Powerup(&quot;Speed&quot;, 5000, 0, 1, 100, 0, priceIncrease);</span>
+<span class="fc" id="L40">        Powerup extraLife = new Powerup(&quot;ExtraLife&quot;, 1000000000, 0, 1, 300, 0, priceIncrease);</span>
+<span class="fc" id="L41">        Powerup stationSpeed = new Powerup(&quot;FastStations&quot;, 10000, 0, 1f, 300, 0, priceIncrease);</span>
+<span class="fc" id="L42">        Powerup orderTimeUp = new Powerup(&quot;ExtraTime&quot;, 1000000000, 0, 10, 100, 0, priceIncrease);</span>
+<span class="fc" id="L43">        Powerup thirdChef = new Powerup(&quot;ExtraChef&quot;, 1000000000, 0, 2, 100, 0, priceIncrease);</span>
+<span class="fc" id="L44">        Powerup doubleMoney = new Powerup(&quot;DoubleMoney&quot;, 120, 0, 1, 300, 0, priceIncrease);</span>
+<span class="fc" id="L45">        allPowerups.put(&quot;Speed&quot;, speedPowerup);</span>
+<span class="fc" id="L46">        allPowerups.put(&quot;ExtraLife&quot;, extraLife);</span>
+<span class="fc" id="L47">        allPowerups.put(&quot;FastStations&quot;, stationSpeed);</span>
+<span class="fc" id="L48">        allPowerups.put(&quot;ExtraTime&quot;, orderTimeUp);</span>
+<span class="fc" id="L49">        allPowerups.put(&quot;ExtraChef&quot;, thirdChef);</span>
+<span class="fc" id="L50">        allPowerups.put(&quot;DoubleMoney&quot;, doubleMoney);</span>
+<span class="fc" id="L51">        this.font = new BitmapFont();</span>
+<span class="fc" id="L52">        this.money = _money;</span>
+<span class="fc" id="L53">        font.setColor(Color.BLACK);</span>
+<span class="fc" id="L54">        font.getData().setScale(0.25f);</span>
+<span class="fc" id="L55">        this.screen = _screen;</span>
+<span class="fc" id="L56">    }</span>
+    /*
+        * Returns the powerup
+        * @param name the name of the powerup
+        * @return the powerup
+     */
+    public float getSpeedMultiplier() {
+<span class="fc" id="L63">        return allPowerups.get(&quot;Speed&quot;).getValue();</span>
+    }
+    /*
+        * Returns the powerup
+        * @param name the name of the powerup
+        * @return the powerup
+     */
+    public void setSpeedMultiplier(int multiplier) {
+<span class="fc" id="L71">        boolean bought = buyPowerup(&quot;Speed&quot;);</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        if (bought) {</span>
+<span class="fc" id="L73">            allPowerups.get(&quot;Speed&quot;).setInitialisedTime(System.currentTimeMillis());</span>
+<span class="fc" id="L74">            allPowerups.get(&quot;Speed&quot;).setValue(multiplier);</span>
+        } else {
+<span class="nc" id="L76">            System.out.println(&quot;Not enough money for this.&quot;);</span>
+        }
+<span class="fc" id="L78">    }</span>
+    public void setSpeedMultiplierFree(int multiplier) {
+<span class="fc" id="L80">        allPowerups.get(&quot;Speed&quot;).setInitialisedTime(System.currentTimeMillis());</span>
+<span class="fc" id="L81">        allPowerups.get(&quot;Speed&quot;).setValue(multiplier);</span>
+<span class="fc" id="L82">    }</span>
+
+    /*
+        * Returns the powerup
+        * @param name the name of the powerup
+        * @return the powerup
+     */
+    public boolean setChefCount(int count) {
+<span class="fc" id="L90">        boolean bought = buyPowerup(&quot;ExtraChef&quot;);</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        if (bought) {</span>
+<span class="fc" id="L92">            allPowerups.get(&quot;ExtraChef&quot;).setInitialisedTime(System.currentTimeMillis());</span>
+<span class="fc" id="L93">            allPowerups.get(&quot;ExtraChef&quot;).setValue(3);</span>
+<span class="fc" id="L94">            return true;</span>
+        } else {
+<span class="fc" id="L96">            System.out.println(&quot;Not enough money for this&quot;);</span>
+<span class="fc" id="L97">            return false;</span>
+        }
+    }
+    /*
+        * Returns the chef count
+        * @param none
+        * @return the number of chefs
+     */
+    public float getChefCount() {
+<span class="fc" id="L106">        return allPowerups.get(&quot;ExtraChef&quot;).getValue();</span>
+    }
+    /*
+        * Returns the powerup
+        * @param name the name of the powerup
+        * @return the powerup
+     */
+    public boolean hasExtraTime() {
+        // return true;
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        return allPowerups.get(&quot;ExtraTime&quot;).getTimesBought() != 0;</span>
+    }
+    /*
+        * Returns the powerup
+        * @param name the name of the powerup
+        * @return the powerup
+     */
+    public float getStationSpeed() {
+<span class="fc" id="L123">        return allPowerups.get(&quot;FastStations&quot;).getValue();</span>
+    }
+    /*
+        * Returns the powerup
+        * @param name the name of the powerup
+        * @return the powerup
+     */
+    public void setStationSpeed(float multiplier) {
+<span class="fc" id="L131">        boolean bought = buyPowerup(&quot;FastStations&quot;);</span>
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        if (bought) {</span>
+<span class="fc" id="L133">            allPowerups.get(&quot;FastStations&quot;).setInitialisedTime(System.currentTimeMillis());</span>
+<span class="fc" id="L134">            allPowerups.get(&quot;FastStations&quot;).setValue(multiplier);</span>
+        } else {
+<span class="nc" id="L136">            System.out.println(&quot;Not enough money for this.&quot;);</span>
+        }
+<span class="fc" id="L138">    }</span>
+
+
+
+    /*
+        * Returns the powerup
+        * @param name the name of the powerup
+        * @return the powerup
+     */
+    public boolean buyExtraTime() {
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        if (allPowerups.get(&quot;ExtraTime&quot;).getTimesBought() &gt; 0) {</span>
+<span class="nc" id="L149">            return false;</span>
+        }
+<span class="nc" id="L151">        boolean bought = buyPowerup(&quot;ExtraTime&quot;);</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        if (!bought) {</span>
+<span class="nc" id="L153">            System.out.println(&quot;invalid&quot;);</span>
+        }
+<span class="nc bnc" id="L155" title="All 2 branches missed.">        for (ArrayList&lt;Customer&gt; customers : ((GameScreen) screen).getCustomers()) {</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">            for (Customer c : customers) {</span>
+<span class="nc" id="L157">                c.customerOrder.setOrderTime(c.customerOrder.getOrderTime() + 10);</span>
+<span class="nc" id="L158">            }</span>
+<span class="nc" id="L159">        }</span>
+
+<span class="nc" id="L161">        return bought;</span>
+    }
+    public void buyExtraTimeFree() {
+<span class="nc bnc" id="L164" title="All 2 branches missed.">        for (ArrayList&lt;Customer&gt; customers : ((GameScreen) screen).getCustomers()) {</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">            for (Customer c : customers) {</span>
+<span class="nc" id="L166">                c.customerOrder.setOrderTime(c.customerOrder.getOrderTime() + 10);</span>
+<span class="nc" id="L167">            }</span>
+<span class="nc" id="L168">        }</span>
+<span class="nc" id="L169">    }</span>
+    public float getExtraTime() {
+<span class="nc" id="L171">        return allPowerups.get(&quot;ExtraTime&quot;).getValue();</span>
+    }
+    /*
+        * Returns the powerup
+        * @param name the name of the powerup
+        * @return the powerup
+     */
+    public boolean buyRep() {
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">        if (allPowerups.get(&quot;ExtraLife&quot;).getTimesBought() &gt; 0) {</span>
+<span class="nc" id="L180">            return false;</span>
+        }
+<span class="fc" id="L182">        boolean bought = buyPowerup(&quot;ExtraLife&quot;);</span>
+<span class="pc bpc" id="L183" title="1 of 2 branches missed.">        if (!bought) {</span>
+<span class="nc" id="L184">            System.out.println(&quot;invalid&quot;);</span>
+        }
+<span class="fc" id="L186">        System.out.println(&quot;Returning &quot;);</span>
+<span class="fc" id="L187">        System.out.println(bought);</span>
+<span class="fc" id="L188">        return bought;</span>
+    }
+
+
+    public float getRep() {
+<span class="fc" id="L193">        return allPowerups.get(&quot;ExtraLife&quot;).getValue();</span>
+    }
+    /*
+        * Returns the powerup
+        * @param name the name of the powerup
+        * @return the powerup
+     */
+    public boolean buyDoubleMoney() {
+<span class="nc" id="L201">        boolean bought = buyPowerup(&quot;DoubleMoney&quot;);</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">        if (bought) {</span>
+<span class="nc" id="L203">            ((GameScreen) screen).incMoneyMult();</span>
+        }
+
+<span class="nc" id="L206">        return bought;</span>
+    }
+    public void buyDoubleMoneyFree() {
+<span class="nc" id="L209">        ((GameScreen) screen).incMoneyMult();</span>
+<span class="nc" id="L210">    }</span>
+    /*
+        * Returns the powerup
+        * @param name the name of the powerup
+        * @return the powerup
+     */
+    public boolean buyPowerup(String powerup) {
+<span class="fc" id="L217">        int price = allPowerups.get(powerup).getPrice();</span>
+<span class="fc" id="L218">        System.out.println(&quot;got here&quot;);</span>
+<span class="pc bpc" id="L219" title="1 of 4 branches missed.">        if (price &lt;= money.getCurrentMoney() &amp;&amp; (allPowerups.get(powerup).getInitialisedTime() == 0)) {</span>
+<span class="fc" id="L220">            System.out.println(&quot;not here&quot;);</span>
+<span class="fc" id="L221">            money.removeMoney(price);</span>
+<span class="fc" id="L222">            allPowerups.get(powerup).incrementTimesBought();</span>
+<span class="fc" id="L223">            return true;</span>
+        } else {
+<span class="fc" id="L225">            System.out.println(&quot;Got here too&quot;);</span>
+<span class="fc" id="L226">            return false;</span>
+        }
+    }
+    /*
+        * Resets the powerup
+        * @param name the name of the powerup
+        * @return none
+     */
+    public void resetPowerup(String k) {
+<span class="fc" id="L235">        allPowerups.get(k).setInitialisedTime(0);</span>
+<span class="fc" id="L236">        allPowerups.get(k).setValue(1);</span>
+<span class="fc" id="L237">    }</span>
+    /*
+        * Checks the powerups
+        * @param none
+        * @return none
+     */
+    public void checkPowerups() {
+<span class="nc bnc" id="L244" title="All 2 branches missed.">        for (String k : allPowerups.keySet()) {</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">            if (allPowerups.get(k).getInitialisedTime() != 0) {</span>
+<span class="nc bnc" id="L246" title="All 2 branches missed.">                if (allPowerups.get(k).getExpiryTime() &lt; System.currentTimeMillis()) {</span>
+<span class="nc" id="L247">                    resetPowerup(k);</span>
+                }
+            }
+<span class="nc" id="L250">        }</span>
+<span class="nc" id="L251">    }</span>
+    public ArrayList&lt;String&gt; getPowerupsActive() {
+<span class="fc" id="L253">        ArrayList&lt;String&gt; activePowerups = new ArrayList&lt;String&gt;();</span>
+<span class="fc bfc" id="L254" title="All 2 branches covered.">        for (String k : allPowerups.keySet()) {</span>
+<span class="fc bfc" id="L255" title="All 2 branches covered.">            if (allPowerups.get(k).getInitialisedTime() != 0) {</span>
+<span class="fc" id="L256">                activePowerups.add(k);</span>
+            }
+<span class="fc" id="L258">        }</span>
+<span class="fc" id="L259">        return activePowerups;</span>
+    }
+
+//    public void render() {
+//        String message = &quot;POWERUPS ACTIVE : &quot;;
+//        StringBuilder messageBuilder = new StringBuilder(message);
+//        for (String k : allPowerups.keySet()) {
+//            if (allPowerups.get(k).getInitialisedTime() != 0) {
+//                messageBuilder.append(&quot; &quot;).append(k);
+//            }
+//        }
+//        message = messageBuilder.toString();
+//        game.batch.begin();
+//        font.draw(game.batch, message, 127, 122);
+//        game.batch.end();
+//    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

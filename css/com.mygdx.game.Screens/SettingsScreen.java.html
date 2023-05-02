@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SettingsScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Screens</a> &gt; <span class="el_source">SettingsScreen.java</span></div><h1>SettingsScreen.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Screens;
+
+import java.io.IOException;
+
+import com.badlogic.gdx.graphics.Color;
+import org.json.JSONObject;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.ConfigHandler;
+import com.mygdx.game.PiazzaPanic;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+
+public class SettingsScreen implements Screen {
+    PiazzaPanic game;
+    Stage gameStage;
+<span class="fc" id="L35">    Texture checkedBox = new Texture(&quot;checked.png&quot;);</span>
+<span class="fc" id="L36">    Texture uncheckedBox = new Texture(&quot;unchecked_box.png&quot;);</span>
+<span class="fc" id="L37">    Texture backBtnTex = new Texture(&quot;backBtn.png&quot;);</span>
+<span class="fc" id="L38">    Texture backBtnTexHover = new Texture(&quot;backBtn2.png&quot;);</span>
+
+    FitViewport view;
+    TextureRegion checkedBoxRegion;
+    TextureRegion uncheckedBoxRegion;
+    TextureRegionDrawable checkedBoxDrawable;
+    TextureRegionDrawable uncheckedBoxDrawable;
+    ImageButton checkedBoxBtn;
+<span class="fc" id="L46">    Boolean checked = true;</span>
+    ConfigHandler configHandler;
+    TextureRegion backBtnRegion;
+    TextureRegionDrawable backBtnDrawable;
+    ImageButton backBtn;
+    TextureRegion backBtnRegionHover;
+    TextureRegionDrawable backBtnDrawableHover;
+
+    JSONObject config;
+<span class="fc" id="L55">    String currentDifficulty = &quot;Easy&quot;;</span>
+    /*
+        * Constructor for the settings screen
+        * @param game the game object
+        * @param configHandler the config handler object
+        * @return none
+     */
+<span class="fc" id="L62">    public SettingsScreen(PiazzaPanic game, ConfigHandler configHandler) {</span>
+<span class="fc" id="L63">        this.game = game;</span>
+<span class="fc" id="L64">        this.configHandler = configHandler;</span>
+<span class="fc" id="L65">        this.config = configHandler.getConfig();</span>
+<span class="fc" id="L66">    }</span>
+
+    public Label createLabel(String text, float x, float y, BitmapFont font) {
+<span class="fc" id="L69">        LabelStyle labelStyle = new LabelStyle();</span>
+<span class="fc" id="L70">        labelStyle.font = font;</span>
+<span class="fc" id="L71">        labelStyle.fontColor = com.badlogic.gdx.graphics.Color.BLACK;</span>
+<span class="fc" id="L72">        Label label = new Label(text, labelStyle);</span>
+<span class="fc" id="L73">        label.setPosition(x, y);</span>
+<span class="fc" id="L74">        return label;</span>
+    }
+    /*
+        * Renders the settings screen
+        * @param delta the time between frames
+        * @return none
+     */
+    @Override
+    public void show() {
+<span class="fc" id="L83">        System.out.println(&quot;SettingsScreen&quot;);</span>
+<span class="fc" id="L84">        currentDifficulty = config.getString(&quot;difficulty&quot;);</span>
+<span class="fc" id="L85">        checked = config.getBoolean(&quot;muteMusic&quot;);</span>
+<span class="fc" id="L86">        view = new FitViewport(game.GAME_WIDTH, game.GAME_HEIGHT);</span>
+<span class="fc" id="L87">        view.getCamera().position.set(game.GAME_WIDTH / 2, game.GAME_HEIGHT / 2, 1f);</span>
+<span class="fc" id="L88">        gameStage = new Stage(view, game.batch);</span>
+
+<span class="fc" id="L90">        backBtnRegion = new TextureRegion(backBtnTex);</span>
+<span class="fc" id="L91">        backBtnDrawable = new TextureRegionDrawable(backBtnRegion);</span>
+<span class="fc" id="L92">        backBtn = new ImageButton(backBtnDrawable);</span>
+
+<span class="fc" id="L94">        backBtnRegionHover = new TextureRegion(backBtnTexHover);</span>
+<span class="fc" id="L95">        backBtnDrawableHover = new TextureRegionDrawable(backBtnRegionHover);</span>
+
+<span class="fc" id="L97">        checkedBoxRegion = new TextureRegion(checkedBox);</span>
+<span class="fc" id="L98">        checkedBoxDrawable = new TextureRegionDrawable(checkedBoxRegion);</span>
+
+<span class="fc" id="L100">        uncheckedBoxRegion = new TextureRegion(uncheckedBox);</span>
+<span class="fc" id="L101">        uncheckedBoxDrawable = new TextureRegionDrawable(uncheckedBoxRegion);</span>
+
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        checkedBoxBtn = new ImageButton(checked ? checkedBoxDrawable : uncheckedBoxDrawable);</span>
+<span class="fc" id="L104">        checkedBoxBtn.setPosition((game.GAME_WIDTH / 2) - (checkedBox.getWidth() / 2), game.GAME_HEIGHT - 350);</span>
+
+<span class="fc" id="L106">        BitmapFont font = new BitmapFont();</span>
+<span class="fc" id="L107">        TextField.TextFieldFilter numOnly = new TextField.TextFieldFilter.DigitsOnlyFilter();</span>
+<span class="fc" id="L108">        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();</span>
+<span class="fc" id="L109">        textFieldStyle.font = font;</span>
+<span class="fc" id="L110">        textFieldStyle.fontColor = com.badlogic.gdx.graphics.Color.BLACK;</span>
+<span class="fc" id="L111">        int currentServe = config.getInt(&quot;customersToServe&quot;);</span>
+<span class="fc" id="L112">        final TextField numberInput = new TextField(String.valueOf(currentServe), textFieldStyle);</span>
+<span class="fc" id="L113">        numberInput.setPosition((game.GAME_WIDTH / 2) - (numberInput.getWidth() / 2), game.GAME_HEIGHT - 300);</span>
+<span class="fc" id="L114">        numberInput.setSize(200, 40);</span>
+<span class="fc" id="L115">        Texture inputBg = new Texture(&quot;inp.png&quot;);</span>
+<span class="fc" id="L116">        NinePatch inputNinePatch = new NinePatch(inputBg, 10, 10, 10, 10);</span>
+<span class="fc" id="L117">        NinePatchDrawable inputBoxBackground = new NinePatchDrawable(inputNinePatch);</span>
+<span class="fc" id="L118">        inputBoxBackground.setLeftWidth(10);</span>
+<span class="fc" id="L119">        numberInput.getStyle().background = inputBoxBackground;</span>
+<span class="fc" id="L120">        numberInput.setTextFieldFilter(numOnly);</span>
+
+<span class="fc" id="L122">        TextButton.TextButtonStyle diffButtonStyle = new TextButton.TextButtonStyle();</span>
+<span class="fc" id="L123">        diffButtonStyle.font = font;</span>
+<span class="fc" id="L124">        diffButtonStyle.fontColor = Color.BLACK;</span>
+<span class="fc" id="L125">        diffButtonStyle.up = new NinePatchDrawable(new NinePatch(new Texture(&quot;inp.png&quot;), 10,10,10,10));</span>
+<span class="fc" id="L126">        diffButtonStyle.down = new NinePatchDrawable(new NinePatch(new Texture(&quot;inp.png&quot;), 10,10,10,10));</span>
+<span class="fc" id="L127">        final TextButton difficultyButton = new TextButton(currentDifficulty, diffButtonStyle);</span>
+<span class="fc" id="L128">        difficultyButton.setPosition((game.GAME_WIDTH / 2) - (difficultyButton.getWidth() -2), 200);</span>
+
+<span class="fc" id="L130">        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();</span>
+<span class="fc" id="L131">        textButtonStyle.font = font;</span>
+<span class="fc" id="L132">        textButtonStyle.fontColor = com.badlogic.gdx.graphics.Color.BLACK;</span>
+<span class="fc" id="L133">        textButtonStyle.up = new NinePatchDrawable(new NinePatch(new Texture(&quot;inp.png&quot;), 10, 10, 10, 10));</span>
+<span class="fc" id="L134">        textButtonStyle.down = new NinePatchDrawable(new NinePatch(new Texture(&quot;inp.png&quot;), 10, 10, 10, 10));</span>
+<span class="fc" id="L135">        TextButton button = new TextButton(&quot;Submit&quot;, textButtonStyle);</span>
+<span class="fc" id="L136">        button.setPosition((game.GAME_WIDTH / 2) - (button.getWidth() / 2), 300);</span>
+<span class="fc" id="L137">        checkedBoxBtn.addListener(new ClickListener() {</span>
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+<span class="nc bnc" id="L140" title="All 2 branches missed.">                checked = !checked; // Toggle the checked state</span>
+<span class="nc" id="L141">                ImageButton.ImageButtonStyle newStyle = new ImageButton.ImageButtonStyle(checkedBoxBtn.getStyle());</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">                if (checked) {</span>
+<span class="nc" id="L143">                    System.out.println(&quot;Checked&quot;);</span>
+<span class="nc" id="L144">                    newStyle.imageUp = checkedBoxDrawable;</span>
+                } else {
+<span class="nc" id="L146">                    System.out.println(&quot;Unchecked&quot;);</span>
+<span class="nc" id="L147">                    newStyle.imageUp = uncheckedBoxDrawable;</span>
+                }
+<span class="nc" id="L149">                checkedBoxBtn.setStyle(newStyle);</span>
+<span class="nc" id="L150">                super.clicked(event, x, y);</span>
+<span class="nc" id="L151">            }</span>
+        });
+
+<span class="fc" id="L154">        difficultyButton.addListener(new ClickListener() {</span>
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+<span class="nc" id="L157">                System.out.println(&quot;Difficulty pressed, &quot;+ currentDifficulty);</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">                if (currentDifficulty == &quot;Easy&quot;) {</span>
+<span class="nc" id="L159">                    currentDifficulty = &quot;Medium&quot;;</span>
+
+<span class="nc bnc" id="L161" title="All 2 branches missed.">                } else if (currentDifficulty == &quot;Medium&quot;) {</span>
+<span class="nc" id="L162">                    currentDifficulty = &quot;Hard&quot;;</span>
+                } else {
+<span class="nc" id="L164">                    currentDifficulty = &quot;Easy&quot;;</span>
+                }
+<span class="nc" id="L166">                difficultyButton.setText(currentDifficulty);</span>
+<span class="nc" id="L167">                super.clicked(event, x, y);</span>
+<span class="nc" id="L168">            }</span>
+
+        });
+
+<span class="fc" id="L172">        button.addListener(new ClickListener() {</span>
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+<span class="nc" id="L175">                System.out.println(&quot;Button clicked&quot;);</span>
+<span class="nc" id="L176">                String inputtedNum = numberInput.getText();</span>
+<span class="nc" id="L177">                System.out.println(inputtedNum);</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">                if (inputtedNum.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L179">                    inputtedNum = &quot;5&quot;;</span>
+                }
+<span class="nc" id="L181">                configHandler.setCustomersToServe(Integer.parseInt(inputtedNum));</span>
+<span class="nc" id="L182">                configHandler.setMuteMode(checked);</span>
+<span class="nc" id="L183">                configHandler.setDifficulty(currentDifficulty);</span>
+<span class="nc" id="L184">                super.clicked(event, x, y);</span>
+<span class="nc" id="L185">            }</span>
+        });
+
+<span class="fc" id="L188">        backBtn.addListener(new ClickListener() {</span>
+<span class="fc" id="L189">            final ImageButton backNormal = new ImageButton(backBtnDrawable);</span>
+<span class="fc" id="L190">            final ImageButton backHover = new ImageButton(backBtnDrawableHover);</span>
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+<span class="nc" id="L194">                backBtn.setStyle(backHover.getStyle());</span>
+<span class="nc" id="L195">            }</span>
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+<span class="nc" id="L199">                backBtn.setStyle(backNormal.getStyle());</span>
+<span class="nc" id="L200">            }</span>
+        });
+<span class="fc" id="L202">        backBtn.setPosition(0, game.GAME_HEIGHT - backBtn.getHeight());</span>
+
+<span class="fc" id="L204">        gameStage.addActor(checkedBoxBtn);</span>
+<span class="fc" id="L205">        gameStage.addActor(numberInput);</span>
+<span class="fc" id="L206">        gameStage.addActor(button);</span>
+<span class="fc" id="L207">        gameStage.addActor(backBtn);</span>
+<span class="fc" id="L208">        gameStage.addActor(difficultyButton);</span>
+
+<span class="fc" id="L210">        checkedBoxBtn.setPosition(game.GAME_WIDTH / 2 - checkedBoxBtn.getWidth()/2, (float) (game.GAME_HEIGHT * 0.5));</span>
+<span class="fc" id="L211">        numberInput.setPosition(game.GAME_WIDTH / 2 - numberInput.getWidth() /2, (float) (game.GAME_HEIGHT * 0.3));</span>
+<span class="fc" id="L212">        button.setPosition(game.GAME_WIDTH/2 - button.getWidth()/2, (float) (game.GAME_HEIGHT * 0.1));</span>
+<span class="fc" id="L213">        difficultyButton.setPosition(game.GAME_WIDTH / 2 - difficultyButton.getWidth()/2, (float) (game.GAME_HEIGHT * 0.7));</span>
+
+<span class="fc" id="L215">        Label checkedBoxLabel = createLabel(&quot;Mute Music&quot;, game.GAME_WIDTH / 2 - checkedBoxBtn.getWidth() / 2 - 90, (float) (game.GAME_HEIGHT * 0.5), font);</span>
+<span class="fc" id="L216">        Label numberInputLabel = createLabel(&quot;Customers to Serve&quot;, game.GAME_WIDTH / 2 - numberInput.getWidth() / 2, (float) (game.GAME_HEIGHT * 0.3 + numberInput.getHeight() + 10), font);</span>
+<span class="fc" id="L217">        Label submitButtonLabel = createLabel(&quot;Submit&quot;, game.GAME_WIDTH / 2 - button.getWidth() / 2, (float) (game.GAME_HEIGHT * 0.1 + button.getHeight() + 10), font);</span>
+<span class="fc" id="L218">        Label difficultyButtonLabel = createLabel(&quot;Difficulty&quot;, game.GAME_WIDTH / 2 - difficultyButton.getWidth() / 2, (float) (game.GAME_HEIGHT * 0.7 + difficultyButton.getHeight() + 10), font);</span>
+<span class="fc" id="L219">        gameStage.addActor(checkedBoxLabel);</span>
+<span class="fc" id="L220">        gameStage.addActor(numberInputLabel);</span>
+<span class="fc" id="L221">        gameStage.addActor(submitButtonLabel);</span>
+<span class="fc" id="L222">        gameStage.addActor(difficultyButtonLabel);</span>
+
+<span class="fc" id="L224">    }</span>
+    /*
+        * Returns the game stage
+        *
+        * @param none
+        *
+        * @return gameStage
+     */
+    public Stage getGameStage() {
+<span class="fc" id="L233">        return gameStage;</span>
+    }
+
+    /*
+        * Render loop for the screen
+        *
+        * @param delta The time in seconds since the last render.
+        *
+        * @return none
+     */
+    public void render(float delta) {
+<span class="nc" id="L244">        gameStage.act();</span>
+<span class="nc" id="L245">        gameStage.draw();</span>
+
+<span class="nc" id="L247">        ScreenUtils.clear(1, 1, 1, 1);</span>
+<span class="nc" id="L248">        view.apply();</span>
+
+<span class="nc" id="L250">        game.batch.setProjectionMatrix(view.getCamera().combined);</span>
+<span class="nc" id="L251">        game.batch.begin();</span>
+<span class="nc" id="L252">        game.batch.end();</span>
+
+<span class="nc" id="L254">        gameStage.getViewport().apply();</span>
+
+<span class="nc bnc" id="L256" title="All 2 branches missed.">        if (backBtn.isPressed()) {</span>
+            try {
+<span class="nc" id="L258">                game.setScreen(new MainMenuScreen(game));</span>
+<span class="nc" id="L259">            } catch (IOException e) {</span>
+                // TODO Auto-generated catch block
+<span class="nc" id="L261">                e.printStackTrace();</span>
+<span class="nc" id="L262">            }</span>
+        }
+<span class="nc" id="L264">        Gdx.input.setInputProcessor(gameStage);</span>
+<span class="nc" id="L265">        gameStage.draw();</span>
+<span class="nc" id="L266">    }</span>
+
+    /*
+     * Resizes the settings screen graphics
+     * @param width - width of the screen
+     * @param height - height of the screen
+     * @return none
+     */
+    @Override
+    public void resize(int width, int height) {
+<span class="nc" id="L276">        gameStage.getViewport().update(width, height);</span>
+<span class="nc" id="L277">    }</span>
+    /*
+     * Pauses settings screen graphics
+     * @param none
+     * @return none
+     */
+    @Override
+    public void pause() {
+        // TODO Auto-generated method stub
+
+<span class="nc" id="L287">    }</span>
+    /*
+     * Resumes the settings screen graphics
+     * @param none
+     * @return none
+     */
+    @Override
+    public void resume() {
+        // TODO Auto-generated method stub
+
+<span class="nc" id="L297">    }</span>
+    /*
+     * Hides the settings screen graphics
+     * @param none
+     * @return none
+     */
+    @Override
+    public void hide() {
+        // TODO Auto-generated method stub
+
+<span class="nc" id="L307">    }</span>
+    /*
+        * Disposes the main menu screen graphics
+        * @param none
+        * @return none
+     */
+    @Override
+    public void dispose() {
+<span class="nc" id="L315">        gameStage.dispose();</span>
+<span class="nc" id="L316">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

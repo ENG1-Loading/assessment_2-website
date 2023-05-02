@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Potato.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Food</a> &gt; <span class="el_source">Potato.java</span></div><h1>Potato.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Food;
+
+import com.badlogic.gdx.graphics.Texture;
+
+import java.util.ArrayList;
+import java.util.Stack;
+
+public class Potato implements Recipe{
+    ArrayList&lt;Ingredient&gt; recipe;
+    Texture potatoTex;
+    Texture speechBubble;
+<span class="fc" id="L12">    boolean isBurnt = false;</span>
+    /*
+        * Constructor for the potato recipe
+        * @param none
+        * @return none
+     */
+<span class="fc" id="L18">    public Potato() {</span>
+<span class="fc" id="L19">        this.recipe = new ArrayList&lt;Ingredient&gt;();</span>
+<span class="fc" id="L20">        Ingredient potato = new Ingredient(&quot;potato&quot;, new Texture(&quot;potato.png&quot;), new Texture(&quot;potatoCooked.png&quot;), new Texture(&quot;burntPotato.png&quot;));</span>
+<span class="fc" id="L21">        potato.prepare();</span>
+<span class="fc" id="L22">        recipe.add(potato);</span>
+<span class="fc" id="L23">        this.potatoTex = new Texture(&quot;potatoCooked.png&quot;);</span>
+<span class="fc" id="L24">        this.speechBubble = new Texture(&quot;orderPotatoBubble.png&quot;);</span>
+<span class="fc" id="L25">    }</span>
+    /*
+        * Returns the recipe for the potato
+        * @param none
+        * @return recipe the recipe for the potato
+     */
+    @Override
+    public ArrayList&lt;Ingredient&gt; getRecipe() {
+<span class="fc" id="L33">        return recipe;</span>
+    }
+    /*
+        * Returns the texture for the potato
+        * @param none
+        * @return potatoTex the texture for the potato
+     */
+    @Override
+    public Texture getTexture() {
+<span class="fc" id="L42">        return potatoTex;</span>
+    }
+    /*
+        * Returns the texture for the speech bubble
+        * @param none
+        * @return speechBubble the texture for the speech bubble
+     */
+    @Override
+    public Texture getSpeechBubbleTexture() {
+<span class="fc" id="L51">        return speechBubble;</span>
+    }
+    /*
+        * Checks if the stack of ingredients has the potato
+        * @param ingredients the stack of ingredients
+        * @return foundPotato true if the stack of ingredients has the potato, false otherwise
+     */
+    @Override
+    public Boolean has(Stack&lt;Ingredient&gt; ingredients) {
+
+<span class="fc" id="L61">        boolean foundPotato = false;</span>
+<span class="fc" id="L62">        Ingredient potato = new Ingredient(&quot;potato&quot;, null, null, null);</span>
+<span class="fc" id="L63">        potato.prepare();</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        for (Ingredient ingredient: ingredients) {</span>
+
+<span class="pc bpc" id="L66" title="2 of 4 branches missed.">            if (ingredient.equals(potato) &amp;&amp; !ingredient.getBurnt()) {</span>
+<span class="fc" id="L67">                foundPotato = true;</span>
+            } else {
+            }
+<span class="fc" id="L70">        }</span>
+<span class="fc" id="L71">        return foundPotato;</span>
+    }
+    /*
+        * Checks if the stack of ingredients matches the recipe
+        * @param ingredients the stack of ingredients to be checked
+        * @return true if the stack of ingredients matches the recipe, false otherwise
+     */
+    public void setBurnt() {
+<span class="fc" id="L79">        isBurnt = true;</span>
+<span class="fc" id="L80">        potatoTex = new Texture(&quot;burntPotato.png&quot;);</span>
+<span class="fc" id="L81">    }</span>
+    /*
+        * Returns whether the potato is burnt
+        * @param none
+        * @return isBurnt true if the potato is burnt, false otherwise
+     */
+    public Boolean getIsBurnt() {
+<span class="fc" id="L88">        return isBurnt;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

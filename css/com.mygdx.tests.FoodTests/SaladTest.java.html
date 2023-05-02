@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SaladTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.tests.FoodTests</a> &gt; <span class="el_source">SaladTest.java</span></div><h1>SaladTest.java</h1><pre class="source lang-java linenums">package com.mygdx.tests.FoodTests;
+
+import com.mygdx.game.Food.Ingredient;
+import com.mygdx.game.Food.Salad;
+import com.mygdx.tests.GdxTestRunner;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.Stack;
+
+
+<span class="fc" id="L13">@RunWith(GdxTestRunner.class)</span>
+<span class="fc" id="L14">public class SaladTest {</span>
+    private Salad salad;
+
+    @Before
+    public void setUp() {
+<span class="fc" id="L19">        salad = new Salad();</span>
+<span class="fc" id="L20">    }</span>
+
+    @Test
+    public void saladIsNotNull() {
+<span class="pc bpc" id="L24" title="1 of 2 branches missed.">        assert salad != null;</span>
+<span class="fc" id="L25">    }</span>
+
+    @Test
+    public void saladHasRecipe() {
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">        assert salad.getRecipe() != null;</span>
+<span class="fc" id="L30">    }</span>
+
+    @Test
+    public void saladHasTexture() {
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        assert salad.getTexture() != null;</span>
+<span class="fc" id="L35">    }</span>
+
+    @Test
+    public void saladHasSpeech() {
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        assert salad.getSpeechBubbleTexture() != null;</span>
+<span class="fc" id="L40">    }</span>
+
+    @Test
+    public void saladCanServe() {
+<span class="fc" id="L44">        Ingredient lettuce = new Ingredient(&quot;lettuce&quot;, null, null, null);</span>
+<span class="fc" id="L45">        lettuce.prepare();</span>
+<span class="fc" id="L46">        Ingredient tomato = new Ingredient(&quot;tomato&quot;, null, null, null);</span>
+<span class="fc" id="L47">        tomato.prepare();</span>
+<span class="fc" id="L48">        Stack&lt;Ingredient&gt; ingredients = new Stack&lt;Ingredient&gt;();</span>
+<span class="fc" id="L49">        ingredients.push(lettuce);</span>
+<span class="fc" id="L50">        ingredients.push(tomato);</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        assert salad.has(ingredients) == true;</span>
+<span class="fc" id="L52">    }</span>
+
+    @Test
+    public void saladCantServe() {
+<span class="fc" id="L56">        Ingredient lettuce = new Ingredient(&quot;lettuce&quot;, null, null, null);</span>
+<span class="fc" id="L57">        Ingredient tomato = new Ingredient(&quot;tomato&quot;, null, null, null);</span>
+<span class="fc" id="L58">        tomato.prepare();</span>
+<span class="fc" id="L59">        Stack&lt;Ingredient&gt; ingredients = new Stack&lt;Ingredient&gt;();</span>
+<span class="fc" id="L60">        ingredients.push(lettuce);</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        assert salad.has(ingredients) == false;</span>
+<span class="fc" id="L62">    }</span>
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

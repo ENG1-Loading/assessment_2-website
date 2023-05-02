@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FoodMenu.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Food</a> &gt; <span class="el_source">FoodMenu.java</span></div><h1>FoodMenu.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Food;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class FoodMenu {
+
+    private final ArrayList&lt;Order&gt; orderOptions;
+<span class="fc" id="L12">    public boolean bakingUnlocked = false;</span>
+    /*
+        * Constructor for the food menu
+        * @param none
+        * @return none
+     */
+<span class="fc" id="L18">    public FoodMenu(boolean _bakingUnlocked) throws IOException {</span>
+<span class="fc" id="L19">        this.orderOptions = new ArrayList&lt;&gt;();</span>
+
+        // Add order options here
+<span class="fc" id="L22">        this.orderOptions.add(new Order(&quot;burger&quot;, new Texture(&quot;orderBurger.png&quot;), new Burger()));</span>
+<span class="fc" id="L23">        this.orderOptions.add(new Order(&quot;salad&quot;, new Texture(&quot;orderSalad.png&quot;), new Salad()));</span>
+<span class="fc" id="L24">        this.orderOptions.add(new Order(&quot;potato&quot;, new Texture(&quot;orderPotato.png&quot;), new Potato()));</span>
+<span class="fc" id="L25">        this.orderOptions.add(new Order(&quot;pizza&quot;, new Texture(&quot;orderPizza.png&quot;), new Pizza()));</span>
+<span class="fc" id="L26">        bakingUnlocked = _bakingUnlocked;</span>
+<span class="fc" id="L27">    }</span>
+    /*
+        * Returns the order options
+        * @param none
+        * @return orderOptions the order options
+     */
+    /*
+        * Returns a random order
+        * @param none
+        * @return orderOptions.get(MathUtils.random(0, 3)) a random order
+     */
+    public Order getRandomOrder() {
+//        return orderOptions.get(2);
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">        if (bakingUnlocked) {</span>
+<span class="nc" id="L41">            return orderOptions.get(MathUtils.random(0, 3));</span>
+        } else {
+<span class="fc" id="L43">            return  orderOptions.get(MathUtils.random(0, 1));</span>
+        }
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

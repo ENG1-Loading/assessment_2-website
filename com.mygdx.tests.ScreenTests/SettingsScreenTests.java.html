@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SettingsScreenTests.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.tests.ScreenTests</a> &gt; <span class="el_source">SettingsScreenTests.java</span></div><h1>SettingsScreenTests.java</h1><pre class="source lang-java linenums">package com.mygdx.tests.ScreenTests;
+
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Json;
+import com.mygdx.game.ConfigHandler;
+import com.mygdx.game.PiazzaPanic;
+import com.mygdx.game.Screens.SettingsScreen;
+import com.mygdx.tests.GdxTestRunner;
+import org.json.JSONObject;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.io.IOException;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static org.mockito.Mockito.mock;
+@RunWith(GdxTestRunner.class)
+<span class="fc" id="L22">public class SettingsScreenTests {</span>
+    private PiazzaPanic mockgame;
+    private ConfigHandler configHandler;
+    private SettingsScreen settingsScreen;
+    private BitmapFont font;
+    @Before
+    public void setUp() throws IOException {
+<span class="fc" id="L29">        System.out.println(&quot;Setting up class&quot;);</span>
+<span class="fc" id="L30">        mockgame = mock(PiazzaPanic.class);</span>
+<span class="fc" id="L31">        configHandler = mock(ConfigHandler.class);</span>
+<span class="fc" id="L32">        JSONObject config = new JSONObject();</span>
+<span class="fc" id="L33">        config.put(&quot;difficulty&quot;, &quot;Easy&quot;);</span>
+<span class="fc" id="L34">        config.put(&quot;muteMusic&quot;, false);</span>
+<span class="fc" id="L35">        config.put(&quot;customersToServe&quot;, 5);</span>
+<span class="fc" id="L36">        mockgame.batch = mock(com.badlogic.gdx.graphics.g2d.SpriteBatch.class);</span>
+
+<span class="fc" id="L38">        configHandler = new ConfigHandler(config);</span>
+
+<span class="fc" id="L40">        settingsScreen = new SettingsScreen(mockgame, configHandler);</span>
+<span class="fc" id="L41">        font = new BitmapFont();</span>
+<span class="fc" id="L42">    }</span>
+    @Test
+    public void testLabelNotNull() {
+<span class="fc" id="L45">        Label label = settingsScreen.createLabel(&quot;test&quot;, 0, 0, font);</span>
+<span class="fc" id="L46">        assertNotNull(label);</span>
+<span class="fc" id="L47">    }</span>
+
+    @Test
+    public void testStage() {
+<span class="fc" id="L51">        settingsScreen.show();</span>
+<span class="fc" id="L52">        Stage stage = settingsScreen.getGameStage();</span>
+<span class="fc" id="L53">        stage.getActors();</span>
+<span class="fc" id="L54">        assertEquals(9, stage.getActors().size);</span>
+
+<span class="fc" id="L56">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

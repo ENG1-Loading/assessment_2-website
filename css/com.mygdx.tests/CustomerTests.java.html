@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomerTests.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.tests</a> &gt; <span class="el_source">CustomerTests.java</span></div><h1>CustomerTests.java</h1><pre class="source lang-java linenums">package com.mygdx.tests;
+
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.mygdx.game.Customer;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@RunWith(GdxTestRunner.class)
+<span class="fc" id="L17">public class CustomerTests {</span>
+    private Customer customer;
+    @Before
+    public void setUp() throws IOException {
+<span class="fc" id="L21">        customer = new Customer(new Actor(), false);</span>
+<span class="fc" id="L22">    }</span>
+
+    @After
+<span class="fc" id="L25">    public void tearDown(){}</span>
+
+    @Test
+    public void testInitBodyX() {
+<span class="fc" id="L29">        assertEquals(144, customer.body.getX());</span>
+<span class="fc" id="L30">        System.out.println(&quot;Customer is at expected x position on initialisation&quot;);</span>
+<span class="fc" id="L31">    }</span>
+
+    @Test
+    public void testInitBodyY() {
+<span class="fc" id="L35">        assertEquals(80, customer.body.getY());</span>
+<span class="fc" id="L36">        System.out.println(&quot;Customer is at expected Y position on initialisation&quot;);</span>
+<span class="fc" id="L37">    }</span>
+
+    @Test
+    public void testInitHeight() {
+<span class="fc" id="L41">        assertEquals(23, customer.body.getHeight());</span>
+<span class="fc" id="L42">        System.out.println(&quot;Customer is the expected initial height&quot;);</span>
+<span class="fc" id="L43">    }</span>
+
+    @Test
+    public void testInitWidth() {
+<span class="fc" id="L47">        assertEquals(16, customer.body.getWidth());</span>
+<span class="fc" id="L48">        System.out.println(&quot;Customer is the expected initial width&quot;);</span>
+<span class="fc" id="L49">    }</span>
+
+    @Test
+    public void testSetY() {
+<span class="fc" id="L53">        customer.body.setY(100);</span>
+<span class="fc" id="L54">        assertEquals(100, customer.body.getY());</span>
+<span class="fc" id="L55">        System.out.println(&quot;Customer moved Y position correctly&quot;);</span>
+<span class="fc" id="L56">    }</span>
+
+    @Test
+    public void testSetX() {
+<span class="fc" id="L60">        customer.body.setX(24);</span>
+<span class="fc" id="L61">        assertEquals(24, customer.body.getX());</span>
+<span class="fc" id="L62">        System.out.println(&quot;Customer moved X position correctly&quot;);</span>
+
+<span class="fc" id="L64">    }</span>
+
+    @Test
+    public void testName() {
+<span class="fc" id="L68">        String[] names = {&quot;Blue&quot;, &quot;Red&quot;, &quot;White&quot;, &quot;Yellow&quot; };</span>
+<span class="fc" id="L69">        assertEquals(true, Arrays.asList(names).contains(customer.name));</span>
+<span class="fc" id="L70">        System.out.println(&quot;Customer has a valid name&quot;);</span>
+<span class="fc" id="L71">    }</span>
+
+    @Test
+    public void testCustomerOrder() {
+<span class="fc" id="L75">        String[] names = {&quot;burger&quot;, &quot;salad&quot;};</span>
+<span class="fc" id="L76">        String orderName = customer.customerOrder.getName();</span>
+<span class="fc" id="L77">        assertEquals(true, Arrays.asList(names).contains(orderName));</span>
+<span class="fc" id="L78">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PizzaTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.tests.FoodTests</a> &gt; <span class="el_source">PizzaTest.java</span></div><h1>PizzaTest.java</h1><pre class="source lang-java linenums">package com.mygdx.tests.FoodTests;
+
+import com.mygdx.game.Food.Ingredient;
+import com.mygdx.game.Food.Potato;
+import com.mygdx.tests.GdxTestRunner;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.Stack;
+
+<span class="fc" id="L12">@RunWith(GdxTestRunner.class)</span>
+<span class="fc" id="L13">public class PizzaTest {</span>
+    private Potato potato;
+    @Before
+    public void setUp() {
+<span class="fc" id="L17">        potato = new Potato();</span>
+<span class="fc" id="L18">    }</span>
+
+    @Test
+    public void potatoIsNotNull() {
+<span class="pc bpc" id="L22" title="1 of 2 branches missed.">        assert potato != null;</span>
+<span class="fc" id="L23">    }</span>
+
+    @Test
+    public void potatoHasRecipe() {
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">        assert potato.getRecipe() != null;</span>
+<span class="fc" id="L28">    }</span>
+
+    @Test
+    public void potatoHasTexture() {
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">        assert potato.getTexture() != null;</span>
+<span class="fc" id="L33">    }</span>
+
+    @Test
+    public void potatoHasSpeech() {
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        assert potato.getSpeechBubbleTexture() != null;</span>
+<span class="fc" id="L38">    }</span>
+
+    @Test
+    public void potatoNotBurned() {
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        assert potato.getIsBurnt() == false;</span>
+<span class="fc" id="L43">    }</span>
+
+    @Test
+    public void potatoCanBurn() {
+<span class="fc" id="L47">        potato.setBurnt();</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        assert potato.getIsBurnt() == true;</span>
+<span class="fc" id="L49">    }</span>
+
+    @Test
+    public void potatoCanServe() {
+<span class="fc" id="L53">        Ingredient potatoS = new Ingredient(&quot;potato&quot;, null, null, null);</span>
+<span class="fc" id="L54">        potatoS.prepare();</span>
+<span class="fc" id="L55">        Stack&lt;Ingredient&gt; ingredients = new Stack&lt;Ingredient&gt;();</span>
+<span class="fc" id="L56">        ingredients.push(potatoS);</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        assert potato.has(ingredients) == true;</span>
+<span class="fc" id="L58">    }</span>
+    @Test
+    public void potatoCanNotServe() {
+<span class="fc" id="L61">        Ingredient potatoS = new Ingredient(&quot;potato&quot;, null, null, null);</span>
+<span class="fc" id="L62">        potatoS.prepare();</span>
+<span class="fc" id="L63">        Stack&lt;Ingredient&gt; ingredients = new Stack&lt;Ingredient&gt;();</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        assert potato.has(ingredients) == false;</span>
+<span class="fc" id="L65">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

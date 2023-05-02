@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GamescreenTests.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.tests.ScreenTests</a> &gt; <span class="el_source">GamescreenTests.java</span></div><h1>GamescreenTests.java</h1><pre class="source lang-java linenums">package com.mygdx.tests.ScreenTests;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.backends.headless.HeadlessNativesLoader;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.Cook;
+import com.mygdx.game.CustomTiledMapRenderer;
+import com.mygdx.game.Customer;
+import com.mygdx.game.PiazzaPanic;
+import com.mygdx.game.Screens.GameScreen;
+import com.mygdx.tests.GdxTestRunner;
+import org.json.JSONObject;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static junit.framework.TestCase.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+@RunWith(GdxTestRunner.class)
+<span class="fc" id="L32">public class GamescreenTests {</span>
+
+    static {
+<span class="fc" id="L35">        HeadlessNativesLoader.load();</span>
+<span class="fc" id="L36">    }</span>
+
+    private PiazzaPanic mockgame;
+    private FitViewport viewport;
+    private boolean isEndless;
+    private boolean isLoad;
+    private String loadPath;
+    private JSONObject config;
+    private GameScreen screen;
+
+    @Before
+    public void setUp() throws IOException {
+<span class="fc" id="L48">        System.out.println(&quot;Setting up class&quot;);</span>
+<span class="fc" id="L49">        mockgame = new PiazzaPanic();</span>
+
+<span class="fc" id="L51">        viewport = new FitViewport(800, 480);</span>
+<span class="fc" id="L52">        mockgame.batch = mock(SpriteBatch.class);</span>
+<span class="fc" id="L53">        isEndless = false;</span>
+<span class="fc" id="L54">        isLoad = false;</span>
+<span class="fc" id="L55">        loadPath = &quot;&quot;;</span>
+<span class="fc" id="L56">        config = new JSONObject();</span>
+<span class="fc" id="L57">        config.put(&quot;difficulty&quot;, &quot;Easy&quot;);</span>
+<span class="fc" id="L58">        config.put(&quot;muteMusic&quot;, false);</span>
+<span class="fc" id="L59">        config.put(&quot;customersToServe&quot;, 5);</span>
+<span class="fc" id="L60">        OrthogonalTiledMapRenderer mockRenderer = mock(OrthogonalTiledMapRenderer.class);</span>
+<span class="fc" id="L61">        screen = new GameScreen(mockgame, viewport, isEndless, isLoad, loadPath, config, mockRenderer);</span>
+
+<span class="fc" id="L63">    }</span>
+
+    private void simulateKeyPress(int keyCode) {
+<span class="nc" id="L66">        when(Gdx.input.isKeyPressed(keyCode)).thenReturn(true);</span>
+<span class="nc" id="L67">    }</span>
+
+    @Test
+    public void testGameTimeNotNull() {
+        // Get a random actor from the stage
+<span class="fc" id="L72">        System.out.println(screen.getGameTime());</span>
+<span class="fc" id="L73">        assertNotNull(screen.getGameTime());</span>
+<span class="fc" id="L74">    }</span>
+
+    @Test
+    public void testSetStaion() {
+        // Get a random actor from the stage
+<span class="fc" id="L79">        screen.setSationSelected(4);</span>
+<span class="fc" id="L80">        ArrayList&lt;Integer&gt; stations =  screen.getStationSelected();</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        assert stations.get(0) == 4;</span>
+<span class="fc" id="L82">    }</span>
+
+    @Test
+    public void testCooksNotNull() {
+        // Get a random actor from the stage
+<span class="fc" id="L87">        System.out.println(screen.getCooks());</span>
+<span class="fc" id="L88">        assertNotNull(screen.getCooks());</span>
+<span class="fc" id="L89">    }</span>
+
+    @Test
+    public void testIncrementFrying() {
+        // Get a random actor from the stage
+<span class="fc" id="L94">        screen.incrementFryingClicked();</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">        assert screen.getFryingClicked() == 1;</span>
+<span class="fc" id="L96">    }</span>
+
+    @Test
+    public void testSetChef() {
+<span class="fc" id="L100">        screen.setChef(3);</span>
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">        assert screen.getCookCount() == 3;</span>
+<span class="fc" id="L102">    }</span>
+
+    @Test
+    public void testIncrementBakingClicked() {
+<span class="fc" id="L106">        screen.incrementBakingClicked();</span>
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        assert screen.getBakingClicked() == 1;</span>
+<span class="fc" id="L108">    }</span>
+
+    @Test
+    public void testBakingLockedAndUnlocked() {
+<span class="fc" id="L112">        screen.setBakingUnlocked(true);</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        assert screen.bakingUnlocked();</span>
+<span class="fc" id="L114">        screen.setBakingUnlocked(false);</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        assert !screen.bakingUnlocked();</span>
+<span class="fc" id="L116">    }</span>
+
+    @Test
+    public void testSetPizzaAtBaking() {
+<span class="fc" id="L120">        screen.setPizzaAtBaking(true);</span>
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">        assert screen.getPizzaAtBaking();</span>
+<span class="fc" id="L122">    }</span>
+
+    @Test
+    public void testSetPotatoAtBaking() {
+<span class="fc" id="L126">        screen.setAtPotatoBaking(true);</span>
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">        assert screen.getAtPotatoBaking();</span>
+<span class="fc" id="L128">        screen.setAtPotatoBaking(false);</span>
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">        assert !screen.getAtPotatoBaking();</span>
+<span class="fc" id="L130">    }</span>
+
+    @Test
+    public void testSetPattyAtFrying() {
+<span class="fc" id="L134">        screen.setPattyAtFrying(true);</span>
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">        assert screen.getPattyAtFrying();</span>
+<span class="fc" id="L136">        screen.setPattyAtFrying(false);</span>
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        assert !screen.getPattyAtFrying();</span>
+<span class="fc" id="L138">    }</span>
+
+    @Test
+    public void testShowPantry() {
+<span class="fc" id="L142">        screen.setShowPantryScreen(true);</span>
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">        assert screen.getShowPantryScreen();</span>
+<span class="fc" id="L144">        screen.setShowPantryScreen(false);</span>
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">        assert !screen.getShowPantryScreen();</span>
+<span class="fc" id="L146">    }</span>
+
+    @Test
+    public void testShowServingScreen() {
+<span class="fc" id="L150">        screen.setShowServingScreen(true);</span>
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">        assert screen.getShowServingScreen();</span>
+<span class="fc" id="L152">        screen.setShowServingScreen(false);</span>
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">        assert !screen.getShowServingScreen();</span>
+<span class="fc" id="L154">    }</span>
+
+    @Test
+    public void testCustomersNotNull() {
+<span class="fc" id="L158">        ArrayList&lt;ArrayList&lt;Customer&gt;&gt; customers = screen.getCustomers();</span>
+<span class="fc" id="L159">        assertNotNull(customers);</span>
+<span class="fc" id="L160">    }</span>
+
+    @Test
+    public void testGetCustomers() {
+<span class="fc" id="L164">        screen.getCustomerCount();</span>
+<span class="pc bpc" id="L165" title="1 of 2 branches missed.">        assert screen.getCustomerCount() == 0;</span>
+<span class="fc" id="L166">    }</span>
+
+    @Test
+    public void testAddRep() {
+<span class="fc" id="L170">        screen.addRep(10);</span>
+<span class="fc" id="L171">        System.out.println(screen.getRep());</span>
+<span class="pc bpc" id="L172" title="1 of 2 branches missed.">        assert screen.getRep() == 13; // 3 is the default rep</span>
+<span class="fc" id="L173">    }</span>
+
+    @Test
+    public void testMoney() {
+<span class="fc" id="L177">        screen.getMoney().addMoney(10);</span>
+<span class="pc bpc" id="L178" title="1 of 2 branches missed.">        assert screen.getMoney().getCurrentMoney() == 10; // 3 is the default rep</span>
+<span class="fc" id="L179">    }</span>
+
+    @Test
+    public void testGetDefaultRep() {
+<span class="fc" id="L183">        int rep = screen.getRep();</span>
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">        assert rep == 3; // 3 is the default rep</span>
+<span class="fc" id="L185">    }</span>
+
+    @Test
+    public void testInitialiseLoad() {
+        // test with empty load path
+<span class="fc" id="L190">        JSONObject conf = new JSONObject();</span>
+<span class="fc" id="L191">        screen.initialiseLoad(conf);</span>
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">        assert screen.getRep() == 3;</span>
+<span class="fc" id="L193">        conf.put(&quot;rep&quot;, 10);</span>
+<span class="fc" id="L194">        screen.initialiseLoad(conf);</span>
+<span class="fc" id="L195">        System.out.println(screen.getRep());</span>
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">        assert screen.getRep() == 10;</span>
+<span class="fc" id="L197">        conf.put(&quot;Money&quot;, 1000);</span>
+<span class="fc" id="L198">        screen.initialiseLoad(conf);</span>
+<span class="pc bpc" id="L199" title="1 of 2 branches missed.">        assert screen.getMoney().getCurrentMoney() == 1000;</span>
+<span class="fc" id="L200">        conf.put(&quot;bakingUnlocked&quot;, true);</span>
+<span class="fc" id="L201">        screen.initialiseLoad(conf);</span>
+<span class="pc bpc" id="L202" title="1 of 2 branches missed.">        assert screen.bakingUnlocked();</span>
+<span class="fc" id="L203">        conf.put(&quot;ExtraChef&quot;, true);</span>
+<span class="fc" id="L204">        screen.initialiseLoad(conf);</span>
+<span class="pc bpc" id="L205" title="1 of 2 branches missed.">        assert screen.getCookCount() == 3;</span>
+<span class="fc" id="L206">    }</span>
+
+    @Test
+    public void testCreateImageClickable() {
+<span class="fc" id="L210">        ImageButton btn = screen.createImageClickable(new Texture(&quot;burger.png&quot;), 0, 0);</span>
+<span class="pc bpc" id="L211" title="1 of 2 branches missed.">        assert btn != null;</span>
+<span class="fc" id="L212">    }</span>
+
+    @Test
+    public void testCookStack() {
+<span class="fc" id="L216">        screen.showCookStack();</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        assert screen.getCooks().get(0).CookStack != null;</span>
+
+<span class="fc" id="L219">    }</span>
+
+    @Test
+    public void testShowOrders() {
+<span class="fc" id="L223">        screen.showOrders(0);</span>
+        assert 1 ==1; // the show orders method does not return anything
+<span class="fc" id="L225">    }</span>
+
+    @Test
+    public void testShowServingScreenVisually() {
+<span class="fc" id="L229">        screen.setShowServingScreen(true);</span>
+<span class="fc" id="L230">        screen.showServingScreen();</span>
+<span class="fc" id="L231">        ImageButton btn = screen.getPizzaServableClickable();</span>
+<span class="pc bpc" id="L232" title="1 of 2 branches missed.">        assert btn.getX() == 77;</span>
+
+<span class="pc bpc" id="L234" title="1 of 2 branches missed.">        assert screen.getGameStage().getActors().size != 0; // the show orders method does not return anything</span>
+<span class="fc" id="L235">    }</span>
+
+    @Test
+    public void testCreateProgressBar() {
+<span class="fc" id="L239">        Array&lt;Cook&gt; cooks = screen.getCooks();</span>
+<span class="fc" id="L240">        screen.createProgressBar(0, 0, cooks.get(0));</span>
+<span class="fc" id="L241">        HashMap&lt;ProgressBar, Cook&gt; bars = screen.getBars();</span>
+<span class="pc bpc" id="L242" title="1 of 2 branches missed.">        assert bars.size() != 0;</span>
+<span class="fc" id="L243">    }</span>
+
+    @Test
+    public void testMultiplier() {
+<span class="pc bpc" id="L247" title="1 of 2 branches missed.">        assert screen.getMoney().getMultiplier() == 1.0f;</span>
+<span class="fc" id="L248">        screen.incMoneyMult();</span>
+<span class="pc bpc" id="L249" title="1 of 2 branches missed.">        assert screen.getMoney().getMultiplier() == 1.5f;</span>
+<span class="fc" id="L250">    }</span>
+
+    @Test
+    public void testHideServingScreen() {
+<span class="fc" id="L254">        screen.hideServingScreen();</span>
+<span class="fc" id="L255">        ImageButton btn = screen.getPizzaServableClickable();</span>
+<span class="pc bpc" id="L256" title="1 of 2 branches missed.">        assert btn.getX() == 100000;</span>
+<span class="fc" id="L257">    }</span>
+
+    @Test
+    public void testHidePantry() {
+<span class="fc" id="L261">        screen.hidePantryScreen();</span>
+<span class="fc" id="L262">        ImageButton btn = screen.getPotatoClickable();</span>
+<span class="fc" id="L263">        System.out.println(btn.getX());</span>
+<span class="pc bpc" id="L264" title="1 of 2 branches missed.">        assert btn.getX() == 10000.0;</span>
+<span class="fc" id="L265">    }</span>
+
+    @Test
+    public void showPantry() {
+<span class="fc" id="L269">        screen.setShowPantryScreen(true);</span>
+<span class="fc" id="L270">        screen.showPantryScreen();</span>
+<span class="fc" id="L271">        ImageButton btn = screen.getPotatoClickable();</span>
+<span class="fc" id="L272">        System.out.println(btn.getX());</span>
+<span class="pc bpc" id="L273" title="1 of 2 branches missed.">        assert btn.getX() == 81;</span>
+<span class="fc" id="L274">    }</span>
+
+    @Test
+    public void handlePizzaBaking() {
+<span class="fc" id="L278">        screen.setPizzaAtBaking(true);</span>
+<span class="fc" id="L279">        screen.handlePizzaBaking(0);</span>
+<span class="pc bpc" id="L280" title="1 of 2 branches missed.">        assert screen.getPizzaAtBaking();</span>
+<span class="fc" id="L281">        screen.setPizzaAtBaking(false);</span>
+<span class="fc" id="L282">        screen.handlePizzaBaking(0);</span>
+<span class="pc bpc" id="L283" title="1 of 2 branches missed.">        assert !screen.getPizzaAtBaking();</span>
+<span class="fc" id="L284">        screen.setPizzaAtBaking(true);</span>
+<span class="fc" id="L285">        screen.handlePizzaBaking(10000000);</span>
+<span class="pc bpc" id="L286" title="1 of 2 branches missed.">        assert screen.getPizzaAtBaking();</span>
+<span class="fc" id="L287">    }</span>
+
+    @Test
+    public void testPotatoAtBaking() {
+<span class="fc" id="L291">        screen.setAtPotatoBaking(true);</span>
+<span class="fc" id="L292">        screen.handlePotatoBaking(0);</span>
+<span class="pc bpc" id="L293" title="1 of 2 branches missed.">        assert screen.getAtPotatoBaking();</span>
+<span class="fc" id="L294">        screen.setAtPotatoBaking(false);</span>
+<span class="fc" id="L295">        screen.handlePotatoBaking(0);</span>
+<span class="pc bpc" id="L296" title="1 of 2 branches missed.">        assert !screen.getAtPotatoBaking();</span>
+<span class="fc" id="L297">        screen.setAtPotatoBaking(true);</span>
+<span class="fc" id="L298">        screen.handlePotatoBaking(10000000);</span>
+<span class="pc bpc" id="L299" title="1 of 2 branches missed.">        assert screen.getAtPotatoBaking();</span>
+<span class="fc" id="L300">    }</span>
+
+    @Test
+    public void testPattyAtFrying() {
+<span class="fc" id="L304">        screen.setPattyAtFrying(true);</span>
+<span class="fc" id="L305">        screen.handlePattyFrying(0);</span>
+<span class="pc bpc" id="L306" title="1 of 2 branches missed.">        assert screen.getPattyAtFrying();</span>
+<span class="fc" id="L307">        screen.setPattyAtFrying(false);</span>
+<span class="fc" id="L308">        screen.handlePattyFrying(0);</span>
+<span class="pc bpc" id="L309" title="1 of 2 branches missed.">        assert !screen.getPattyAtFrying();</span>
+<span class="fc" id="L310">        screen.setPattyAtFrying(true);</span>
+<span class="fc" id="L311">        screen.handlePattyFrying(10000000);</span>
+<span class="pc bpc" id="L312" title="1 of 2 branches missed.">        assert screen.getPattyAtFrying();</span>
+<span class="fc" id="L313">    }</span>
+
+    @Test
+    public void getPowerups() {
+<span class="pc bpc" id="L317" title="1 of 2 branches missed.">        assert screen.getPowerups() != null;</span>
+<span class="fc" id="L318">    }</span>
+
+    @Test
+    public void testCustomers()  {
+<span class="fc" id="L322">        screen.updateBatch();</span>
+<span class="pc bpc" id="L323" title="1 of 2 branches missed.">        assert screen.getCustomers().size() != 0;</span>
+<span class="fc" id="L324">    }</span>
+
+    @Test
+    public void testCustomerOperations() throws IOException {
+<span class="fc" id="L328">        screen.customerOperations();</span>
+<span class="pc bpc" id="L329" title="1 of 2 branches missed.">        assert screen.getCustomers().size() != 0;</span>
+<span class="fc" id="L330">        ArrayList&lt;Customer&gt; customers = screen.getCustomers().get(screen.getCustomerCount());</span>
+<span class="fc bfc" id="L331" title="All 2 branches covered.">        for (Customer customer : customers) {</span>
+<span class="fc" id="L332">            customer.selfComplete = true;</span>
+<span class="fc" id="L333">        }</span>
+<span class="fc" id="L334">        screen.customerOperations();</span>
+<span class="pc bpc" id="L335" title="1 of 2 branches missed.">        assert screen.getCustomers().size() != 0;</span>
+<span class="fc bfc" id="L336" title="All 2 branches covered.">        for (Customer customer : customers) {</span>
+<span class="fc" id="L337">            customer.body.setX(150);</span>
+<span class="fc" id="L338">        }</span>
+<span class="fc" id="L339">        screen.customerOperations();</span>
+<span class="pc bpc" id="L340" title="1 of 2 branches missed.">        assert screen.getCustomers().size() != 0;</span>
+<span class="fc" id="L341">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

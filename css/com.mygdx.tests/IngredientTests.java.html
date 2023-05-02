@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IngredientTests.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.tests</a> &gt; <span class="el_source">IngredientTests.java</span></div><h1>IngredientTests.java</h1><pre class="source lang-java linenums">package com.mygdx.tests;
+
+
+import com.badlogic.gdx.graphics.Texture;
+import org.junit.Test;
+import com.mygdx.game.Food.Ingredient;
+import org.junit.runner.RunWith;
+import static org.junit.Assert.*;
+@RunWith(GdxTestRunner.class)
+<span class="fc" id="L10">public class IngredientTests {</span>
+
+    @Test
+    public void testInitialState() {
+<span class="fc" id="L14">        Texture notPreparedTexture = new Texture(&quot;rawPatty.png&quot;);</span>
+<span class="fc" id="L15">        Texture preparedTexture = new Texture(&quot;prepdPatty.png&quot;);</span>
+<span class="fc" id="L16">        Texture burntTexture = new Texture(&quot;burntPatty.png&quot;);</span>
+<span class="fc" id="L17">        Ingredient ingredient = new Ingredient(&quot;patty&quot;, notPreparedTexture, preparedTexture, burntTexture);</span>
+
+
+
+<span class="fc" id="L21">        assertEquals(&quot;patty&quot;, ingredient.name);</span>
+<span class="fc" id="L22">        assertFalse(ingredient.getState());</span>
+<span class="fc" id="L23">        assertSame(notPreparedTexture, ingredient.getCurrentTexture());</span>
+<span class="fc" id="L24">    }</span>
+
+    @Test
+    public void testPrepare() {
+        // Create a new ingredient
+<span class="fc" id="L29">        Texture notPreparedTexture = new Texture(&quot;rawPatty.png&quot;);</span>
+<span class="fc" id="L30">        Texture preparedTexture = new Texture(&quot;prepdPatty.png&quot;);</span>
+<span class="fc" id="L31">        Texture burntTexture = new Texture(&quot;burntPatty.png&quot;);</span>
+<span class="fc" id="L32">        Ingredient ingredient = new Ingredient(&quot;patty&quot;, notPreparedTexture, preparedTexture, burntTexture);</span>
+
+
+
+        // Ensure that the ingredient is not prepared yet
+<span class="fc" id="L37">        assertFalse(ingredient.getState());</span>
+<span class="fc" id="L38">        assertSame(notPreparedTexture, ingredient.getCurrentTexture());</span>
+
+        // Call the prepare method
+<span class="fc" id="L41">        ingredient.prepare();</span>
+
+        // Ensure that the ingredient is now prepared
+<span class="fc" id="L44">        assertTrue(ingredient.getState());</span>
+<span class="fc" id="L45">    }</span>
+
+    @Test
+    public void testEquals() {
+<span class="fc" id="L49">        Texture notPreparedTexture1 = new Texture(&quot;rawPatty.png&quot;);</span>
+<span class="fc" id="L50">        Texture preparedTexture1 = new Texture(&quot;prepdPatty.png&quot;);</span>
+<span class="fc" id="L51">        Texture burntTexture = new Texture(&quot;burntPatty.png&quot;);</span>
+<span class="fc" id="L52">        Ingredient ingredient1 = new Ingredient(&quot;patty&quot;, notPreparedTexture1, preparedTexture1, burntTexture);</span>
+
+<span class="fc" id="L54">        Texture notPreparedTexture2 = new Texture(&quot;rawPatty.png&quot;);</span>
+<span class="fc" id="L55">        Texture preparedTexture2 = new Texture(&quot;prepdPatty.png&quot;);</span>
+<span class="fc" id="L56">        Texture burntTexture2 = new Texture(&quot;burntPatty.png&quot;);</span>
+
+<span class="fc" id="L58">        Ingredient ingredient2 = new Ingredient(&quot;patty&quot;, notPreparedTexture2, preparedTexture2, burntTexture2);</span>
+
+<span class="fc" id="L60">        Texture notPreparedTexture3 = new Texture(&quot;buns.png&quot;);</span>
+<span class="fc" id="L61">        Texture preparedTexture3 = new Texture(&quot;buns.png&quot;);</span>
+<span class="fc" id="L62">        Ingredient ingredient3 = new Ingredient(&quot;bun&quot;, notPreparedTexture3, preparedTexture3, null);</span>
+
+
+
+        // Test if two ingredients with the same name and same prepared state are equal
+<span class="fc" id="L67">        assertEquals(ingredient1, ingredient2);</span>
+
+        // Test if two ingredients with the same name but different prepared state are not equal
+<span class="fc" id="L70">        ingredient2.prepare();</span>
+<span class="fc" id="L71">        assertNotEquals(ingredient1, ingredient2);</span>
+
+        // Test if two ingredients with different names and different prepared states are not equal
+<span class="fc" id="L74">        assertNotEquals(ingredient1, ingredient3);</span>
+<span class="fc" id="L75">    }</span>
+
+    @Test
+    public void testUpdateCurrentTexture() {
+<span class="fc" id="L79">        Texture notPreparedTexture = new Texture(&quot;rawPatty.png&quot;);</span>
+<span class="fc" id="L80">        Texture preparedTexture = new Texture(&quot;prepdPatty.png&quot;);</span>
+<span class="fc" id="L81">        Texture burntTexture = new Texture(&quot;burntPatty.png&quot;);</span>
+
+<span class="fc" id="L83">        Ingredient ingredient = new Ingredient(&quot;patty&quot;, notPreparedTexture, preparedTexture, burntTexture);</span>
+
+
+        // Ensure that the texture is initially set to notPreparedTexture
+<span class="fc" id="L87">        assertSame(notPreparedTexture, ingredient.getCurrentTexture());</span>
+
+        // Prepare the ingredient and update the texture
+<span class="fc" id="L90">        ingredient.prepare();</span>
+<span class="fc" id="L91">        ingredient.updateCurrentTexture();</span>
+
+        // Ensure that the texture has been updated to preparedTexture
+<span class="fc" id="L94">        assertSame(preparedTexture, ingredient.getCurrentTexture());</span>
+<span class="fc" id="L95">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

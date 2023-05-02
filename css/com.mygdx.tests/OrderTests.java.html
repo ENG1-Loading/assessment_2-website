@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderTests.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.tests</a> &gt; <span class="el_source">OrderTests.java</span></div><h1>OrderTests.java</h1><pre class="source lang-java linenums">package com.mygdx.tests;
+
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.TextureData;
+import com.mygdx.game.Food.Burger;
+import com.mygdx.game.Food.Order;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.internal.matchers.Or;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+@RunWith(GdxTestRunner.class)
+<span class="fc" id="L18">public class OrderTests {</span>
+    Order order;
+
+
+    @Before
+    public void setUp() throws IOException {
+<span class="fc" id="L24">        order = new Order(&quot;burger&quot;, new Texture(&quot;orderBurger.png&quot;), new Burger());</span>
+<span class="fc" id="L25">    }</span>
+
+    @Test
+    public void testOrderName() {
+<span class="fc" id="L29">        assertEquals(&quot;burger&quot;, order.getName());</span>
+<span class="fc" id="L30">        System.out.println(&quot;Order has correct name&quot;);</span>
+<span class="fc" id="L31">    }</span>
+
+    @Test
+    public void testOrderTexture() {
+<span class="fc" id="L35">        Texture validT = new Texture(&quot;orderBurger.png&quot;);</span>
+<span class="fc" id="L36">        Texture orderTex = order.getOrderTexture();</span>
+<span class="fc" id="L37">        Boolean isSame = false;</span>
+<span class="pc bpc" id="L38" title="2 of 4 branches missed.">        if (validT.getWidth() != orderTex.getWidth() || validT.getHeight() != orderTex.getHeight()) {</span>
+<span class="nc" id="L39">            isSame = true;</span>
+        }
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        if (isSame == false) {</span>
+<span class="fc" id="L42">            TextureData validMap = validT.getTextureData();</span>
+<span class="fc" id="L43">            TextureData orderMap = orderTex.getTextureData();</span>
+
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">            if (!validMap.isPrepared()) {</span>
+<span class="fc" id="L46">                validMap.prepare();</span>
+            }
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">            if (!orderMap.isPrepared()) {</span>
+<span class="fc" id="L49">                orderMap.prepare();</span>
+            }
+
+<span class="fc" id="L52">            Pixmap validPMap = validMap.consumePixmap();</span>
+<span class="fc" id="L53">            Pixmap orderPMap = orderMap.consumePixmap();</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">            for (int x=0; x &lt; validPMap.getWidth(); x++ ) {</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">                for (int y=0; y&lt;validPMap.getHeight();y++) {</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">                    if (validPMap.getPixel(x, y) != orderPMap.getPixel(x, y)) {</span>
+<span class="nc" id="L57">                        isSame=false;</span>
+<span class="nc" id="L58">                        break;</span>
+                    } else {
+<span class="fc" id="L60">                        isSame = true;</span>
+                    }
+                }
+            }
+        }
+<span class="fc" id="L65">        assertEquals(true, isSame);</span>
+<span class="fc" id="L66">        System.out.println(&quot;Order has the correct texture&quot;);</span>
+<span class="fc" id="L67">    }</span>
+
+    @Test
+    public void testInitOrderTime() {
+<span class="fc" id="L71">        assertEquals(40, order.getOrderTime());</span>
+<span class="fc" id="L72">        System.out.println(&quot;Initial order time is correct&quot;);</span>
+<span class="fc" id="L73">    }</span>
+
+    @Test
+    public void testOrderTimeSet() {
+<span class="fc" id="L77">        order.setOrderTime(50);</span>
+<span class="fc" id="L78">        assertEquals(50, order.getOrderTime());</span>
+<span class="fc" id="L79">        System.out.println(&quot;Order time setter works&quot;);</span>
+<span class="fc" id="L80">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
