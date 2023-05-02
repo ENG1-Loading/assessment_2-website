@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CuttingTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.tests.ClickableTests</a> &gt; <span class="el_source">CuttingTest.java</span></div><h1>CuttingTest.java</h1><pre class="source lang-java linenums">package com.mygdx.tests.ClickableTests;
 
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Clickables.Baking;
 import com.mygdx.game.Clickables.Cutting;
 import com.mygdx.game.Clickables.Utils;
+import com.mygdx.game.Cook;
+import com.mygdx.game.Food.Ingredient;
 import com.mygdx.game.PiazzaPanic;
 import com.mygdx.game.Screens.GameScreen;
 import com.mygdx.tests.GdxTestRunner;
@@ -12,10 +15,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
-import static org.junit.Assert.assertNotNull;
+import java.util.Stack;
 
-@RunWith(GdxTestRunner.class)
-<span class="fc" id="L18">public class CuttingTest {</span>
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+<span class="fc" id="L24">@RunWith(GdxTestRunner.class)</span>
+<span class="fc" id="L25">public class CuttingTest {</span>
     private PiazzaPanic game;
     private Utils utils;
     private GameScreen gameScreen;
@@ -23,16 +30,46 @@ import static org.junit.Assert.assertNotNull;
 
     @Before
     public void setUp() {
-<span class="fc" id="L26">        game = Mockito.mock(PiazzaPanic.class);</span>
-<span class="fc" id="L27">        utils = new Utils();</span>
-<span class="fc" id="L28">        gameScreen = Mockito.mock(GameScreen.class);</span>
-<span class="fc" id="L29">        cutting = new Cutting(game, utils, gameScreen);</span>
-<span class="fc" id="L30">    }</span>
+<span class="fc" id="L33">        game = Mockito.mock(PiazzaPanic.class);</span>
+<span class="fc" id="L34">        utils = new Utils();</span>
+<span class="fc" id="L35">        gameScreen = Mockito.mock(GameScreen.class);</span>
+<span class="fc" id="L36">        cutting = new Cutting(game, utils, gameScreen);</span>
+<span class="fc" id="L37">    }</span>
 
     @Test
     public void cuttingClickableNotNull() {
-<span class="fc" id="L34">        ImageButton cuttingClickable = cutting.getCuttingClickable();</span>
-<span class="fc" id="L35">        assertNotNull(cuttingClickable);</span>
-<span class="fc" id="L36">    }</span>
+<span class="fc" id="L41">        ImageButton cuttingClickable = cutting.getCuttingClickable();</span>
+<span class="fc" id="L42">        assertNotNull(cuttingClickable);</span>
+<span class="fc" id="L43">    }</span>
+
+    @Test
+    public void testClick() {
+<span class="fc" id="L47">        Array&lt;Cook&gt; cooks = new Array&lt;Cook&gt;();</span>
+<span class="fc" id="L48">        Cook cook = new Cook(new com.badlogic.gdx.scenes.scene2d.Actor());</span>
+<span class="fc" id="L49">        cook.CookBody.setY(28f);</span>
+<span class="fc" id="L50">        cook.CookBody.setX(0f);</span>
+<span class="fc" id="L51">        cooks.add(cook);</span>
+<span class="fc" id="L52">        when(gameScreen.getCooks()).thenReturn(cooks);</span>
+<span class="fc" id="L53">        cutting.onClicked(gameScreen);</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        assert !cook.isBusy;</span>
+<span class="fc" id="L55">    }</span>
+
+    @Test
+    public void testClickWithLettuce() {
+<span class="fc" id="L59">        Array&lt;Cook&gt; cooks = new Array&lt;Cook&gt;();</span>
+<span class="fc" id="L60">        Cook cook = new Cook(new com.badlogic.gdx.scenes.scene2d.Actor());</span>
+<span class="fc" id="L61">        cook.CookBody.setY(28f);</span>
+<span class="fc" id="L62">        cook.CookBody.setX(48f);</span>
+<span class="fc" id="L63">        Stack&lt;Ingredient&gt; cookStack = new Stack&lt;Ingredient&gt;();</span>
+<span class="fc" id="L64">        cookStack.push(new Ingredient(&quot;lettuce&quot;, null, null, null));</span>
+<span class="fc" id="L65">        cook.CookStack = cookStack;</span>
+<span class="fc" id="L66">        cook.isBusy = false;</span>
+<span class="fc" id="L67">        cooks.add(cook);</span>
+
+<span class="fc" id="L69">        when(gameScreen.getCooks()).thenReturn(cooks);</span>
+<span class="fc" id="L70">        cutting.onClicked(gameScreen);</span>
+<span class="fc" id="L71">        System.out.println(cook.isBusy);</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        assert cook.isBusy;</span>
+<span class="fc" id="L73">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

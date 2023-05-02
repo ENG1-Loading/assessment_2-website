@@ -33,60 +33,64 @@ public class Frying {
 <span class="fc" id="L33">        fryingClickable.addListener(new ClickListener() {</span>
 
             public void clicked(InputEvent event, float x, float y) {
-<span class="nc" id="L36">                Array&lt;Cook&gt; cooks = screen.getCooks();</span>
-<span class="nc" id="L37">                int selected = screen.getSelected();</span>
-<span class="nc" id="L38">                screen.setSationSelected(1);</span>
-                // stationSelected.set(selected, 1);
-                // boolean ingredientAtStation = false;
-<span class="nc" id="L41">                Ingredient cookedPatty = new Ingredient(&quot;patty&quot;, new Texture(&quot;rawPatty.png&quot;),</span>
-                        new Texture(&quot;prepdPatty.png&quot;), new Texture(&quot;burntPatty.png&quot;));
-<span class="nc" id="L43">                cookedPatty.prepare();</span>
-<span class="nc" id="L44">                cookedPatty.updateCurrentTexture();</span>
-<span class="nc bnc" id="L45" title="All 2 branches missed.">                if ((Math.abs(screen.getCooks().get(screen.getSelected()).CookBody.getY() - 64f) &lt; 2)</span>
-<span class="nc bnc" id="L46" title="All 2 branches missed.">                        &amp;&amp; (Math.abs(cooks.get(selected).CookBody.getX() - 32f) &lt; 2)) {</span>
-<span class="nc bnc" id="L47" title="All 2 branches missed.">                    if (!(screen.getCooks().get(screen.getSelected()).isBusy)) {</span>
-                        // used to limit to preparing only one ingredient per press
-<span class="nc" id="L49">                        boolean ingredientDone = false;</span>
-<span class="nc" id="L50">                        Ingredient selectedIngredient = null;</span>
-                        // preps the first vegetable in the current cook's stack after pressing the
-                        // station again
-                        // while busy creates a progress bar to indicate when the cook can move again
-<span class="nc bnc" id="L54" title="All 2 branches missed.">                        for (Ingredient ingredient : screen.getCooks().get(screen.getSelected()).CookStack) {</span>
-<span class="nc bnc" id="L55" title="All 6 branches missed.">                            if ((ingredient.name == &quot;patty&quot;) &amp;&amp; (!ingredient.getState()) &amp;&amp; (!ingredientDone)) {</span>
-<span class="nc" id="L56">                                selectedIngredient = ingredient;</span>
-                            }
-<span class="nc" id="L58">                        }</span>
-<span class="nc bnc" id="L59" title="All 2 branches missed.">                        if (!(selectedIngredient == null)) {</span>
+<span class="nc" id="L36">                onClick(screen);</span>
+<span class="nc" id="L37">            }</span>
+        });
+<span class="fc" id="L39">    }</span>
 
-<span class="nc" id="L61">                            cooks.get(selected).isBusy = true;</span>
-<span class="nc" id="L62">                            screen.createProgressBar(24, 86, cooks.get(selected));</span>
-<span class="nc" id="L63">                            screen.incrementFryingClicked();</span>
-                            // used for the flipping mechanism (the station has to be pressed twice for the
-                            // patty to be prepared)
-<span class="nc bnc" id="L66" title="All 2 branches missed.">                            if ((screen.getFryingClicked()) % 2 == 0) {</span>
-<span class="nc" id="L67">                                ingredientDone = true;</span>
-<span class="nc" id="L68">                                cooks.get(selected).CookStack.push(cookedPatty);</span>
-<span class="nc" id="L69">                                screen.setPattyAtFrying(false);</span>
-                            } else {
-<span class="nc" id="L71">                                cooks.get(selected).CookStack.remove(selectedIngredient);</span>
-<span class="nc" id="L72">                                screen.setPattyAtFrying(true);</span>
-                            }
-                        } else {
-                            // create message to indicate that there are no ingredients in the current
-                            // cook's stack to be prepared
-<span class="nc bnc" id="L77" title="All 2 branches missed.">                            if (screen.getPattyAtFrying()) {</span>
-<span class="nc" id="L78">                                cooks.get(selected).isBusy = true;</span>
-<span class="nc" id="L79">                                screen.createProgressBar(24, 86, cooks.get(selected));</span>
-<span class="nc" id="L80">                                screen.incrementFryingClicked();</span>
-<span class="nc" id="L81">                                cooks.get(selected).CookStack.push(cookedPatty);</span>
-<span class="nc" id="L82">                                screen.setPattyAtFrying(false);</span>
-                            }
-                        }
+    public void onClick(GameScreen screen) {
+<span class="fc" id="L42">        Array&lt;Cook&gt; cooks = screen.getCooks();</span>
+<span class="fc" id="L43">        int selected = screen.getSelected();</span>
+<span class="fc" id="L44">        screen.setSationSelected(1);</span>
+        // stationSelected.set(selected, 1);
+        // boolean ingredientAtStation = false;
+<span class="fc" id="L47">        Ingredient cookedPatty = new Ingredient(&quot;patty&quot;, new Texture(&quot;rawPatty.png&quot;),</span>
+                new Texture(&quot;prepdPatty.png&quot;), new Texture(&quot;burntPatty.png&quot;));
+<span class="fc" id="L49">        cookedPatty.prepare();</span>
+<span class="fc" id="L50">        cookedPatty.updateCurrentTexture();</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        if ((Math.abs(screen.getCooks().get(screen.getSelected()).CookBody.getY() - 64f) &lt; 2)</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">                &amp;&amp; (Math.abs(cooks.get(selected).CookBody.getX() - 32f) &lt; 2)) {</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">            if (!(screen.getCooks().get(screen.getSelected()).isBusy)) {</span>
+                // used to limit to preparing only one ingredient per press
+<span class="fc" id="L55">                boolean ingredientDone = false;</span>
+<span class="fc" id="L56">                Ingredient selectedIngredient = null;</span>
+                // preps the first vegetable in the current cook's stack after pressing the
+                // station again
+                // while busy creates a progress bar to indicate when the cook can move again
+<span class="fc bfc" id="L60" title="All 2 branches covered.">                for (Ingredient ingredient : screen.getCooks().get(screen.getSelected()).CookStack) {</span>
+<span class="pc bpc" id="L61" title="2 of 6 branches missed.">                    if ((ingredient.name == &quot;patty&quot;) &amp;&amp; (!ingredient.getState()) &amp;&amp; (!ingredientDone)) {</span>
+<span class="fc" id="L62">                        selectedIngredient = ingredient;</span>
+                    }
+<span class="fc" id="L64">                }</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">                if (!(selectedIngredient == null)) {</span>
+
+<span class="fc" id="L67">                    cooks.get(selected).isBusy = true;</span>
+<span class="fc" id="L68">                    screen.createProgressBar(24, 86, cooks.get(selected));</span>
+<span class="fc" id="L69">                    screen.incrementFryingClicked();</span>
+                    // used for the flipping mechanism (the station has to be pressed twice for the
+                    // patty to be prepared)
+<span class="fc bfc" id="L72" title="All 2 branches covered.">                    if ((screen.getFryingClicked()) % 2 == 0) {</span>
+<span class="fc" id="L73">                        ingredientDone = true;</span>
+<span class="fc" id="L74">                        cooks.get(selected).CookStack.push(cookedPatty);</span>
+<span class="fc" id="L75">                        screen.setPattyAtFrying(false);</span>
+                    } else {
+<span class="fc" id="L77">                        cooks.get(selected).CookStack.remove(selectedIngredient);</span>
+<span class="fc" id="L78">                        screen.setPattyAtFrying(true);</span>
+                    }
+                } else {
+                    // create message to indicate that there are no ingredients in the current
+                    // cook's stack to be prepared
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">                    if (screen.getPattyAtFrying()) {</span>
+<span class="fc" id="L84">                        cooks.get(selected).isBusy = true;</span>
+<span class="fc" id="L85">                        screen.createProgressBar(24, 86, cooks.get(selected));</span>
+<span class="fc" id="L86">                        screen.incrementFryingClicked();</span>
+<span class="fc" id="L87">                        cooks.get(selected).CookStack.push(cookedPatty);</span>
+<span class="fc" id="L88">                        screen.setPattyAtFrying(false);</span>
                     }
                 }
-<span class="nc" id="L87">            }</span>
-        });
-<span class="fc" id="L89">    }</span>
+            }
+        }
+<span class="fc" id="L93">    }</span>
     /*
         * Getter for the frying station
         *
@@ -95,7 +99,7 @@ public class Frying {
         * @return fryingClickable the frying station
      */
     public ImageButton createFryingClickable() {
-<span class="fc" id="L98">        return fryingClickable;</span>
+<span class="fc" id="L102">        return fryingClickable;</span>
     }
 
 

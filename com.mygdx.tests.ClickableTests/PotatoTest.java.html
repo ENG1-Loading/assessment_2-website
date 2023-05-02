@@ -4,15 +4,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.mygdx.game.Clickables.Pantry;
 import com.mygdx.game.Clickables.PotatoClickable;
 import com.mygdx.game.Clickables.Utils;
+import com.mygdx.game.Cook;
 import com.mygdx.game.PiazzaPanic;
 import com.mygdx.game.Screens.GameScreen;
+import com.mygdx.tests.GdxTestRunner;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
-import static org.junit.Assert.assertNotNull;
+import java.lang.reflect.Array;
 
-<span class="fc" id="L15">public class PotatoTest {</span>
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
+<span class="fc" id="L20">@RunWith(GdxTestRunner.class)</span>
+<span class="fc" id="L21">public class PotatoTest {</span>
     private PiazzaPanic game;
     private Utils utils;
     private GameScreen gameScreen;
@@ -20,17 +26,28 @@ import static org.junit.Assert.assertNotNull;
 
     @Before
     public void setUp() {
-<span class="fc" id="L23">        game = Mockito.mock(PiazzaPanic.class);</span>
-<span class="fc" id="L24">        utils = new Utils();</span>
-<span class="fc" id="L25">        gameScreen = Mockito.mock(GameScreen.class);</span>
-<span class="fc" id="L26">        potatoClickable = new PotatoClickable( utils,gameScreen);</span>
-<span class="fc" id="L27">    }</span>
+<span class="fc" id="L29">        game = Mockito.mock(PiazzaPanic.class);</span>
+<span class="fc" id="L30">        utils = new Utils();</span>
+<span class="fc" id="L31">        gameScreen = Mockito.mock(GameScreen.class);</span>
+<span class="fc" id="L32">        potatoClickable = new PotatoClickable( utils,gameScreen);</span>
+<span class="fc" id="L33">    }</span>
 
     @Test
     public void potatoClickableIsNotNull() {
-<span class="fc" id="L31">        ImageButton potatoClickable1 = potatoClickable.getPotatoClickable();</span>
-<span class="fc" id="L32">        assertNotNull(potatoClickable1);</span>
-<span class="fc" id="L33">    }</span>
+<span class="fc" id="L37">        ImageButton potatoClickable1 = potatoClickable.getPotatoClickable();</span>
+<span class="fc" id="L38">        assertNotNull(potatoClickable1);</span>
+<span class="fc" id="L39">    }</span>
+
+    @Test
+    public void testClick() {
+<span class="fc" id="L43">        when(gameScreen.bakingUnlocked()).thenReturn(true);</span>
+<span class="fc" id="L44">        com.badlogic.gdx.utils.Array&lt;Cook&gt; cooks = new com.badlogic.gdx.utils.Array&lt;Cook&gt;();</span>
+<span class="fc" id="L45">        Cook cook = new Cook(new com.badlogic.gdx.scenes.scene2d.Actor());</span>
+<span class="fc" id="L46">        cooks.add(cook);</span>
+<span class="fc" id="L47">        when(gameScreen.getCooks()).thenReturn(cooks);</span>
+<span class="fc" id="L48">        potatoClickable.onClick(gameScreen);</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        assert cook.CookStack.size() == 1;</span>
+<span class="fc" id="L50">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

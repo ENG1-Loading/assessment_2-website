@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PantryTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.tests.ClickableTests</a> &gt; <span class="el_source">PantryTest.java</span></div><h1>PantryTest.java</h1><pre class="source lang-java linenums">package com.mygdx.tests.ClickableTests;
 
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Clickables.BunClickable;
 import com.mygdx.game.Clickables.Pantry;
 import com.mygdx.game.Clickables.Utils;
+import com.mygdx.game.Cook;
 import com.mygdx.game.PiazzaPanic;
 import com.mygdx.game.Screens.GameScreen;
 import com.mygdx.tests.GdxTestRunner;
@@ -13,8 +15,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 @RunWith(GdxTestRunner.class)
-<span class="fc" id="L17">public class PantryTest {</span>
+<span class="fc" id="L22">public class PantryTest {</span>
     private PiazzaPanic game;
     private Utils utils;
     private GameScreen gameScreen;
@@ -22,16 +27,29 @@ import static org.junit.Assert.assertNotNull;
 
     @Before
     public void setUp() {
-<span class="fc" id="L25">        game = Mockito.mock(PiazzaPanic.class);</span>
-<span class="fc" id="L26">        utils = new Utils();</span>
-<span class="fc" id="L27">        gameScreen = Mockito.mock(GameScreen.class);</span>
-<span class="fc" id="L28">        pantry = new Pantry(game, utils,gameScreen);</span>
-<span class="fc" id="L29">    }</span>
+<span class="fc" id="L30">        game = Mockito.mock(PiazzaPanic.class);</span>
+<span class="fc" id="L31">        utils = new Utils();</span>
+<span class="fc" id="L32">        gameScreen = Mockito.mock(GameScreen.class);</span>
+<span class="fc" id="L33">        pantry = new Pantry(game, utils,gameScreen);</span>
+<span class="fc" id="L34">    }</span>
 
     @Test
     public void pantryClickableIsNotNull() {
-<span class="fc" id="L33">        ImageButton pantryClickable = pantry.getPantryClickable();</span>
-<span class="fc" id="L34">        assertNotNull(pantryClickable);</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L38">        ImageButton pantryClickable = pantry.getPantryClickable();</span>
+<span class="fc" id="L39">        assertNotNull(pantryClickable);</span>
+<span class="fc" id="L40">    }</span>
+
+    @Test
+    public void testClick() {
+<span class="fc" id="L44">        Array&lt;Cook&gt; cooks = new Array&lt;Cook&gt;();</span>
+<span class="fc" id="L45">        Cook cook = new Cook(new com.badlogic.gdx.scenes.scene2d.Actor());</span>
+<span class="fc" id="L46">        cook.CookBody.setY(64f);</span>
+<span class="fc" id="L47">        cook.CookBody.setX(0f);</span>
+
+<span class="fc" id="L49">        cooks.add(cook);</span>
+<span class="fc" id="L50">        when(gameScreen.getCooks()).thenReturn(cooks);</span>
+<span class="fc" id="L51">        pantry.onClick(gameScreen);</span>
+<span class="fc" id="L52">        verify(gameScreen).setShowPantryScreen(true);</span>
+<span class="fc" id="L53">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

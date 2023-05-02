@@ -22,13 +22,20 @@ public class ExtraChef {
 <span class="fc" id="L22">        extraChefClickable.addListener(new ClickListener() {</span>
             @Override
             public void clicked(InputEvent event, float x, float y) {
-<span class="nc" id="L25">                boolean bought = powerups.setChefCount(3);</span>
-<span class="nc bnc" id="L26" title="All 2 branches missed.">                if (bought) {</span>
-<span class="nc" id="L27">                    screen.setChef(3);</span>
-                }
-<span class="nc" id="L29">            }</span>
+<span class="nc" id="L25">                onExtraChefButtonClicked(powerups, screen);</span>
+<span class="nc" id="L26">            }</span>
         });
-<span class="fc" id="L31">    }</span>
+<span class="fc" id="L28">    }</span>
+
+    public void onExtraChefButtonClicked(Powerups powerups, GameScreen gameScreen) {
+<span class="fc" id="L31">        System.out.println(&quot;buying extra chef&quot;);</span>
+<span class="fc" id="L32">        boolean bought = powerups.setChefCount(3);</span>
+<span class="pc bpc" id="L33" title="1 of 2 branches missed.">        if (bought) {</span>
+<span class="fc" id="L34">            gameScreen.setChef(3);</span>
+        }
+<span class="fc" id="L36">    }</span>
+
+
     /*
         * Getter for the extra chef powerup
         *
@@ -36,7 +43,7 @@ public class ExtraChef {
         *
         * @return the extra chef powerup
      */
-<span class="fc" id="L39">    public ImageButton getExtraChefClickable() {return extraChefClickable;}</span>
+<span class="fc" id="L46">    public ImageButton getExtraChefClickable() {return extraChefClickable;}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

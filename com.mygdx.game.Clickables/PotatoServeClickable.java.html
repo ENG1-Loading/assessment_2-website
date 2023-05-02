@@ -28,29 +28,33 @@ public class PotatoServeClickable {
 <span class="fc" id="L28">        potatoServeClickable.addListener(new ClickListener() {</span>
             @Override
             public void clicked(InputEvent event, float x, float y) {
-<span class="nc" id="L31">                Array&lt;Cook&gt; cooks = screen.getCooks();</span>
-<span class="nc" id="L32">                int selected = screen.getSelected();</span>
-<span class="nc" id="L33">                ArrayList&lt;ArrayList&lt;Customer&gt;&gt; customers = screen.getCustomers();</span>
-<span class="nc" id="L34">                int customerCount = screen.getCustomerCount();</span>
-<span class="nc" id="L35">                Potato recipe = new Potato();</span>
-<span class="nc" id="L36">                Ingredient potato = new Ingredient(&quot;potato&quot;, null, null, null);</span>
-<span class="nc" id="L37">                potato.prepare();</span>
-<span class="nc bnc" id="L38" title="All 2 branches missed.">                if (recipe.has(cooks.get(selected).CookStack)) {</span>
-<span class="nc bnc" id="L39" title="All 2 branches missed.">                    for (int i=0; i&lt;customers.get(customerCount).size();i++) {</span>
-<span class="nc bnc" id="L40" title="All 4 branches missed.">                        if (!customers.get(customerCount).get(i).selfComplete == true) {</span>
-<span class="nc" id="L41">                            cooks.get(selected).CookStack.remove(potato);</span>
-<span class="nc" id="L42">                            customers.get(customerCount).get(i).selfComplete = true;</span>
-<span class="nc" id="L43">                            screen.getMoney().addMoney(100);</span>
-<span class="nc" id="L44">                            screen.hideServingScreen();</span>
-<span class="nc" id="L45">                            cooks.get(selected).isBusy = false;</span>
-<span class="nc" id="L46">                            return;</span>
-                        }
-                    }
-                } else {
-                }
-<span class="nc" id="L51">            }</span>
+<span class="nc" id="L31">                onClick(screen);</span>
+<span class="nc" id="L32">            }</span>
         });
-<span class="fc" id="L53">    }</span>
+<span class="fc" id="L34">    }</span>
+
+    public void onClick(GameScreen screen) {
+<span class="fc" id="L37">        Array&lt;Cook&gt; cooks = screen.getCooks();</span>
+<span class="fc" id="L38">        int selected = screen.getSelected();</span>
+<span class="fc" id="L39">        ArrayList&lt;ArrayList&lt;Customer&gt;&gt; customers = screen.getCustomers();</span>
+<span class="fc" id="L40">        int customerCount = screen.getCustomerCount();</span>
+<span class="fc" id="L41">        Potato recipe = new Potato();</span>
+<span class="fc" id="L42">        Ingredient potato = new Ingredient(&quot;potato&quot;, null, null, null);</span>
+<span class="fc" id="L43">        potato.prepare();</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        if (recipe.has(cooks.get(selected).CookStack)) {</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">            for (int i=0; i&lt;customers.get(customerCount).size();i++) {</span>
+<span class="pc bpc" id="L46" title="2 of 4 branches missed.">                if (!customers.get(customerCount).get(i).selfComplete == true) {</span>
+<span class="fc" id="L47">                    cooks.get(selected).CookStack.remove(potato);</span>
+<span class="fc" id="L48">                    customers.get(customerCount).get(i).selfComplete = true;</span>
+<span class="fc" id="L49">                    screen.getMoney().addMoney(100);</span>
+<span class="fc" id="L50">                    screen.hideServingScreen();</span>
+<span class="fc" id="L51">                    cooks.get(selected).isBusy = false;</span>
+<span class="fc" id="L52">                    return;</span>
+                }
+            }
+        } else {
+        }
+<span class="nc" id="L57">    }</span>
     /*
         * Getter for the potato serve clickable
         *
@@ -59,7 +63,7 @@ public class PotatoServeClickable {
         * @return potatoServeClickable
      */
     public ImageButton getPotatoServeClickable() {
-<span class="fc" id="L62">        return potatoServeClickable;</span>
+<span class="fc" id="L66">        return potatoServeClickable;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

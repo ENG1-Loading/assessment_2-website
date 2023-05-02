@@ -29,44 +29,49 @@ public class BurgerClickable {
 <span class="fc" id="L29">        burgerClickable.addListener(new ClickListener() {</span>
             @Override
             public void clicked(InputEvent event, float x, float y) {
-<span class="nc" id="L32">                Array&lt;Cook&gt; cooks = screen.getCooks();</span>
-<span class="nc" id="L33">                int selected = screen.getSelected();</span>
-<span class="nc" id="L34">                ArrayList&lt;ArrayList&lt;Customer&gt;&gt; customers = screen.getCustomers();</span>
-<span class="nc" id="L35">                int customerCount = screen.getCustomerCount();</span>
-<span class="nc" id="L36">                Burger recipe = new Burger();</span>
-<span class="nc" id="L37">                Ingredient buns = new Ingredient(&quot;buns&quot;, null, null, null);</span>
-<span class="nc" id="L38">                buns.prepare();</span>
-<span class="nc" id="L39">                Ingredient patty = new Ingredient(&quot;patty&quot;, null, null, null);</span>
-<span class="nc" id="L40">                patty.prepare();</span>
-<span class="nc" id="L41">                Ingredient lettuce = new Ingredient(&quot;lettuce&quot;, null, null, null);</span>
-<span class="nc" id="L42">                lettuce.prepare();</span>
-<span class="nc bnc" id="L43" title="All 2 branches missed.">                if (recipe.has(cooks.get(selected).CookStack)) {</span>
-<span class="nc bnc" id="L44" title="All 2 branches missed.">                    for (int i = 0; i &lt; customers.get(customerCount).size(); i++) {</span>
-<span class="nc bnc" id="L45" title="All 2 branches missed.">                        if (customers.get(customerCount).get(i).customerOrder.getName() == &quot;burger&quot;) {</span>
-<span class="nc bnc" id="L46" title="All 4 branches missed.">                            if (!customers.get(customerCount).get(i).selfComplete == true) {</span>
-<span class="nc" id="L47">                                cooks.get(selected).CookStack.remove(buns);</span>
-<span class="nc" id="L48">                                cooks.get(selected).CookStack.remove(patty);</span>
-<span class="nc" id="L49">                                cooks.get(selected).CookStack.remove(lettuce);</span>
-                                
-<span class="nc" id="L51">                                customers.get(customerCount).get(i).selfComplete = true;</span>
-<span class="nc" id="L52">                                screen.getMoney().addMoney(100);</span>
-<span class="nc" id="L53">                                screen.hideServingScreen();</span>
-<span class="nc" id="L54">                                cooks.get(selected).isBusy = false;</span>
-<span class="nc" id="L55">                                return;</span>
-                            }
-                            
-                        } else {
-                        }
-                    }
-                    
-                } else {
-                    // some or all ingredients are not in the current cook's stack
-                }
+<span class="nc" id="L32">                onClick(screen);</span>
 
-<span class="nc" id="L66">            }</span>
+<span class="nc" id="L34">            }</span>
         });
 
-<span class="fc" id="L69">    }</span>
+<span class="fc" id="L37">    }</span>
+
+    public void onClick(GameScreen screen) {
+<span class="fc" id="L40">        Array&lt;Cook&gt; cooks = screen.getCooks();</span>
+<span class="fc" id="L41">        int selected = screen.getSelected();</span>
+<span class="fc" id="L42">        ArrayList&lt;ArrayList&lt;Customer&gt;&gt; customers = screen.getCustomers();</span>
+<span class="fc" id="L43">        int customerCount = screen.getCustomerCount();</span>
+<span class="fc" id="L44">        Burger recipe = new Burger();</span>
+<span class="fc" id="L45">        Ingredient buns = new Ingredient(&quot;buns&quot;, null, null, null);</span>
+<span class="fc" id="L46">        buns.prepare();</span>
+<span class="fc" id="L47">        Ingredient patty = new Ingredient(&quot;patty&quot;, null, null, null);</span>
+<span class="fc" id="L48">        patty.prepare();</span>
+<span class="fc" id="L49">        Ingredient lettuce = new Ingredient(&quot;lettuce&quot;, null, null, null);</span>
+<span class="fc" id="L50">        lettuce.prepare();</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (recipe.has(cooks.get(selected).CookStack)) {</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">            for (int i = 0; i &lt; customers.get(customerCount).size(); i++) {</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">                if (customers.get(customerCount).get(i).customerOrder.getName() == &quot;burger&quot;) {</span>
+<span class="pc bpc" id="L54" title="2 of 4 branches missed.">                    if (!customers.get(customerCount).get(i).selfComplete == true) {</span>
+<span class="fc" id="L55">                        cooks.get(selected).CookStack.remove(buns);</span>
+<span class="fc" id="L56">                        cooks.get(selected).CookStack.remove(patty);</span>
+<span class="fc" id="L57">                        cooks.get(selected).CookStack.remove(lettuce);</span>
+
+<span class="fc" id="L59">                        customers.get(customerCount).get(i).selfComplete = true;</span>
+<span class="fc" id="L60">                        screen.getMoney().addMoney(100);</span>
+<span class="fc" id="L61">                        screen.hideServingScreen();</span>
+<span class="fc" id="L62">                        cooks.get(selected).isBusy = false;</span>
+<span class="fc" id="L63">                        return;</span>
+                    }
+
+                } else {
+                }
+            }
+
+        } else {
+            // some or all ingredients are not in the current cook's stack
+        }
+
+<span class="nc" id="L74">    }</span>
 
     /*
         * Getter for the burger station
@@ -76,7 +81,7 @@ public class BurgerClickable {
         * @return the burger station
      */
     public ImageButton getBurgerClickable() {
-<span class="fc" id="L79">        return burgerClickable;</span>
+<span class="fc" id="L84">        return burgerClickable;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

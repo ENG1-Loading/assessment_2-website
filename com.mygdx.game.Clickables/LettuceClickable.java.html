@@ -26,14 +26,18 @@ public class LettuceClickable {
 <span class="fc" id="L26">        lettuceClickable.addListener(new ClickListener() {</span>
             @Override
             public void clicked(InputEvent event, float x, float y) {
-<span class="nc" id="L29">                Array&lt;Cook&gt; cooks = screen.getCooks();</span>
-<span class="nc" id="L30">                int selected = screen.getSelected();</span>
-<span class="nc bnc" id="L31" title="All 2 branches missed.">                if (cooks.get(selected).CookStack.size() &lt; 5) {</span>
-<span class="nc" id="L32">                    cooks.get(selected).CookStack.push(new Ingredient(&quot;lettuce&quot;, new Texture(&quot;lettuce.png&quot;), new Texture(&quot;prepdLettuce.png&quot;), null));</span>
-                }
-<span class="nc" id="L34">            }</span>
+<span class="nc" id="L29">                onClick(screen);</span>
+<span class="nc" id="L30">            }</span>
         });
-<span class="fc" id="L36">    }</span>
+<span class="fc" id="L32">    }</span>
+
+    public void onClick(GameScreen screen) {
+<span class="fc" id="L35">        Array&lt;Cook&gt; cooks = screen.getCooks();</span>
+<span class="fc" id="L36">        int selected = screen.getSelected();</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (cooks.get(selected).CookStack.size() &lt; 5) {</span>
+<span class="fc" id="L38">            cooks.get(selected).CookStack.push(new Ingredient(&quot;lettuce&quot;, new Texture(&quot;lettuce.png&quot;), new Texture(&quot;prepdLettuce.png&quot;), null));</span>
+        }
+<span class="fc" id="L40">    }</span>
     /*
         * Getter for the lettuce station
         *
@@ -42,7 +46,7 @@ public class LettuceClickable {
         * @return the lettuce station
      */
     public ImageButton getLettuceClickable() {
-<span class="fc" id="L45">        return lettuceClickable;</span>
+<span class="fc" id="L49">        return lettuceClickable;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

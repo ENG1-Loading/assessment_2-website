@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BakingTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.tests.ClickableTests</a> &gt; <span class="el_source">BakingTest.java</span></div><h1>BakingTest.java</h1><pre class="source lang-java linenums">package com.mygdx.tests.ClickableTests;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Clickables.Baking;
+import com.mygdx.game.Food.Ingredient;
 import com.mygdx.game.PiazzaPanic;
 import com.mygdx.game.Screens.GameScreen;
 
@@ -22,14 +20,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import java.util.Stack;
 
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.*;
 
 
 @RunWith(GdxTestRunner.class)
-<span class="fc" id="L32">public class BakingTest {</span>
+<span class="fc" id="L30">public class BakingTest {</span>
     private PiazzaPanic game;
     private Utils utils;
     private GameScreen gameScreen;
@@ -37,42 +35,68 @@ import static org.mockito.Mockito.when;
 
     @Before
     public void setUp() {
-<span class="fc" id="L40">        game = Mockito.mock(PiazzaPanic.class);</span>
-<span class="fc" id="L41">        utils = new Utils();</span>
-<span class="fc" id="L42">        gameScreen = Mockito.mock(GameScreen.class);</span>
-<span class="fc" id="L43">        baking = new Baking(game, utils, gameScreen);</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L38">        game = Mockito.mock(PiazzaPanic.class);</span>
+<span class="fc" id="L39">        utils = new Utils();</span>
+<span class="fc" id="L40">        gameScreen = Mockito.mock(GameScreen.class);</span>
+<span class="fc" id="L41">        baking = new Baking(game, utils, gameScreen);</span>
+<span class="fc" id="L42">    }</span>
 
-    private void simulateClick2(ImageButton button) {
-<span class="nc" id="L47">        ClickListener clickListener = null;</span>
-<span class="nc bnc" id="L48" title="All 2 branches missed.">        for (EventListener listener: button.getListeners()) {</span>
-<span class="nc bnc" id="L49" title="All 2 branches missed.">            if (listener instanceof ClickListener) {</span>
-<span class="nc" id="L50">                clickListener = (ClickListener) listener;</span>
-<span class="nc" id="L51">                break;</span>
-            }
-<span class="nc" id="L53">        }</span>
-<span class="nc bnc" id="L54" title="All 2 branches missed.">        if (clickListener == null) {</span>
-<span class="nc" id="L55">            throw new RuntimeException(&quot;No click listener found&quot;);</span>
-        }
-
-<span class="nc" id="L58">        InputEvent event = mock(InputEvent.class);</span>
-<span class="nc" id="L59">        Mockito.when(event.getListenerActor()).thenReturn(button);</span>
-<span class="nc" id="L60">        when(event.getTarget()).thenReturn(button);</span>
-<span class="nc" id="L61">        clickListener.clicked(event, 0, 0);</span>
-<span class="nc" id="L62">    }</span>
     public void simulateClick(ImageButton imageButton) {
-<span class="nc" id="L64">        InputEvent inputEvent = new InputEvent();</span>
-<span class="nc" id="L65">        inputEvent.setType(InputEvent.Type.touchDown);</span>
-<span class="nc" id="L66">        imageButton.fire(inputEvent);</span>
+<span class="nc" id="L45">        InputEvent inputEvent = new InputEvent();</span>
+<span class="nc" id="L46">        inputEvent.setType(InputEvent.Type.touchDown);</span>
+<span class="nc" id="L47">        imageButton.fire(inputEvent);</span>
 
-<span class="nc" id="L68">        inputEvent.setType(InputEvent.Type.touchUp);</span>
-<span class="nc" id="L69">        imageButton.fire(inputEvent);</span>
-<span class="nc" id="L70">    }</span>
+<span class="nc" id="L49">        inputEvent.setType(InputEvent.Type.touchUp);</span>
+<span class="nc" id="L50">        imageButton.fire(inputEvent);</span>
+<span class="nc" id="L51">    }</span>
     @Test
     public void bakingClickableIsNotNull() {
-<span class="fc" id="L73">        ImageButton bakingClickable = baking.getBakingClickable();</span>
-<span class="fc" id="L74">        assertNotNull(bakingClickable);</span>
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L54">        ImageButton bakingClickable = baking.getBakingClickable();</span>
+<span class="fc" id="L55">        assertNotNull(bakingClickable);</span>
+<span class="fc" id="L56">    }</span>
+
+    @Test
+    public void testClickPizza() {
+<span class="fc" id="L60">        Array&lt;Cook&gt; cooks = new Array&lt;Cook&gt;();</span>
+<span class="fc" id="L61">        Cook cook = new Cook(new Actor());</span>
+<span class="fc" id="L62">        cooks.add(cook);</span>
+<span class="fc" id="L63">        when(gameScreen.getCooks()).thenReturn(cooks);</span>
+<span class="fc" id="L64">        when(gameScreen.getSelected()).thenReturn(0);</span>
+<span class="fc" id="L65">        when(gameScreen.getPizzaAtBaking()).thenReturn(true);</span>
+<span class="fc" id="L66">        gameScreen.getCooks().get(0).CookBody.setX(64);</span>
+<span class="fc" id="L67">        gameScreen.getCooks().get(0).CookBody.setY(64);</span>
+<span class="fc" id="L68">        Ingredient potato = new Ingredient(&quot;potato&quot;, null, null, null);</span>
+<span class="fc" id="L69">        potato.prepare();</span>
+<span class="fc" id="L70">        Stack&lt;Ingredient&gt; stack = new Stack&lt;&gt;();</span>
+<span class="fc" id="L71">        stack.push(potato);</span>
+<span class="fc" id="L72">        gameScreen.getCooks().get(0).CookStack = stack;</span>
+
+<span class="fc" id="L74">        when(gameScreen.bakingUnlocked()).thenReturn(true);</span>
+<span class="fc" id="L75">        baking.onBakingButtonClicked(gameScreen);</span>
+<span class="fc" id="L76">        verify(gameScreen, times(1)).setPizzaAtBaking(false);</span>
+
+<span class="fc" id="L78">    }</span>
+
+    @Test
+    public void testClickPotato() {
+<span class="fc" id="L82">        Array&lt;Cook&gt; cooks = new Array&lt;Cook&gt;();</span>
+<span class="fc" id="L83">        Cook cook = new Cook(new Actor());</span>
+<span class="fc" id="L84">        cooks.add(cook);</span>
+<span class="fc" id="L85">        when(gameScreen.getCooks()).thenReturn(cooks);</span>
+<span class="fc" id="L86">        when(gameScreen.getSelected()).thenReturn(0);</span>
+<span class="fc" id="L87">        when(gameScreen.getAtPotatoBaking()).thenReturn(true);</span>
+<span class="fc" id="L88">        gameScreen.getCooks().get(0).CookBody.setX(64);</span>
+<span class="fc" id="L89">        gameScreen.getCooks().get(0).CookBody.setY(64);</span>
+<span class="fc" id="L90">        Ingredient potato = new Ingredient(&quot;potato&quot;, null, null, null);</span>
+<span class="fc" id="L91">        potato.prepare();</span>
+<span class="fc" id="L92">        Stack&lt;Ingredient&gt; stack = new Stack&lt;&gt;();</span>
+<span class="fc" id="L93">        stack.push(potato);</span>
+<span class="fc" id="L94">        gameScreen.getCooks().get(0).CookStack = stack;</span>
+
+<span class="fc" id="L96">        when(gameScreen.bakingUnlocked()).thenReturn(true);</span>
+<span class="fc" id="L97">        baking.onBakingButtonClicked(gameScreen);</span>
+<span class="fc" id="L98">        verify(gameScreen, times(1)).setAtPotatoBaking(false);</span>
+<span class="fc" id="L99">    }</span>
 
 
 

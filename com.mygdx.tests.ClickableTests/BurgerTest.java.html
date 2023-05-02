@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BurgerTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.tests.ClickableTests</a> &gt; <span class="el_source">BurgerTest.java</span></div><h1>BurgerTest.java</h1><pre class="source lang-java linenums">package com.mygdx.tests.ClickableTests;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.Array;
@@ -28,8 +29,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(GdxTestRunner.class)
-<span class="fc" id="L32">public class BurgerTest {</span>
+<span class="fc" id="L32">@RunWith(GdxTestRunner.class)</span>
+<span class="fc" id="L33">public class BurgerTest {</span>
     private PiazzaPanic game;
     private Utils utils;
     private GameScreen gameScreen;
@@ -38,22 +39,51 @@ import static org.mockito.Mockito.when;
 
     @Before
     public void setUp() {
-<span class="fc" id="L41">        game = Mockito.mock(PiazzaPanic.class);</span>
-<span class="fc" id="L42">        utils = new Utils();</span>
-<span class="fc" id="L43">        gameScreen = Mockito.mock(GameScreen.class);</span>
+<span class="fc" id="L42">        game = Mockito.mock(PiazzaPanic.class);</span>
+<span class="fc" id="L43">        utils = new Utils();</span>
+<span class="fc" id="L44">        gameScreen = Mockito.mock(GameScreen.class);</span>
 
-<span class="fc" id="L45">        when(gameScreen.getCooks()).thenReturn(new Array&lt;Cook&gt;());</span>
-<span class="fc" id="L46">        when(gameScreen.getCustomers()).thenReturn(new ArrayList&lt;ArrayList&lt;Customer&gt;&gt;());</span>
-<span class="fc" id="L47">        when(gameScreen.getCustomerCount()).thenReturn(0);</span>
-<span class="fc" id="L48">        when(gameScreen.getMoney()).thenReturn(Mockito.mock(Money.class));</span>
-<span class="fc" id="L49">        burger = new BurgerClickable(game, utils,gameScreen);</span>
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L46">        when(gameScreen.getCooks()).thenReturn(new Array&lt;Cook&gt;());</span>
+<span class="fc" id="L47">        when(gameScreen.getCustomers()).thenReturn(new ArrayList&lt;ArrayList&lt;Customer&gt;&gt;());</span>
+<span class="fc" id="L48">        when(gameScreen.getCustomerCount()).thenReturn(0);</span>
+<span class="fc" id="L49">        when(gameScreen.getMoney()).thenReturn(Mockito.mock(Money.class));</span>
+<span class="fc" id="L50">        burger = new BurgerClickable(game, utils,gameScreen);</span>
+<span class="fc" id="L51">    }</span>
 
     @Test
     public void bunClickableIsNotNull() {
-<span class="fc" id="L54">        ImageButton burgerClickable = burger.getBurgerClickable();</span>
-<span class="fc" id="L55">        assertNotNull(burgerClickable);</span>
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L55">        ImageButton burgerClickable = burger.getBurgerClickable();</span>
+<span class="fc" id="L56">        assertNotNull(burgerClickable);</span>
+<span class="fc" id="L57">    }</span>
+
+    @Test
+    public void testClick() throws IOException {
+<span class="fc" id="L61">        Array&lt;Cook&gt; cooks = new Array&lt;Cook&gt;();</span>
+<span class="fc" id="L62">        Cook cook = new Cook(new Actor());</span>
+<span class="fc" id="L63">        cook.CookBody.setY(32f);</span>
+<span class="fc" id="L64">        cook.CookBody.setX(0f);</span>
+<span class="fc" id="L65">        Ingredient bun = new Ingredient(&quot;buns&quot;, null, null, null);</span>
+<span class="fc" id="L66">        bun.prepare();</span>
+<span class="fc" id="L67">        cook.CookStack.push(bun);</span>
+<span class="fc" id="L68">        Ingredient patty = new Ingredient(&quot;patty&quot;, null, null, null);</span>
+<span class="fc" id="L69">        patty.prepare();</span>
+<span class="fc" id="L70">        cook.CookStack.push(patty);</span>
+<span class="fc" id="L71">        Ingredient lettuce = new Ingredient(&quot;lettuce&quot;, null, null, null);</span>
+<span class="fc" id="L72">        lettuce.prepare();</span>
+<span class="fc" id="L73">        cook.CookStack.push(lettuce);</span>
+<span class="fc" id="L74">        cooks.add(cook);</span>
+<span class="fc" id="L75">        Customer customer = new Customer(new Actor(), false);</span>
+<span class="fc" id="L76">        customer.customerOrder = new Order(&quot;burger&quot;, null, new Burger());</span>
+<span class="fc" id="L77">        customer.selfComplete = false;</span>
+<span class="fc" id="L78">        ArrayList&lt;Customer&gt; customerList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L79">        customerList.add(customer);</span>
+<span class="fc" id="L80">        ArrayList&lt;ArrayList&lt;Customer&gt;&gt; customers = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L81">        customers.add(customerList);</span>
+<span class="fc" id="L82">        when(gameScreen.getCustomers()).thenReturn(customers);</span>
+<span class="fc" id="L83">        when(gameScreen.getCooks()).thenReturn(cooks);</span>
+<span class="fc" id="L84">        burger.onClick(gameScreen);</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        assert cook.CookStack.size() == 0;</span>
+<span class="fc" id="L86">    }</span>
 
 //    @Test
 //    public void testBurgerClick() throws IOException {

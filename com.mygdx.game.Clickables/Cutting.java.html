@@ -26,36 +26,40 @@ public class Cutting {
 <span class="fc" id="L26">        cuttingClickable.addListener(new ClickListener() {</span>
             @Override
             public void clicked(InputEvent event, float x, float y) {
-<span class="nc" id="L29">                screen.setSationSelected(4);</span>
-<span class="nc" id="L30">                Array&lt;Cook&gt; cooks = screen.getCooks();</span>
-<span class="nc" id="L31">                int selected = screen.getSelected();</span>
-<span class="nc bnc" id="L32" title="All 4 branches missed.">                if ((Math.abs(cooks.get(selected).CookBody.getY() - 28f) &lt; 2) &amp;&amp; (Math.abs(cooks.get(selected).CookBody.getX() - 48f) &lt; 2)) {</span>
-                    // Can only prep if the cook is not busy
-<span class="nc bnc" id="L34" title="All 2 branches missed.">                    if (!(cooks.get(selected).isBusy)) {</span>
-                        // used to limit to preping only one ingredient per press
-<span class="nc" id="L36">                        boolean ingredientDone = false;</span>
-                        // preps the first vegetable in the current cook's stack after pressing the station again
-                        // while busy creates a progress bar to indicate when the cook can move again
-<span class="nc" id="L39">                        Ingredient selectedIngredient = null;</span>
-<span class="nc bnc" id="L40" title="All 2 branches missed.">                        for (Ingredient ingredient : cooks.get(selected).CookStack) {</span>
-<span class="nc bnc" id="L41" title="All 6 branches missed.">                            if ((ingredient.name == &quot;lettuce&quot;) &amp;&amp; (!ingredient.getState()) &amp;&amp; (!ingredientDone)) {</span>
-<span class="nc" id="L42">                                selectedIngredient = ingredient;</span>
-<span class="nc bnc" id="L43" title="All 6 branches missed.">                            } else if ((ingredient.name == &quot;tomato&quot;) &amp;&amp; (!ingredient.getState()) &amp;&amp; (!ingredientDone)) {</span>
-<span class="nc" id="L44">                                selectedIngredient = ingredient;</span>
-                            }
-<span class="nc" id="L46">                        }</span>
-<span class="nc bnc" id="L47" title="All 2 branches missed.">                        if (!(selectedIngredient == null)) {</span>
-<span class="nc" id="L48">                            cooks.get(selected).isBusy = true;</span>
-<span class="nc" id="L49">                            screen.createProgressBar(40, 50, cooks.get(selected));</span>
-<span class="nc" id="L50">                            selectedIngredient.prepare();</span>
-<span class="nc" id="L51">                            selectedIngredient.updateCurrentTexture();</span>
-<span class="nc" id="L52">                            ingredientDone = true;</span>
-                        }
-                    }
-                }
-<span class="nc" id="L56">            }</span>
+<span class="nc" id="L29">                onClicked(screen);</span>
+<span class="nc" id="L30">            }</span>
         });
-<span class="fc" id="L58">    }</span>
+<span class="fc" id="L32">    }</span>
+
+    public void onClicked(GameScreen screen) {
+<span class="fc" id="L35">        screen.setSationSelected(4);</span>
+<span class="fc" id="L36">        Array&lt;Cook&gt; cooks = screen.getCooks();</span>
+<span class="fc" id="L37">        int selected = screen.getSelected();</span>
+<span class="pc bpc" id="L38" title="1 of 4 branches missed.">        if ((Math.abs(cooks.get(selected).CookBody.getY() - 28f) &lt; 2) &amp;&amp; (Math.abs(cooks.get(selected).CookBody.getX() - 48f) &lt; 2)) {</span>
+            // Can only prep if the cook is not busy
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">            if (!(cooks.get(selected).isBusy)) {</span>
+                // used to limit to preping only one ingredient per press
+<span class="fc" id="L42">                boolean ingredientDone = false;</span>
+                // preps the first vegetable in the current cook's stack after pressing the station again
+                // while busy creates a progress bar to indicate when the cook can move again
+<span class="fc" id="L45">                Ingredient selectedIngredient = null;</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">                for (Ingredient ingredient : cooks.get(selected).CookStack) {</span>
+<span class="pc bpc" id="L47" title="3 of 6 branches missed.">                    if ((ingredient.name == &quot;lettuce&quot;) &amp;&amp; (!ingredient.getState()) &amp;&amp; (!ingredientDone)) {</span>
+<span class="fc" id="L48">                        selectedIngredient = ingredient;</span>
+<span class="nc bnc" id="L49" title="All 6 branches missed.">                    } else if ((ingredient.name == &quot;tomato&quot;) &amp;&amp; (!ingredient.getState()) &amp;&amp; (!ingredientDone)) {</span>
+<span class="nc" id="L50">                        selectedIngredient = ingredient;</span>
+                    }
+<span class="fc" id="L52">                }</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">                if (!(selectedIngredient == null)) {</span>
+<span class="fc" id="L54">                    cooks.get(selected).isBusy = true;</span>
+<span class="fc" id="L55">                    screen.createProgressBar(40, 50, cooks.get(selected));</span>
+<span class="fc" id="L56">                    selectedIngredient.prepare();</span>
+<span class="fc" id="L57">                    selectedIngredient.updateCurrentTexture();</span>
+<span class="fc" id="L58">                    ingredientDone = true;</span>
+                }
+            }
+        }
+<span class="fc" id="L62">    }</span>
     /*
         * Getter for the cutting station
         *
@@ -64,7 +68,7 @@ public class Cutting {
         * @return the cutting station
      */
     public ImageButton getCuttingClickable() {
-<span class="fc" id="L67">        return cuttingClickable;</span>
+<span class="fc" id="L71">        return cuttingClickable;</span>
     }
 
 }

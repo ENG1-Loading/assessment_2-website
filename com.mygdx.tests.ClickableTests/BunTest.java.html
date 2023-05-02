@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BunTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.tests.ClickableTests</a> &gt; <span class="el_source">BunTest.java</span></div><h1>BunTest.java</h1><pre class="source lang-java linenums">package com.mygdx.tests.ClickableTests;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Clickables.Baking;
 import com.mygdx.game.Clickables.BunClickable;
 import com.mygdx.game.Clickables.Utils;
+import com.mygdx.game.Cook;
+import com.mygdx.game.Food.Ingredient;
 import com.mygdx.game.PiazzaPanic;
 import com.mygdx.game.Screens.GameScreen;
 import com.mygdx.tests.GdxTestRunner;
@@ -13,9 +17,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
 
-@RunWith(GdxTestRunner.class)
-<span class="fc" id="L18">public class BunTest {</span>
+<span class="fc" id="L22">@RunWith(GdxTestRunner.class)</span>
+<span class="fc" id="L23">public class BunTest {</span>
     private PiazzaPanic game;
     private Utils utils;
     private GameScreen gameScreen;
@@ -23,16 +28,32 @@ import static org.junit.Assert.assertNotNull;
 
     @Before
     public void setUp() {
-<span class="fc" id="L26">        game = Mockito.mock(PiazzaPanic.class);</span>
-<span class="fc" id="L27">        utils = new Utils();</span>
-<span class="fc" id="L28">        gameScreen = Mockito.mock(GameScreen.class);</span>
-<span class="fc" id="L29">        bun = new BunClickable(utils,gameScreen);</span>
-<span class="fc" id="L30">    }</span>
+<span class="fc" id="L31">        game = Mockito.mock(PiazzaPanic.class);</span>
+<span class="fc" id="L32">        utils = new Utils();</span>
+<span class="fc" id="L33">        gameScreen = Mockito.mock(GameScreen.class);</span>
+<span class="fc" id="L34">        bun = new BunClickable(utils,gameScreen);</span>
+<span class="fc" id="L35">    }</span>
 
     @Test
     public void bunClickableIsNotNull() {
-<span class="fc" id="L34">        ImageButton bunClickable = bun.getBunClickable();</span>
-<span class="fc" id="L35">        assertNotNull(bunClickable);</span>
-<span class="fc" id="L36">    }</span>
+<span class="fc" id="L39">        ImageButton bunClickable = bun.getBunClickable();</span>
+<span class="fc" id="L40">        assertNotNull(bunClickable);</span>
+<span class="fc" id="L41">    }</span>
+
+    @Test
+    public void testClick() {
+<span class="fc" id="L45">        Array&lt;Cook&gt; cooks = new Array&lt;Cook&gt;();</span>
+<span class="fc" id="L46">        Cook cook = new Cook(new Actor());</span>
+<span class="fc" id="L47">        cook.CookBody.setY(32f);</span>
+<span class="fc" id="L48">        cook.CookBody.setX(0f);</span>
+<span class="fc" id="L49">        cook.CookStack.push(new Ingredient(&quot;buns&quot;, null, null, null));</span>
+<span class="fc" id="L50">        cooks.add(cook);</span>
+
+<span class="fc" id="L52">        when(gameScreen.getCooks()).thenReturn(cooks);</span>
+<span class="fc" id="L53">        bun.onClick(gameScreen);</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        assert cook.CookStack.size() == 2;</span>
+<span class="fc" id="L55">    }</span>
+
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

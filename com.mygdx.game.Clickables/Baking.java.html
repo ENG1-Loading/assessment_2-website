@@ -30,80 +30,85 @@ public class Baking {
 <span class="fc" id="L30">        bakingClickable.addListener(new ClickListener() {</span>
             @Override
             public void clicked(InputEvent event, float x, float y) {
-<span class="nc" id="L33">                System.out.println(&quot;Baking Clicked&quot;);</span>
-<span class="nc" id="L34">                Array&lt;Cook&gt; cooks = screen.getCooks();</span>
-<span class="nc" id="L35">                int selected = screen.getSelected();</span>
-<span class="nc" id="L36">                screen.setSationSelected(2);</span>
+<span class="nc" id="L33">                onBakingButtonClicked(screen);</span>
+<span class="nc" id="L34">            }</span>
+        });
+<span class="fc" id="L36">    }</span>
 
-<span class="nc" id="L38">                Ingredient bakedPizza = new Ingredient(&quot;pizza&quot;, new Texture(&quot;rawPizza.png&quot;),</span>
-                        new Texture(&quot;prepdPizza.png&quot;), new Texture(&quot;burntPizza.png&quot;));
-<span class="nc" id="L40">                bakedPizza.prepare();</span>
-<span class="nc" id="L41">                bakedPizza.updateCurrentTexture();</span>
-<span class="nc" id="L42">                Ingredient bakedPotato = new Ingredient(&quot;potato&quot;, new Texture(&quot;potato.png&quot;), new Texture(&quot;potatoCooked.png&quot;), new Texture(&quot;burntPotato.png&quot;));</span>
-<span class="nc" id="L43">                bakedPotato.prepare();</span>
-<span class="nc" id="L44">                bakedPotato.updateCurrentTexture();</span>
-<span class="nc bnc" id="L45" title="All 2 branches missed.">                if ((Math.abs(screen.getCooks().get(screen.getSelected()).CookBody.getY() - 64f) &lt; 2)</span>
-<span class="nc bnc" id="L46" title="All 4 branches missed.">                        &amp;&amp; (Math.abs(cooks.get(selected).CookBody.getX() - 64f) &lt; 2) &amp;&amp; screen.bakingUnlocked()) {</span>
-<span class="nc bnc" id="L47" title="All 2 branches missed.">                    if (!(screen.getCooks().get(screen.getSelected()).isBusy)) {</span>
-                        // used to limit to preping only one ingredient per press
-<span class="nc" id="L49">                        boolean ingredientDone = false;</span>
-<span class="nc" id="L50">                        Ingredient selectedIngredient = null;</span>
-                        // preps the first vegetable in the current cook's stack after pressing the
-                        // station again
-                        // while busy creates a progress bar to indicate when the cook can move again
-<span class="nc bnc" id="L54" title="All 2 branches missed.">                        for (Ingredient ingredient : screen.getCooks().get(screen.getSelected()).CookStack) {</span>
-<span class="nc bnc" id="L55" title="All 8 branches missed.">                            if ((ingredient.name == &quot;pizza&quot; || ingredient.name == &quot;potato&quot;) &amp;&amp; (!ingredient.getState()) &amp;&amp; (!ingredientDone)) {</span>
-<span class="nc" id="L56">                                selectedIngredient = ingredient;</span>
-                            } else {
-                            }
-<span class="nc" id="L59">                        }</span>
-<span class="nc bnc" id="L60" title="All 2 branches missed.">                        if (!(selectedIngredient == null)) {</span>
-<span class="nc" id="L61">                            cooks.get(selected).isBusy = true;</span>
-<span class="nc" id="L62">                            screen.createProgressBar(80, 86, cooks.get(selected));</span>
-<span class="nc" id="L63">                            screen.incrementBakingClicked();</span>
-                            // used for the flipping mechanism (the station has to be pressed twice for the
-                            // patty to be prepared)
-<span class="nc bnc" id="L66" title="All 2 branches missed.">                            if ((screen.getBakingClicked()) % 2 == 0) {</span>
-<span class="nc" id="L67">                                ingredientDone = true;</span>
-<span class="nc bnc" id="L68" title="All 2 branches missed.">                                if (selectedIngredient.name == &quot;pizza&quot;) {</span>
-<span class="nc" id="L69">                                    cooks.get(selected).CookStack.push(bakedPizza);</span>
-<span class="nc" id="L70">                                    screen.setPizzaAtBaking(false);</span>
-<span class="nc bnc" id="L71" title="All 2 branches missed.">                                } else if (selectedIngredient.name == &quot;potato&quot;) {</span>
-<span class="nc" id="L72">                                    cooks.get(selected).CookStack.push(bakedPotato);</span>
-<span class="nc" id="L73">                                    screen.setAtPotatoBaking(false);</span>
-                                }
+    public void onBakingButtonClicked(GameScreen screen) {
+<span class="fc" id="L39">        System.out.println(&quot;Baking Clicked&quot;);</span>
+<span class="fc" id="L40">        Array&lt;Cook&gt; cooks = screen.getCooks();</span>
+<span class="fc" id="L41">        int selected = screen.getSelected();</span>
+<span class="fc" id="L42">        screen.setSationSelected(2);</span>
 
-                            } else {
-<span class="nc" id="L77">                                cooks.get(selected).CookStack.remove(selectedIngredient);</span>
-<span class="nc bnc" id="L78" title="All 2 branches missed.">                                if (selectedIngredient.name == &quot;pizza&quot;) {</span>
-<span class="nc" id="L79">                                    screen.setPizzaAtBaking(true);</span>
+<span class="fc" id="L44">        Ingredient bakedPizza = new Ingredient(&quot;pizza&quot;, new Texture(&quot;rawPizza.png&quot;),</span>
+                new Texture(&quot;prepdPizza.png&quot;), new Texture(&quot;burntPizza.png&quot;));
+<span class="fc" id="L46">        bakedPizza.prepare();</span>
+<span class="fc" id="L47">        bakedPizza.updateCurrentTexture();</span>
+<span class="fc" id="L48">        Ingredient bakedPotato = new Ingredient(&quot;potato&quot;, new Texture(&quot;potato.png&quot;), new Texture(&quot;potatoCooked.png&quot;), new Texture(&quot;burntPotato.png&quot;));</span>
+<span class="fc" id="L49">        bakedPotato.prepare();</span>
+<span class="fc" id="L50">        bakedPotato.updateCurrentTexture();</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if ((Math.abs(screen.getCooks().get(screen.getSelected()).CookBody.getY() - 64f) &lt; 2)</span>
+<span class="pc bpc" id="L52" title="2 of 4 branches missed.">                &amp;&amp; (Math.abs(cooks.get(selected).CookBody.getX() - 64f) &lt; 2) &amp;&amp; screen.bakingUnlocked()) {</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">            if (!(screen.getCooks().get(screen.getSelected()).isBusy)) {</span>
+                // used to limit to preping only one ingredient per press
+<span class="fc" id="L55">                boolean ingredientDone = false;</span>
+<span class="fc" id="L56">                Ingredient selectedIngredient = null;</span>
+                // preps the first vegetable in the current cook's stack after pressing the
+                // station again
+                // while busy creates a progress bar to indicate when the cook can move again
+<span class="fc bfc" id="L60" title="All 2 branches covered.">                for (Ingredient ingredient : screen.getCooks().get(screen.getSelected()).CookStack) {</span>
+<span class="pc bpc" id="L61" title="5 of 8 branches missed.">                    if ((ingredient.name == &quot;pizza&quot; || ingredient.name == &quot;potato&quot;) &amp;&amp; (!ingredient.getState()) &amp;&amp; (!ingredientDone)) {</span>
+<span class="nc" id="L62">                        selectedIngredient = ingredient;</span>
+                    } else {
+                    }
+<span class="fc" id="L65">                }</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">                if (!(selectedIngredient == null)) {</span>
+<span class="nc" id="L67">                    cooks.get(selected).isBusy = true;</span>
+<span class="nc" id="L68">                    screen.createProgressBar(80, 86, cooks.get(selected));</span>
+<span class="nc" id="L69">                    screen.incrementBakingClicked();</span>
+                    // used for the flipping mechanism (the station has to be pressed twice for the
+                    // patty to be prepared)
+<span class="nc bnc" id="L72" title="All 2 branches missed.">                    if ((screen.getBakingClicked()) % 2 == 0) {</span>
+<span class="nc" id="L73">                        ingredientDone = true;</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">                        if (selectedIngredient.name == &quot;pizza&quot;) {</span>
+<span class="nc" id="L75">                            cooks.get(selected).CookStack.push(bakedPizza);</span>
+<span class="nc" id="L76">                            screen.setPizzaAtBaking(false);</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">                        } else if (selectedIngredient.name == &quot;potato&quot;) {</span>
+<span class="nc" id="L78">                            cooks.get(selected).CookStack.push(bakedPotato);</span>
+<span class="nc" id="L79">                            screen.setAtPotatoBaking(false);</span>
+                        }
 
-<span class="nc bnc" id="L81" title="All 2 branches missed.">                                } else if(selectedIngredient.name == &quot;potato&quot;) {</span>
-<span class="nc" id="L82">                                    screen.setAtPotatoBaking(true);</span>
-                                }
-                            }
-                        } else {
-<span class="nc bnc" id="L86" title="All 2 branches missed.">                            if (screen.getPizzaAtBaking()) {</span>
-<span class="nc" id="L87">                                cooks.get(selected).isBusy = true;</span>
-<span class="nc" id="L88">                                screen.createProgressBar(80, 86, cooks.get(selected));</span>
-<span class="nc" id="L89">                                screen.incrementBakingClicked();</span>
-<span class="nc" id="L90">                                cooks.get(selected).CookStack.push(bakedPizza);</span>
-<span class="nc" id="L91">                                screen.setPizzaAtBaking(false);</span>
-<span class="nc bnc" id="L92" title="All 2 branches missed.">                            } else if (screen.getAtPotatoBaking()) {</span>
-<span class="nc" id="L93">                                cooks.get(selected).isBusy = true;</span>
-<span class="nc" id="L94">                                screen.createProgressBar(80, 86, cooks.get(selected));</span>
-<span class="nc" id="L95">                                screen.incrementBakingClicked();</span>
-<span class="nc" id="L96">                                cooks.get(selected).CookStack.push(bakedPotato);</span>
-<span class="nc" id="L97">                                screen.setAtPotatoBaking(false);</span>
-                            }
+                    } else {
+<span class="nc" id="L83">                        cooks.get(selected).CookStack.remove(selectedIngredient);</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">                        if (selectedIngredient.name == &quot;pizza&quot;) {</span>
+<span class="nc" id="L85">                            screen.setPizzaAtBaking(true);</span>
+
+<span class="nc bnc" id="L87" title="All 2 branches missed.">                        } else if(selectedIngredient.name == &quot;potato&quot;) {</span>
+<span class="nc" id="L88">                            screen.setAtPotatoBaking(true);</span>
                         }
                     }
                 } else {
-
+<span class="fc bfc" id="L92" title="All 2 branches covered.">                    if (screen.getPizzaAtBaking()) {</span>
+<span class="fc" id="L93">                        cooks.get(selected).isBusy = true;</span>
+<span class="fc" id="L94">                        screen.createProgressBar(80, 86, cooks.get(selected));</span>
+<span class="fc" id="L95">                        screen.incrementBakingClicked();</span>
+<span class="fc" id="L96">                        cooks.get(selected).CookStack.push(bakedPizza);</span>
+<span class="fc" id="L97">                        screen.setPizzaAtBaking(false);</span>
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">                    } else if (screen.getAtPotatoBaking()) {</span>
+<span class="fc" id="L99">                        cooks.get(selected).isBusy = true;</span>
+<span class="fc" id="L100">                        screen.createProgressBar(80, 86, cooks.get(selected));</span>
+<span class="fc" id="L101">                        screen.incrementBakingClicked();</span>
+<span class="fc" id="L102">                        cooks.get(selected).CookStack.push(bakedPotato);</span>
+<span class="fc" id="L103">                        screen.setAtPotatoBaking(false);</span>
+                    }
                 }
-<span class="nc" id="L104">            }</span>
-        });
-<span class="fc" id="L106">    }</span>
+            }
+        } else {
+
+        }
+<span class="fc" id="L110">    }</span>
+
     /*
         * Getter for the baking station
         * @param none
@@ -111,7 +116,7 @@ public class Baking {
         * @return the baking station
      */
     public ImageButton getBakingClickable() {
-<span class="fc" id="L114">        return bakingClickable;</span>
+<span class="fc" id="L119">        return bakingClickable;</span>
     }
 
 }

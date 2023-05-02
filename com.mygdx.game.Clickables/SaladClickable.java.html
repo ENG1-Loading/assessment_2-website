@@ -29,38 +29,42 @@ public class SaladClickable {
 <span class="fc" id="L29">        saladClickable.addListener(new ClickListener() {</span>
             @Override
             public void clicked(InputEvent event, float x, float y) {
-<span class="nc" id="L32">                Array&lt;Cook&gt; cooks = screen.getCooks();</span>
-<span class="nc" id="L33">                ArrayList&lt;ArrayList&lt;Customer&gt;&gt; customers = screen.getCustomers();</span>
-<span class="nc" id="L34">                int selected = screen.getSelected();</span>
-<span class="nc" id="L35">                int customerCount = screen.getCustomerCount();</span>
-<span class="nc" id="L36">                com.mygdx.game.Food.Salad recipe = new com.mygdx.game.Food.Salad();</span>
-<span class="nc" id="L37">                Ingredient tomato = new Ingredient(&quot;tomato&quot;, null, null, null);</span>
-<span class="nc" id="L38">                tomato.prepare();</span>
-<span class="nc" id="L39">                Ingredient lettuce = new Ingredient(&quot;lettuce&quot;, null, null, null);</span>
-<span class="nc" id="L40">                lettuce.prepare();</span>
-<span class="nc bnc" id="L41" title="All 2 branches missed.">                if (recipe.has(cooks.get(selected).CookStack)) {</span>
-<span class="nc bnc" id="L42" title="All 2 branches missed.">                    for (int i = 0; i &lt; customers.get(customerCount).size(); i++) {</span>
-<span class="nc bnc" id="L43" title="All 2 branches missed.">                    if (customers.get(customerCount).get(i).customerOrder.getName() == &quot;salad&quot;) {</span>
-<span class="nc bnc" id="L44" title="All 2 branches missed.">                        if (!customers.get(customerCount).get(i).selfComplete) {</span>
-<span class="nc" id="L45">                            cooks.get(selected).CookStack.remove(tomato);</span>
-<span class="nc" id="L46">                            cooks.get(selected).CookStack.remove(lettuce);</span>
-<span class="nc" id="L47">                            customers.get(customerCount).get(i).selfComplete = true;</span>
-<span class="nc" id="L48">                            screen.getMoney().addMoney(100);</span>
-<span class="nc" id="L49">                            screen.hideServingScreen();</span>
-<span class="nc" id="L50">                            cooks.get(selected).isBusy = false;</span>
-<span class="nc" id="L51">                            return;</span>
-                        }
-                        }
-                        
-                }
-                } else {
-                    // some or all ingredients are not in the current cook's stack
-                }
-                
-<span class="nc" id="L60">            }</span>
+<span class="nc" id="L32">                onClick(screen);</span>
+<span class="nc" id="L33">            }</span>
         });
 
-<span class="fc" id="L63">    }</span>
+<span class="fc" id="L36">    }</span>
+
+    public void onClick(GameScreen screen) {
+<span class="fc" id="L39">        Array&lt;Cook&gt; cooks = screen.getCooks();</span>
+<span class="fc" id="L40">        ArrayList&lt;ArrayList&lt;Customer&gt;&gt; customers = screen.getCustomers();</span>
+<span class="fc" id="L41">        int selected = screen.getSelected();</span>
+<span class="fc" id="L42">        int customerCount = screen.getCustomerCount();</span>
+<span class="fc" id="L43">        com.mygdx.game.Food.Salad recipe = new com.mygdx.game.Food.Salad();</span>
+<span class="fc" id="L44">        Ingredient tomato = new Ingredient(&quot;tomato&quot;, null, null, null);</span>
+<span class="fc" id="L45">        tomato.prepare();</span>
+<span class="fc" id="L46">        Ingredient lettuce = new Ingredient(&quot;lettuce&quot;, null, null, null);</span>
+<span class="fc" id="L47">        lettuce.prepare();</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        if (recipe.has(cooks.get(selected).CookStack)) {</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">            for (int i = 0; i &lt; customers.get(customerCount).size(); i++) {</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">                if (customers.get(customerCount).get(i).customerOrder.getName() == &quot;salad&quot;) {</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">                    if (!customers.get(customerCount).get(i).selfComplete) {</span>
+<span class="fc" id="L52">                        cooks.get(selected).CookStack.remove(tomato);</span>
+<span class="fc" id="L53">                        cooks.get(selected).CookStack.remove(lettuce);</span>
+<span class="fc" id="L54">                        customers.get(customerCount).get(i).selfComplete = true;</span>
+<span class="fc" id="L55">                        screen.getMoney().addMoney(100);</span>
+<span class="fc" id="L56">                        screen.hideServingScreen();</span>
+<span class="fc" id="L57">                        cooks.get(selected).isBusy = false;</span>
+<span class="fc" id="L58">                        return;</span>
+                    }
+                }
+
+            }
+        } else {
+            // some or all ingredients are not in the current cook's stack
+        }
+
+<span class="nc" id="L67">    }</span>
     /*
         * Getter for the salad clickable
         *
@@ -69,7 +73,7 @@ public class SaladClickable {
         * @return the salad clickable
      */
     public ImageButton getSaladClickable() {
-<span class="fc" id="L72">        return saladClickable;</span>
+<span class="fc" id="L76">        return saladClickable;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

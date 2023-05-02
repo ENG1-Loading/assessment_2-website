@@ -27,19 +27,22 @@ public class Bin {
 <span class="fc" id="L27">        binClickable.addListener(new ClickListener() {</span>
             @Override
             public void clicked(InputEvent event, float x, float y) {
-<span class="nc" id="L30">                Array&lt;Cook&gt; cooks = screen.getCooks();</span>
-<span class="nc" id="L31">                int selected = screen.getSelected();</span>
-                //stationSelected.set(selected, 3);
-<span class="nc" id="L33">                screen.setSationSelected(3);</span>
-                // if statement that checks if the current cook is at the bin
-<span class="nc bnc" id="L35" title="All 4 branches missed.">                if ((Math.abs(cooks.get(selected).CookBody.getY() - 32f) &lt; 2) &amp;&amp; (Math.abs(cooks.get(selected).CookBody.getX() - 0f) &lt; 2)) {</span>
-<span class="nc bnc" id="L36" title="All 2 branches missed.">                    if (cooks.get(selected).CookStack.size() &gt; 0) {</span>
-<span class="nc" id="L37">                        cooks.get(selected).CookStack.pop();</span>
-                    }
-                }
-<span class="nc" id="L40">            }</span>
+<span class="nc" id="L30">                onClick(screen);</span>
+<span class="nc" id="L31">            }</span>
         });
-<span class="fc" id="L42">    }</span>
+<span class="fc" id="L33">    }</span>
+
+    public void onClick(GameScreen screen) {
+<span class="fc" id="L36">        Array&lt;Cook&gt; cooks = screen.getCooks();</span>
+<span class="fc" id="L37">        int selected = screen.getSelected();</span>
+<span class="fc" id="L38">        screen.setSationSelected(3);</span>
+        // if statement that checks if the current cook is at the bin
+<span class="pc bpc" id="L40" title="2 of 4 branches missed.">        if ((Math.abs(cooks.get(selected).CookBody.getY() - 32f) &lt; 2) &amp;&amp; (Math.abs(cooks.get(selected).CookBody.getX() - 0f) &lt; 2)) {</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">            if (cooks.get(selected).CookStack.size() &gt; 0) {</span>
+<span class="fc" id="L42">                cooks.get(selected).CookStack.pop();</span>
+            }
+        }
+<span class="fc" id="L45">    }</span>
     /*
         * Getter for the bin station
         *
@@ -48,7 +51,7 @@ public class Bin {
         * @return the bin station
      */
     public ImageButton getBinClickable() {
-<span class="fc" id="L51">        return binClickable;</span>
+<span class="fc" id="L54">        return binClickable;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

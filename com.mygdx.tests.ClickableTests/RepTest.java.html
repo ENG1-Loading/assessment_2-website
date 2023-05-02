@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RepTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.tests.ClickableTests</a> &gt; <span class="el_source">RepTest.java</span></div><h1>RepTest.java</h1><pre class="source lang-java linenums">package com.mygdx.tests.ClickableTests;
+
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mygdx.game.Clickables.Pantry;
+import com.mygdx.game.Clickables.RepPowerup;
+import com.mygdx.game.Clickables.Utils;
+import com.mygdx.game.Money;
+import com.mygdx.game.PiazzaPanic;
+import com.mygdx.game.Powerups.Powerups;
+import com.mygdx.game.Screens.GameScreen;
+import com.mygdx.tests.GdxTestRunner;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.*;
+
+@RunWith(GdxTestRunner.class)
+<span class="fc" id="L30">public class RepTest {</span>
+    private PiazzaPanic game;
+    private Utils utils;
+    private GameScreen gameScreen;
+    private RepPowerup rep;
+    private Powerups powerups;
+
+    @Before
+    public void setUp() {
+<span class="fc" id="L39">        game = Mockito.mock(PiazzaPanic.class);</span>
+<span class="fc" id="L40">        utils = new Utils();</span>
+<span class="fc" id="L41">        gameScreen = Mockito.mock(GameScreen.class);</span>
+<span class="fc" id="L42">        powerups = Mockito.mock(Powerups.class);</span>
+<span class="fc" id="L43">        rep = new RepPowerup( utils,gameScreen, powerups);</span>
+<span class="fc" id="L44">    }</span>
+    @Test
+    public void repClickableIsNotNull() {
+<span class="fc" id="L47">        ImageButton repButton = rep.getRepButton();</span>
+<span class="fc" id="L48">        assertNotNull(repButton);</span>
+<span class="fc" id="L49">    }</span>
+
+    @Test
+    public void testClick() {
+<span class="fc" id="L53">        when(powerups.buyRep()).thenReturn(true);</span>
+<span class="fc" id="L54">        rep.onRepButtonClicked(powerups, gameScreen);</span>
+<span class="fc" id="L55">        verify(powerups, times(1)).buyRep();</span>
+<span class="fc" id="L56">        verify(gameScreen, times(1)).addRep(1);</span>
+<span class="fc" id="L57">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

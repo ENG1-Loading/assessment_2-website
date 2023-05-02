@@ -26,17 +26,21 @@ public class Pantry {
 <span class="fc" id="L26">        pantryClickable.addListener(new ClickListener() {</span>
             @Override
             public void clicked(InputEvent event, float x, float y) {
-<span class="nc" id="L29">                Array&lt;Cook&gt; cooks = screen.getCooks();</span>
-<span class="nc" id="L30">                screen.setSationSelected(0);</span>
-<span class="nc" id="L31">                int selected = screen.getSelected();</span>
-<span class="nc bnc" id="L32" title="All 4 branches missed.">                if ((Math.abs(cooks.get(selected).CookBody.getY() - 64f) &lt; 2) &amp;&amp; (Math.abs(cooks.get(selected).CookBody.getX() - 0f) &lt; 2)) {</span>
-<span class="nc" id="L33">                    screen.setShowPantryScreen(true);</span>
-<span class="nc" id="L34">                    cooks.get(selected).isBusy = true;</span>
-                }
-<span class="nc" id="L36">            }</span>
+<span class="nc" id="L29">                onClick(screen);</span>
+<span class="nc" id="L30">            }</span>
         });
 
-<span class="fc" id="L39">    }</span>
+<span class="fc" id="L33">    }</span>
+
+    public void onClick(GameScreen screen) {
+<span class="fc" id="L36">        Array&lt;Cook&gt; cooks = screen.getCooks();</span>
+<span class="fc" id="L37">        screen.setSationSelected(0);</span>
+<span class="fc" id="L38">        int selected = screen.getSelected();</span>
+<span class="pc bpc" id="L39" title="2 of 4 branches missed.">        if ((Math.abs(cooks.get(selected).CookBody.getY() - 64f) &lt; 2) &amp;&amp; (Math.abs(cooks.get(selected).CookBody.getX() - 0f) &lt; 2)) {</span>
+<span class="fc" id="L40">            screen.setShowPantryScreen(true);</span>
+<span class="fc" id="L41">            cooks.get(selected).isBusy = true;</span>
+        }
+<span class="fc" id="L43">    }</span>
     /*
         * Getter for the pantry
         * @param none
@@ -44,7 +48,7 @@ public class Pantry {
         * @return pantryClickable the pantry
      */
     public ImageButton getPantryClickable() {
-<span class="fc" id="L47">        return pantryClickable;</span>
+<span class="fc" id="L51">        return pantryClickable;</span>
     }
 
 }

@@ -25,17 +25,21 @@ public class Serving {
 <span class="fc" id="L25">        servingClickable.addListener(new ClickListener() {</span>
             @Override
             public void clicked(InputEvent event, float x, float y) {
-<span class="nc" id="L28">                screen.setSationSelected(5);</span>
-<span class="nc" id="L29">                Array&lt;Cook&gt; cooks = screen.getCooks();</span>
-<span class="nc" id="L30">                int selected = screen.getSelected();</span>
-
-<span class="nc bnc" id="L32" title="All 4 branches missed.">                if ((Math.abs(cooks.get(selected).CookBody.getY() - 48f) &lt; 2) &amp;&amp; (Math.abs(cooks.get(selected).CookBody.getX() - 80f) &lt; 2)) {</span>
-<span class="nc" id="L33">                    screen.setShowServingScreen(true);</span>
-<span class="nc" id="L34">                    cooks.get(selected).isBusy = true;</span>
-                }
-<span class="nc" id="L36">            }</span>
+<span class="nc" id="L28">                onClick(screen);</span>
+<span class="nc" id="L29">            }</span>
         });
-<span class="fc" id="L38">    }</span>
+<span class="fc" id="L31">    }</span>
+
+    public void onClick(GameScreen screen) {
+<span class="fc" id="L34">        screen.setSationSelected(5);</span>
+<span class="fc" id="L35">        Array&lt;Cook&gt; cooks = screen.getCooks();</span>
+<span class="fc" id="L36">        int selected = screen.getSelected();</span>
+
+<span class="pc bpc" id="L38" title="2 of 4 branches missed.">        if ((Math.abs(cooks.get(selected).CookBody.getY() - 48f) &lt; 2) &amp;&amp; (Math.abs(cooks.get(selected).CookBody.getX() - 80f) &lt; 2)) {</span>
+<span class="fc" id="L39">            screen.setShowServingScreen(true);</span>
+<span class="fc" id="L40">            cooks.get(selected).isBusy = true;</span>
+        }
+<span class="fc" id="L42">    }</span>
     /*
         * Getter for the serving station
         * @param none
@@ -43,7 +47,7 @@ public class Serving {
         * @return servingClickable the serving station
      */
     public ImageButton getServingClickable() {
-<span class="fc" id="L46">        return servingClickable;</span>
+<span class="fc" id="L50">        return servingClickable;</span>
     }
 
 }

@@ -28,19 +28,22 @@ public class PotatoClickable {
 <span class="fc" id="L28">        potatoClickable.addListener(new ClickListener() {</span>
            @Override
            public void clicked(InputEvent event, float x, float y) {
-<span class="nc bnc" id="L31" title="All 2 branches missed.">               if (screen.bakingUnlocked()) {</span>
-<span class="nc" id="L32">                   Array&lt;Cook&gt; cooks = screen.getCooks();</span>
-<span class="nc" id="L33">                   int selected = screen.getSelected();</span>
-<span class="nc bnc" id="L34" title="All 2 branches missed.">                   if (cooks.get(selected).CookStack.size() &lt; 5) {</span>
-<span class="nc" id="L35">                       cooks.get(selected).CookStack.push(new Ingredient(&quot;potato&quot;, new Texture(&quot;potato.png&quot;), new Texture(&quot;potatoCooked.png&quot;), null));</span>
+<span class="nc" id="L31">               onClick(screen);</span>
 
-                   }
-               }
-
-<span class="nc" id="L40">           }</span>
+<span class="nc" id="L33">           }</span>
         });
 
-<span class="fc" id="L43">    }</span>
+<span class="fc" id="L36">    }</span>
+    public void onClick(GameScreen screen) {
+<span class="pc bpc" id="L38" title="1 of 2 branches missed.">        if (screen.bakingUnlocked()) {</span>
+<span class="fc" id="L39">            Array&lt;Cook&gt; cooks = screen.getCooks();</span>
+<span class="fc" id="L40">            int selected = screen.getSelected();</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">            if (cooks.get(selected).CookStack.size() &lt; 5) {</span>
+<span class="fc" id="L42">                cooks.get(selected).CookStack.push(new Ingredient(&quot;potato&quot;, new Texture(&quot;potato.png&quot;), new Texture(&quot;potatoCooked.png&quot;), null));</span>
+
+            }
+        }
+<span class="fc" id="L46">    }</span>
     /*
         * Getter for the potato station
         *
@@ -49,7 +52,7 @@ public class PotatoClickable {
         * @return the potato station
      */
     public ImageButton getPotatoClickable() {
-<span class="fc" id="L52">        return potatoClickable;</span>
+<span class="fc" id="L55">        return potatoClickable;</span>
     }
 }
 

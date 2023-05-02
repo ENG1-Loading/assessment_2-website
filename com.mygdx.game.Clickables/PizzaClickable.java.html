@@ -23,19 +23,24 @@ public class PizzaClickable {
 <span class="fc" id="L23">        pizzaClickable.addListener(new ClickListener() {</span>
             @Override
             public void clicked(InputEvent event, float x, float y) {
-<span class="nc bnc" id="L26" title="All 2 branches missed.">                if (screen.bakingUnlocked()) {</span>
-<span class="nc" id="L27">                    Array&lt;Cook&gt; cooks = screen.getCooks();</span>
-<span class="nc" id="L28">                    int selected = screen.getSelected();</span>
-<span class="nc bnc" id="L29" title="All 2 branches missed.">                    if (cooks.get(selected).CookStack.size() &lt; 5) {</span>
-<span class="nc" id="L30">                        cooks.get(selected).CookStack</span>
-<span class="nc" id="L31">                                .push(new Ingredient(&quot;pizza&quot;, new Texture(&quot;rawPizza.png&quot;),</span>
-                                        new Texture(&quot;prepdPizza.png&quot;), new Texture(&quot;burntPizza.png&quot;)));
-                    }
-                }
+<span class="nc" id="L26">                onClick(screen);</span>
 
-<span class="nc" id="L36">            }</span>
+<span class="nc" id="L28">            }</span>
         });
-<span class="fc" id="L38">    }</span>
+<span class="fc" id="L30">    }</span>
+
+    public void onClick(GameScreen screen) {
+<span class="pc bpc" id="L33" title="1 of 2 branches missed.">        if (screen.bakingUnlocked()) {</span>
+<span class="fc" id="L34">            Array&lt;Cook&gt; cooks = screen.getCooks();</span>
+<span class="fc" id="L35">            int selected = screen.getSelected();</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">            if (cooks.get(selected).CookStack.size() &lt; 5) {</span>
+<span class="fc" id="L37">                cooks.get(selected).CookStack</span>
+<span class="fc" id="L38">                        .push(new Ingredient(&quot;pizza&quot;, new Texture(&quot;rawPizza.png&quot;),</span>
+                                new Texture(&quot;prepdPizza.png&quot;), new Texture(&quot;burntPizza.png&quot;)));
+            }
+        }
+
+<span class="fc" id="L43">    }</span>
     /*
         * Getter for the pizza station
         *
@@ -44,7 +49,7 @@ public class PizzaClickable {
         * @return the pizza station
      */
     public ImageButton getPizzaClickable() {
-<span class="fc" id="L47">        return pizzaClickable;</span>
+<span class="fc" id="L52">        return pizzaClickable;</span>
     }
 
 }

@@ -23,16 +23,21 @@ public class BunClickable {
 <span class="fc" id="L23">        bunClickable.addListener(new ClickListener() {</span>
             @Override
             public void clicked(InputEvent event, float x, float y) {
-<span class="nc" id="L26">                Array&lt;Cook&gt; cooks = screen.getCooks();</span>
-<span class="nc" id="L27">                int selected = screen.getSelected();</span>
-<span class="nc bnc" id="L28" title="All 2 branches missed.">                if (cooks.get(selected).CookStack.size() &lt; 5) {</span>
-<span class="nc" id="L29">                    Ingredient buns = new Ingredient(&quot;buns&quot;, new Texture(&quot;buns.png&quot;), new Texture(&quot;buns.png&quot;), null);</span>
-<span class="nc" id="L30">                    buns.prepare();</span>
-<span class="nc" id="L31">                    cooks.get(selected).CookStack.push(buns);</span>
-                }
-<span class="nc" id="L33">            }</span>
+<span class="nc" id="L26">                onClick(screen);</span>
+<span class="nc" id="L27">            }</span>
         });
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L29">    }</span>
+
+    public void onClick(GameScreen screen) {
+<span class="fc" id="L32">        Array&lt;Cook&gt; cooks = screen.getCooks();</span>
+<span class="fc" id="L33">        int selected = screen.getSelected();</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        if (cooks.get(selected).CookStack.size() &lt; 5) {</span>
+<span class="fc" id="L35">            Ingredient buns = new Ingredient(&quot;buns&quot;, new Texture(&quot;buns.png&quot;), new Texture(&quot;buns.png&quot;), null);</span>
+<span class="fc" id="L36">            buns.prepare();</span>
+<span class="fc" id="L37">            cooks.get(selected).CookStack.push(buns);</span>
+        }
+
+<span class="fc" id="L40">    }</span>
     /*
         * Getter for the bun station
         *
@@ -41,7 +46,7 @@ public class BunClickable {
         * @return the bun station
      */
     public ImageButton getBunClickable() {
-<span class="fc" id="L44">        return bunClickable;</span>
+<span class="fc" id="L49">        return bunClickable;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
