@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CreditsScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Screens</a> &gt; <span class="el_source">CreditsScreen.java</span></div><h1>CreditsScreen.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Screens;
+
+import java.io.IOException;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.PiazzaPanic;
+
+public class CreditsScreen implements Screen {
+    PiazzaPanic game;
+<span class="nc" id="L21">    Texture credits = new Texture(&quot;credits.png&quot;);</span>
+<span class="nc" id="L22">    Texture backBtnTex = new Texture(&quot;backBtn.png&quot;);</span>
+<span class="nc" id="L23">    Texture backBtnTexHover = new Texture(&quot;backBtn2.png&quot;);</span>
+<span class="nc" id="L24">    Texture assetsInfoBtnTex = new Texture(&quot;infoBtn_50.png&quot;);</span>
+<span class="nc" id="L25">    Texture GUIInfoBtnTex = new Texture(&quot;infoBtn_50.png&quot;);</span>
+
+    FitViewport view;
+    Stage gameStage;
+
+    TextureRegion backBtnRegion;
+    TextureRegionDrawable backBtnDrawable;
+    ImageButton backBtn;
+
+    TextureRegion backBtnRegionHover;
+    TextureRegionDrawable backBtnDrawableHover;
+
+    TextureRegion assetsInfoRegion;
+    TextureRegionDrawable assetsInfoDrawable;
+    ImageButton assetsInfoBtn;
+
+    TextureRegion GUIInfoRegion;
+    TextureRegionDrawable GUIInfoDrawable;
+    ImageButton GUIInfoBtn;
+    /*
+        * Constructor for the credits screen
+        * @param game the game object
+        *
+        * @return none
+     */
+<span class="nc" id="L50">    public CreditsScreen(PiazzaPanic game) {</span>
+<span class="nc" id="L51">        this.game = game;</span>
+<span class="nc" id="L52">    }</span>
+    /*
+        * Renders the credits screen
+        * @param delta the time between frames
+        *
+        * @return none
+     */
+    @Override
+    public void show() {
+<span class="nc" id="L61">        System.out.println(&quot;CreditsScreen&quot;);</span>
+<span class="nc" id="L62">        view = new FitViewport(game.GAME_WIDTH, game.GAME_HEIGHT);</span>
+<span class="nc" id="L63">        view.getCamera().position.set(game.GAME_WIDTH / 2, game.GAME_HEIGHT / 2, 1f);</span>
+<span class="nc" id="L64">        gameStage = new Stage(view, game.batch);</span>
+
+        // Buttons
+<span class="nc" id="L67">        backBtnRegion = new TextureRegion(backBtnTex);</span>
+<span class="nc" id="L68">        backBtnDrawable = new TextureRegionDrawable(backBtnRegion);</span>
+<span class="nc" id="L69">        backBtn = new ImageButton(backBtnDrawable);</span>
+
+<span class="nc" id="L71">        assetsInfoRegion = new TextureRegion(assetsInfoBtnTex);</span>
+<span class="nc" id="L72">        assetsInfoDrawable = new TextureRegionDrawable(assetsInfoRegion);</span>
+<span class="nc" id="L73">        assetsInfoBtn = new ImageButton(assetsInfoDrawable);</span>
+
+<span class="nc" id="L75">        GUIInfoRegion = new TextureRegion(GUIInfoBtnTex);</span>
+<span class="nc" id="L76">        GUIInfoDrawable = new TextureRegionDrawable(GUIInfoRegion);</span>
+<span class="nc" id="L77">        GUIInfoBtn = new ImageButton(GUIInfoDrawable);</span>
+
+        // hovered button
+<span class="nc" id="L80">        backBtnRegionHover = new TextureRegion(backBtnTexHover);</span>
+<span class="nc" id="L81">        backBtnDrawableHover = new TextureRegionDrawable(backBtnRegionHover);</span>
+
+        // listen for hover
+<span class="nc" id="L84">        backBtn.addListener(new ClickListener() {</span>
+<span class="nc" id="L85">            final ImageButton backNormal = new ImageButton(backBtnDrawable);</span>
+<span class="nc" id="L86">            final ImageButton backHover = new ImageButton(backBtnDrawableHover);</span>
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+<span class="nc" id="L90">                backBtn.setStyle(backHover.getStyle());</span>
+<span class="nc" id="L91">            }</span>
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+<span class="nc" id="L95">                backBtn.setStyle(backNormal.getStyle());</span>
+<span class="nc" id="L96">            }</span>
+        });
+
+<span class="nc" id="L99">        assetsInfoBtn.addListener(new ClickListener() {</span>
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+<span class="nc" id="L102">                Gdx.net.openURI(&quot;https://limezu.itch.io/&quot;);</span>
+<span class="nc" id="L103">                super.clicked(event, x, y);</span>
+<span class="nc" id="L104">            }</span>
+        });
+
+<span class="nc" id="L107">        GUIInfoBtn.addListener(new ClickListener() {</span>
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+<span class="nc" id="L110">                Gdx.net.openURI(&quot;https://www.gamedevmarket.net/asset/game-gui-free/&quot;);</span>
+<span class="nc" id="L111">                super.clicked(event, x, y);</span>
+<span class="nc" id="L112">            }</span>
+        });
+
+        // place buttons on stage
+<span class="nc" id="L116">        gameStage.addActor(backBtn);</span>
+<span class="nc" id="L117">        backBtn.setPosition(0, game.GAME_HEIGHT - backBtn.getHeight());</span>
+<span class="nc" id="L118">        assetsInfoBtn.setPosition(735, 145);</span>
+<span class="nc" id="L119">        GUIInfoBtn.setPosition(677, 98);</span>
+<span class="nc" id="L120">        gameStage.addActor(assetsInfoBtn);</span>
+<span class="nc" id="L121">        gameStage.addActor(GUIInfoBtn);</span>
+<span class="nc" id="L122">    }</span>
+    /*
+        * Renders the credits screen
+        * @param delta the time between frames
+        *
+        * @return none
+     */
+    @Override
+    public void render(float delta) {
+<span class="nc" id="L131">        gameStage.act();</span>
+
+<span class="nc" id="L133">        ScreenUtils.clear(1, 1, 1, 1);</span>
+<span class="nc" id="L134">        view.apply();</span>
+
+<span class="nc" id="L136">        game.batch.setProjectionMatrix(view.getCamera().combined);</span>
+<span class="nc" id="L137">        game.batch.begin();</span>
+<span class="nc" id="L138">        game.batch.draw(credits, ((game.GAME_WIDTH / 2) - (credits.getWidth() / 2)), 60);</span>
+<span class="nc" id="L139">        game.batch.end();</span>
+
+<span class="nc" id="L141">        gameStage.getViewport().apply();</span>
+
+<span class="nc bnc" id="L143" title="All 2 branches missed.">        if (backBtn.isPressed()) {</span>
+            try {
+<span class="nc" id="L145">                game.setScreen(new MainMenuScreen(game));</span>
+<span class="nc" id="L146">            } catch (IOException e) {</span>
+                // TODO Auto-generated catch block
+<span class="nc" id="L148">                e.printStackTrace();</span>
+<span class="nc" id="L149">            }</span>
+        }
+<span class="nc" id="L151">        Gdx.input.setInputProcessor(gameStage);</span>
+<span class="nc" id="L152">        gameStage.draw();</span>
+<span class="nc" id="L153">    }</span>
+    /*
+        * Resizes the credits screen
+        * @param width the width of the screen
+        * @param height the height of the screen
+        *
+        * @return none
+     */
+    @Override
+    public void resize(int width, int height) {
+<span class="nc" id="L163">        gameStage.getViewport().update(width, height);</span>
+<span class="nc" id="L164">    }</span>
+    /*
+        * Pauses the credits screen
+        *
+        * @return none
+     */
+    @Override
+    public void pause() {
+        // TODO Auto-generated method stub
+
+<span class="nc" id="L174">    }</span>
+    /*
+        * Resumes the credits screen
+        *
+        * @return none
+     */
+    @Override
+    public void resume() {
+        // TODO Auto-generated method stub
+
+<span class="nc" id="L184">    }</span>
+    /*
+        * Hides the credits screen
+        *
+        * @return none
+     */
+    @Override
+    public void hide() {
+        // TODO Auto-generated method stub
+
+<span class="nc" id="L194">    }</span>
+    /*
+        * Disposes the credits screen
+        *
+        * @return none
+     */
+    @Override
+    public void dispose() {
+<span class="nc" id="L202">        credits.dispose();</span>
+<span class="nc" id="L203">        gameStage.dispose();</span>
+<span class="nc" id="L204">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

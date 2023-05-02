@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CookTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.tests</a> &gt; <span class="el_source">CookTest.java</span></div><h1>CookTest.java</h1><pre class="source lang-java linenums">package com.mygdx.tests;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.mygdx.game.Cook;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+@RunWith(GdxTestRunner.class)
+<span class="fc" id="L17">public class CookTest {</span>
+
+    @Test
+    /**
+     * This test is here to make sure the testing environment is not broken.
+     */
+    public void alwaysTrueTest() {
+<span class="fc" id="L24">        assertTrue(&quot;This test should pass every time&quot;, true);</span>
+<span class="fc" id="L25">    }</span>
+
+    @Test
+    public void testInitialState() {
+<span class="fc" id="L29">        Cook cook = new Cook(new Actor());</span>
+<span class="fc" id="L30">        cook.CookBody.setWidth(16);</span>
+<span class="fc" id="L31">        cook.CookBody.setHeight(23);</span>
+
+<span class="fc" id="L33">        assertFalse(cook.moveable); // check that Cook is not initially moveable</span>
+<span class="fc" id="L34">        assertNotNull(cook.CookStack); // check that CookStack is not null</span>
+<span class="fc" id="L35">    }</span>
+
+    @Test
+    public void testDoUserInputWithNoInput() {
+        // save initial position of Cook's Actor
+<span class="fc" id="L40">        Cook cook = new Cook(new Actor());</span>
+<span class="fc" id="L41">        float initialX = cook.CookBody.getX();</span>
+<span class="fc" id="L42">        float initialY = cook.CookBody.getY();</span>
+
+        // call doUserInput with no input
+<span class="fc" id="L45">        cook.doUserInput(cook);</span>
+
+        // check that position of Cook's Actor did not change
+<span class="fc" id="L48">        assertEquals(initialX, cook.CookBody.getX(), 0);</span>
+<span class="fc" id="L49">        assertEquals(initialY, cook.CookBody.getY(), 0);</span>
+<span class="fc" id="L50">    }</span>
+    @Test
+    public void testDoUserInputWithMoveLeft() {
+        // create a Cook
+<span class="fc" id="L54">        Cook cook = new Cook(new Actor());</span>
+        // save initial position of Cook's Actor
+<span class="fc" id="L56">        float initialX = cook.CookBody.getX();</span>
+<span class="fc" id="L57">        float initialY = cook.CookBody.getY();</span>
+
+        // simulate pressing the left arrow key
+<span class="fc" id="L60">        Gdx.input = mock(Input.class);</span>
+<span class="fc" id="L61">        when(Gdx.input.isKeyPressed(Input.Keys.A)).thenReturn(true);</span>
+
+        // call doUserInput
+<span class="fc" id="L64">        cook.doUserInput(cook);</span>
+
+        // check that position of Cook's Actor moved left
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        assertTrue(cook.CookBody.getX() &lt; initialX);</span>
+<span class="fc" id="L68">        assertEquals(initialY, cook.CookBody.getY(), 0);</span>
+<span class="fc" id="L69">    }</span>
+    @Test
+    public void testDoUserInputWithMoveRight() {
+        // create a Cook
+<span class="fc" id="L73">        Cook cook = new Cook(new Actor());</span>
+        // save initial position of Cook's Actor
+<span class="fc" id="L75">        float initialX = cook.CookBody.getX();</span>
+<span class="fc" id="L76">        float initialY = cook.CookBody.getY();</span>
+
+        // simulate pressing the right arrow key
+<span class="fc" id="L79">        Gdx.input = mock(Input.class);</span>
+<span class="fc" id="L80">        when(Gdx.input.isKeyPressed(Input.Keys.D)).thenReturn(true);</span>
+
+        // call doUserInput
+<span class="fc" id="L83">        cook.doUserInput(cook);</span>
+
+        // check that position of Cook's Actor moved right
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        assertTrue(cook.CookBody.getX() &gt; initialX);</span>
+<span class="fc" id="L87">        assertEquals(initialY, cook.CookBody.getY(), 0);</span>
+<span class="fc" id="L88">    }</span>
+    @Test
+    public void testDoUserInputWithMoveUp() {
+        // create a Cook
+<span class="fc" id="L92">        Cook cook = new Cook(new Actor());</span>
+        // save initial position of Cook's Actor
+<span class="fc" id="L94">        float initialX = cook.CookBody.getX();</span>
+<span class="fc" id="L95">        float initialY = cook.CookBody.getY();</span>
+
+        // simulate pressing the up arrow key
+<span class="fc" id="L98">        Gdx.input = mock(Input.class);</span>
+<span class="fc" id="L99">        when(Gdx.input.isKeyPressed(Input.Keys.W)).thenReturn(true);</span>
+
+        // call doUserInput
+<span class="fc" id="L102">        cook.doUserInput(cook);</span>
+
+        // check that position of Cook's Actor moved up
+<span class="fc" id="L105">        assertEquals(initialX, cook.CookBody.getX(), 0);</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">        assertTrue(cook.CookBody.getY() &gt; initialY);</span>
+<span class="fc" id="L107">    }</span>
+    @Test
+    public void testDoUserInputWithMoveDown() {
+        // create a Cook
+<span class="fc" id="L111">        Cook cook = new Cook(new Actor());</span>
+        // save initial position of Cook's Actor
+<span class="fc" id="L113">        float initialX = cook.CookBody.getX();</span>
+<span class="fc" id="L114">        float initialY = cook.CookBody.getY();</span>
+
+        // simulate pressing the down arrow key
+<span class="fc" id="L117">        Gdx.input = mock(Input.class);</span>
+<span class="fc" id="L118">        when(Gdx.input.isKeyPressed(Input.Keys.S)).thenReturn(true);</span>
+
+        // call doUserInput
+<span class="fc" id="L121">        cook.doUserInput(cook);</span>
+
+        // check that position of Cook's Actor moved down
+<span class="fc" id="L124">        assertEquals(initialX, cook.CookBody.getX(), 0);</span>
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">        assertTrue(cook.CookBody.getY() &lt; initialY);</span>
+<span class="fc" id="L126">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EndGameScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Screens</a> &gt; <span class="el_source">EndGameScreen.java</span></div><h1>EndGameScreen.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Screens;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.ConfigHandler;
+import com.mygdx.game.PiazzaPanic;
+
+import java.io.IOException;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
+import org.json.JSONObject;
+
+// screen which displays after the game finishes
+
+public class EndGameScreen implements Screen {
+<span class="fc" id="L31">    FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(&quot;Odin Rounded - Bold.otf&quot;));</span>
+<span class="fc" id="L32">    FreeTypeFontParameter parameter = new FreeTypeFontParameter();</span>
+    BitmapFont font;
+    PiazzaPanic game;
+    FitViewport view;
+    Stage screenStage;
+<span class="fc" id="L37">    Texture levelCompleteFrame = new Texture(&quot;LevelCompleteFrame.png&quot;);</span>
+    Texture exitBtnTex;
+    Texture exitBtnTexHover;
+    ImageButton exitBtn;
+    Texture restartBtnTex;
+    Texture restartBtnTexHover;
+    ImageButton restartBtn;
+    TextureRegionDrawable exitBtnDrawable;
+    TextureRegionDrawable exitBtnDrawableHover;
+    TextureRegionDrawable restartBtnDrawable;
+    TextureRegionDrawable restartBtnDrawableHover;
+    int Rep;
+    String levelTimeString;
+    Boolean endless;
+    int customersServed;
+    ConfigHandler configHandler;
+    JSONObject config;
+    /*
+        * Converts a long to a human readable time format
+        * @param millis the time in milliseconds
+        *
+        * @return the time in a human readable format
+     */
+    public EndGameScreen(PiazzaPanic game, long levelCompletedIn, int RepPoints, boolean endless, int customersServed)
+<span class="fc" id="L61">            throws IOException {</span>
+        // generate the styling information for the data given to this screen
+<span class="fc" id="L63">        this.configHandler = new ConfigHandler();</span>
+<span class="fc" id="L64">        this.config = configHandler.getConfig();</span>
+<span class="fc" id="L65">        this.game = game;</span>
+<span class="fc" id="L66">        this.endless = endless;</span>
+<span class="fc" id="L67">        this.customersServed = customersServed;</span>
+<span class="fc" id="L68">        parameter.size = 48;</span>
+<span class="fc" id="L69">        parameter.color = Color.BLACK;</span>
+<span class="fc" id="L70">        font = generator.generateFont(parameter);</span>
+<span class="fc" id="L71">        levelTimeString = humanReadableFormat(levelCompletedIn);</span>
+<span class="fc" id="L72">        this.Rep = RepPoints;</span>
+<span class="fc" id="L73">    }</span>
+    /*
+        * Converts a long to a human readable time format
+        * @param millis the time in milliseconds
+        *
+        * @return the time in a human readable format
+     */
+    @Override
+    public void show() {
+        // size information
+<span class="fc" id="L83">        view = new FitViewport(game.GAME_WIDTH, game.GAME_HEIGHT);</span>
+<span class="fc" id="L84">        view.getCamera().position.set(game.GAME_WIDTH / 2, game.GAME_HEIGHT / 2, 1f);</span>
+<span class="fc" id="L85">        screenStage = new Stage(view, game.batch);</span>
+
+        // draw buttons
+<span class="fc" id="L88">        exitBtnTex = new Texture(&quot;exitBtn.png&quot;);</span>
+<span class="fc" id="L89">        exitBtnTexHover = new Texture(&quot;exitBtn2.png&quot;);</span>
+<span class="fc" id="L90">        restartBtnTex = new Texture(&quot;RestartBtn.png&quot;);</span>
+<span class="fc" id="L91">        restartBtnTexHover = new Texture(&quot;RestartBtn2.png&quot;);</span>
+
+<span class="fc" id="L93">        exitBtnDrawable = new TextureRegionDrawable(new TextureRegion(exitBtnTex));</span>
+<span class="fc" id="L94">        exitBtnDrawableHover = new TextureRegionDrawable(new TextureRegion(exitBtnTexHover));</span>
+<span class="fc" id="L95">        exitBtn = new ImageButton(exitBtnDrawable);</span>
+<span class="fc" id="L96">        exitBtn.addListener(new ClickListener() {</span>
+<span class="fc" id="L97">            final ImageButton normal = new ImageButton(exitBtnDrawable);</span>
+<span class="fc" id="L98">            final ImageButton hover = new ImageButton(exitBtnDrawableHover);</span>
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+<span class="nc" id="L102">                exitBtn.setStyle(hover.getStyle());</span>
+<span class="nc" id="L103">            }</span>
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+<span class="nc" id="L107">                exitBtn.setStyle(normal.getStyle());</span>
+<span class="nc" id="L108">            }</span>
+        });
+
+<span class="fc" id="L111">        restartBtnDrawable = new TextureRegionDrawable(new TextureRegion(restartBtnTex));</span>
+<span class="fc" id="L112">        restartBtnDrawableHover = new TextureRegionDrawable(new TextureRegion(restartBtnTexHover));</span>
+<span class="fc" id="L113">        restartBtn = new ImageButton(restartBtnDrawable);</span>
+<span class="fc" id="L114">        restartBtn.addListener(new ClickListener() {</span>
+<span class="fc" id="L115">            final ImageButton normal = new ImageButton(restartBtnDrawable);</span>
+<span class="fc" id="L116">            final ImageButton hover = new ImageButton(restartBtnDrawableHover);</span>
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+<span class="nc" id="L120">                restartBtn.setStyle(hover.getStyle());</span>
+<span class="nc" id="L121">            }</span>
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+<span class="nc" id="L125">                restartBtn.setStyle(normal.getStyle());</span>
+<span class="nc" id="L126">            }</span>
+        });
+
+<span class="fc" id="L129">        screenStage.addActor(exitBtn);</span>
+<span class="fc" id="L130">        exitBtn.setPosition(game.GAME_WIDTH / 2 - exitBtn.getWidth() / 2,</span>
+<span class="fc" id="L131">                game.GAME_HEIGHT / 2 - exitBtn.getHeight() / 2 - 250);</span>
+<span class="fc" id="L132">        screenStage.addActor(restartBtn);</span>
+<span class="fc" id="L133">        restartBtn.setPosition(game.GAME_WIDTH / 2 - restartBtn.getWidth() / 2,</span>
+<span class="fc" id="L134">                game.GAME_HEIGHT / 2 - restartBtn.getHeight() / 2 - 100);</span>
+<span class="fc" id="L135">    }</span>
+
+    public Stage getStage() {
+<span class="fc" id="L138">        return screenStage;</span>
+    }
+    /*
+        * Converts a long to a human readable time format
+        * @param millis the time in milliseconds
+        *
+        * @return the time in a human readable format
+     */
+    @Override
+    public void render(float delta) {
+<span class="nc" id="L148">        screenStage.act();</span>
+
+<span class="nc" id="L150">        ScreenUtils.clear(1, 1, 1, 1);</span>
+<span class="nc" id="L151">        view.apply();</span>
+<span class="nc" id="L152">        Gdx.input.setInputProcessor(screenStage);</span>
+
+<span class="nc" id="L154">        game.batch.setProjectionMatrix(view.getCamera().combined);</span>
+<span class="nc" id="L155">        game.batch.begin();</span>
+<span class="nc" id="L156">        game.batch.draw(levelCompleteFrame, ((game.GAME_WIDTH / 2) - (levelCompleteFrame.getWidth() / 2)), 10);</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">        if (endless) {</span>
+<span class="nc" id="L158">            font.draw(game.batch, &quot;YOU SERVED &quot; + customersServed + &quot; Customers&quot;, 420, 480);</span>
+        } else {
+<span class="nc" id="L160">            font.draw(game.batch, &quot;REPUTATION:&quot; + Rep, 420, 425);</span>
+        }
+
+<span class="nc" id="L163">        game.batch.end();</span>
+
+<span class="nc" id="L165">        screenStage.getViewport().apply();</span>
+
+<span class="nc bnc" id="L167" title="All 2 branches missed.">        if (restartBtn.isPressed()) {</span>
+            try {
+<span class="nc" id="L169">                game.setScreen(new GameScreen(game, view, false, false, &quot;&quot;, this.config));</span>
+<span class="nc" id="L170">            } catch (IOException e) {</span>
+<span class="nc" id="L171">                throw new RuntimeException(e);</span>
+<span class="nc" id="L172">            }</span>
+        }
+
+<span class="nc bnc" id="L175" title="All 2 branches missed.">        if (exitBtn.isPressed()) {</span>
+<span class="nc" id="L176">            dispose();</span>
+            try {
+<span class="nc" id="L178">                game.setScreen(new MainMenuScreen(game));</span>
+<span class="nc" id="L179">            } catch (IOException e) {</span>
+                // TODO Auto-generated catch block
+<span class="nc" id="L181">                e.printStackTrace();</span>
+<span class="nc" id="L182">            }</span>
+        }
+
+<span class="nc" id="L185">        screenStage.draw();</span>
+<span class="nc" id="L186">    }</span>
+    /*
+        * Converts a long to a human readable time format
+        * @param millis the time in milliseconds
+        *
+        * @return the time in a human readable format
+     */
+    @Override
+    public void resize(int width, int height) {
+<span class="nc" id="L195">        screenStage.getViewport().update(width, height);</span>
+<span class="nc" id="L196">    }</span>
+    /*
+        * Converts a long to a human readable time format
+        * @param millis the time in milliseconds
+        *
+        * @return the time in a human readable format
+     */
+    @Override
+    public void pause() {
+        // TODO Auto-generated method stub
+
+<span class="nc" id="L207">    }</span>
+    /*
+        * Converts a long to a human readable time format
+        * @param millis the time in milliseconds
+        *
+        * @return the time in a human readable format
+     */
+    @Override
+    public void resume() {
+        // TODO Auto-generated method stub
+
+<span class="nc" id="L218">    }</span>
+    /*
+        * Converts a long to a human readable time format
+        * @param millis the time in milliseconds
+        *
+        * @return the time in a human readable format
+     */
+    @Override
+    public void hide() {
+        // TODO Auto-generated method stub
+
+<span class="nc" id="L229">    }</span>
+    /*
+        * Converts a long to a human readable time format
+        * @param millis the time in milliseconds
+        *
+        * @return the time in a human readable format
+     */
+    @Override
+    public void dispose() {
+<span class="nc" id="L238">        levelCompleteFrame.dispose();</span>
+<span class="nc" id="L239">        screenStage.dispose();</span>
+<span class="nc" id="L240">    }</span>
+    /*
+        * Converts a long to a human readable time format
+        * @param millis the time in milliseconds
+        *
+        * @return the time in a human readable format
+     */
+    private String humanReadableFormat(long duration) {
+
+<span class="fc" id="L249">        long secs = TimeUnit.MILLISECONDS.toSeconds(duration);</span>
+        // format the time information
+<span class="fc" id="L251">        return (String.format(&quot;%ss&quot;, secs));</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

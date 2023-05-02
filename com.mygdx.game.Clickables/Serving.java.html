@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Serving.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Clickables</a> &gt; <span class="el_source">Serving.java</span></div><h1>Serving.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Clickables;
+
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.Cook;
+import com.mygdx.game.PiazzaPanic;
+import com.mygdx.game.Screens.GameScreen;
+
+public class Serving {
+    ImageButton servingClickable;
+    /*
+        * Constructor for the serving station
+        * @param utils the utils object
+        * @param screen the game screen
+        *
+        * @return none
+     */
+<span class="fc" id="L20">    public Serving(PiazzaPanic _game, Utils utils, final GameScreen screen) {</span>
+<span class="fc" id="L21">        this.servingClickable =  utils.createImageClickable(32, 56);</span>
+        // function exectutes when you press on the serving station on screen
+        // it sets the serving station as the currently selected station - this moves the cook to the serving station
+        // when the cook arrives the serving screen is shown
+<span class="fc" id="L25">        servingClickable.addListener(new ClickListener() {</span>
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+<span class="nc" id="L28">                screen.setSationSelected(5);</span>
+<span class="nc" id="L29">                Array&lt;Cook&gt; cooks = screen.getCooks();</span>
+<span class="nc" id="L30">                int selected = screen.getSelected();</span>
+
+<span class="nc bnc" id="L32" title="All 4 branches missed.">                if ((Math.abs(cooks.get(selected).CookBody.getY() - 48f) &lt; 2) &amp;&amp; (Math.abs(cooks.get(selected).CookBody.getX() - 80f) &lt; 2)) {</span>
+<span class="nc" id="L33">                    screen.setShowServingScreen(true);</span>
+<span class="nc" id="L34">                    cooks.get(selected).isBusy = true;</span>
+                }
+<span class="nc" id="L36">            }</span>
+        });
+<span class="fc" id="L38">    }</span>
+    /*
+        * Getter for the serving station
+        * @param none
+        *
+        * @return servingClickable the serving station
+     */
+    public ImageButton getServingClickable() {
+<span class="fc" id="L46">        return servingClickable;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

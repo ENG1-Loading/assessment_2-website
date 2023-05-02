@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PizzaServeClickable.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Clickables</a> &gt; <span class="el_source">PizzaServeClickable.java</span></div><h1>PizzaServeClickable.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Clickables;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mygdx.game.Cook;
+import com.mygdx.game.Customer;
+import com.mygdx.game.Food.Ingredient;
+import com.mygdx.game.Food.Pizza;
+import com.mygdx.game.PiazzaPanic;
+import com.mygdx.game.Screens.GameScreen;
+
+import com.badlogic.gdx.utils.Array;
+
+import java.util.ArrayList;
+
+public class PizzaServeClickable {
+    ImageButton pizzaServeClickable;
+    /*
+        * Constructor for the pizza station
+        * @param utils the utils object
+        * @param screen the game screen
+        *
+        * @return none
+        *
+     */
+<span class="nc" id="L28">    public PizzaServeClickable(PiazzaPanic _game, Utils utils, final GameScreen screen) {</span>
+<span class="nc" id="L29">        this.pizzaServeClickable = utils.createImageClickable(new Texture(&quot;prepdPizza.png&quot;), 24, 24);</span>
+<span class="nc" id="L30">        pizzaServeClickable.addListener(new ClickListener() {</span>
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+<span class="nc" id="L33">                Array&lt;Cook&gt; cooks = screen.getCooks();</span>
+<span class="nc" id="L34">                int selected = screen.getSelected();</span>
+<span class="nc" id="L35">                ArrayList&lt;ArrayList&lt;Customer&gt;&gt; customers = screen.getCustomers();</span>
+<span class="nc" id="L36">                int customerCount = screen.getCustomerCount();</span>
+<span class="nc" id="L37">                Pizza recipe = new Pizza();</span>
+<span class="nc" id="L38">                Ingredient pizzaBase = new Ingredient(&quot;pizza&quot;, null, null, null);</span>
+<span class="nc" id="L39">                pizzaBase.prepare();</span>
+<span class="nc" id="L40">                Ingredient lettuce = new Ingredient(&quot;lettuce&quot;, null, null,  null);</span>
+<span class="nc" id="L41">                lettuce.prepare();</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">                if (recipe.has(cooks.get(selected).CookStack)) {</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">                    for (int i=0;i&lt;customers.get(customerCount).size(); i++) {</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">                        if (customers.get(customerCount).get(i).customerOrder.getName() == &quot;pizza&quot;) {</span>
+<span class="nc bnc" id="L45" title="All 4 branches missed.">                            if (!customers.get(customerCount).get(i).selfComplete == true) {</span>
+<span class="nc" id="L46">                                cooks.get(selected).CookStack.remove(pizzaBase);</span>
+<span class="nc" id="L47">                                cooks.get(selected).CookStack.remove(lettuce);</span>
+
+<span class="nc" id="L49">                                customers.get(customerCount).get(i).selfComplete = true;</span>
+<span class="nc" id="L50">                                screen.getMoney().addMoney(100);</span>
+<span class="nc" id="L51">                                screen.hideServingScreen();</span>
+<span class="nc" id="L52">                                cooks.get(selected).isBusy = false;</span>
+<span class="nc" id="L53">                                return ;</span>
+                            }
+                        } else {
+                        }
+                    }
+                }
+
+<span class="nc" id="L60">            }</span>
+        });
+<span class="nc" id="L62">    }</span>
+    /*
+        * Getter for the pizza station
+        *
+        * @param none
+        *
+        * @return the pizza station
+     */
+    public ImageButton getPizzaServeClickable() {
+<span class="nc" id="L71">        return pizzaServeClickable;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

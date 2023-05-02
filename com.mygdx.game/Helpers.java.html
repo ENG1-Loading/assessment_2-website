@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Helpers.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game</a> &gt; <span class="el_source">Helpers.java</span></div><h1>Helpers.java</h1><pre class="source lang-java linenums">package com.mygdx.game;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Cursor;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.mygdx.game.Food.Ingredient;
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+
+public class Helpers {
+    PiazzaPanic game;
+    /*
+        * Constructor for the helpers class
+        * @param _game the game object
+        *
+        * @return none
+     */
+<span class="fc" id="L28">    public Helpers(PiazzaPanic _game) {</span>
+<span class="fc" id="L29">        this.game = _game;</span>
+<span class="fc" id="L30">    }</span>
+    public int findFreeStation(ArrayList&lt;Integer&gt; stationSelected) {
+<span class="fc" id="L32">        ArrayList&lt;Integer&gt; listA = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        for (int i=0;i&lt;=5;i++) {</span>
+<span class="fc" id="L34">            listA.add(i);</span>
+        }
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        for (int i : stationSelected) {</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">            for (int j = 0; j &lt; listA.size(); j++) {</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">                if (listA.get(j) == i) {</span>
+<span class="fc" id="L39">                    listA.remove(j);</span>
+                }
+            }
+<span class="fc" id="L42">        }</span>
+<span class="fc" id="L43">        return listA.get(0);</span>
+    }
+    /*
+        * Creates a clickable image button
+        * @param texture the texture of the button
+        * @param width the width of the button
+        * @param height the height of the button
+        * @return the image button
+     */
+    public static TextureRegionDrawable getColoredDrawable(int width, int height, Color color) {
+<span class="fc" id="L53">        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);</span>
+<span class="fc" id="L54">        pixmap.setColor(color);</span>
+<span class="fc" id="L55">        pixmap.fill();</span>
+<span class="fc" id="L56">        TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));</span>
+<span class="fc" id="L57">        pixmap.dispose();</span>
+<span class="fc" id="L58">        return drawable;</span>
+    }
+    /*
+        * Shows the current reputation points
+        * @param RepLabel the texture of the reputation label
+        * @param Rep the number of reputation points
+        * @param RepPoint the texture of the reputation point
+        *
+        * @return none
+     */
+    public void showRepPoints(Texture RepLabel, int Rep, Texture RepPoint) {
+<span class="nc" id="L69">        game.batch.begin();</span>
+<span class="nc" id="L70">        int x = 146;</span>
+<span class="nc" id="L71">        game.batch.draw(RepLabel, 130, 134);</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        for (int i = 0; i &lt; Rep; i++) {</span>
+<span class="nc" id="L73">            game.batch.draw(RepPoint, x, 135);</span>
+<span class="nc" id="L74">            x += 6;</span>
+        }
+<span class="nc" id="L76">        game.batch.end();</span>
+<span class="nc" id="L77">    }</span>
+
+    /*
+        * Gets the number of customers to serve
+        * @param customerCount the number of customers already served
+        * @return the number of customers to serve
+     */
+    public int CustomersToServe(int customerCount) {
+<span class="fc" id="L85">        int num = MathUtils.random(0, 10);</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        if (customerCount &lt;= 1) {</span>
+
+<span class="nc bnc" id="L88" title="All 2 branches missed.">            if (num &lt;= 7) {</span>
+<span class="nc" id="L89">                return 1;</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">            } else if (num &lt;= 9) {</span>
+<span class="nc" id="L91">                return 2;</span>
+            } else {
+<span class="nc" id="L93">                return 3;</span>
+            }
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">        } else if (customerCount == 2) {</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">            if (num &lt;= 5) {</span>
+<span class="nc" id="L97">                return 1;</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">            } else if (num &lt;= 8) {</span>
+<span class="nc" id="L99">                return 2;</span>
+            } else {
+<span class="nc" id="L101">                return 3;</span>
+            }
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        } else if (customerCount == 3) {</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">            if (num &lt;= 3) {</span>
+<span class="nc" id="L105">                return 1;</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">            } else if (num &lt;= 7) {</span>
+<span class="nc" id="L107">                return 2;</span>
+            } else {
+<span class="fc" id="L109">                return 3;</span>
+            }
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        } else if (customerCount &lt;= 5) {</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">            if (num &lt;= 2) {</span>
+<span class="nc" id="L113">                return 1;</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">            } else if (num &lt;= 5) {</span>
+<span class="nc" id="L115">                return 2;</span>
+            } else {
+<span class="nc" id="L117">                return 3;</span>
+            }
+        }
+<span class="nc" id="L120">        return num % 3;</span>
+    }
+
+
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

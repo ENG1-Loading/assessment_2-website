@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HelpersTests.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.tests</a> &gt; <span class="el_source">HelpersTests.java</span></div><h1>HelpersTests.java</h1><pre class="source lang-java linenums">package com.mygdx.tests;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.mygdx.game.Helpers;
+import com.mygdx.game.PiazzaPanic;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+
+import java.util.ArrayList;
+
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
+
+@RunWith(GdxTestRunner.class)
+<span class="fc" id="L18">public class HelpersTests {</span>
+    private PiazzaPanic game;
+    private Helpers helpers;
+
+    @Before
+    public void setUp() {
+<span class="fc" id="L24">        game = Mockito.mock(PiazzaPanic.class);</span>
+<span class="fc" id="L25">        helpers = new Helpers(game);</span>
+<span class="fc" id="L26">    }</span>
+
+    @Test
+    public void testCustomersToServeOutput() {
+<span class="fc" id="L30">        int returnValue = helpers.CustomersToServe(3);</span>
+<span class="pc bpc" id="L31" title="2 of 4 branches missed.">        assertTrue(returnValue &lt;= 3 &amp;&amp; returnValue &gt;= 1);</span>
+<span class="fc" id="L32">    }</span>
+
+    @Test
+    public void testTexRegionNotNull() {
+<span class="fc" id="L36">        TextureRegionDrawable drawable= helpers.getColoredDrawable(20, 5, Color.GREEN);</span>
+<span class="fc" id="L37">        assertNotNull(drawable);</span>
+<span class="fc" id="L38">    }</span>
+
+    @Test
+    public void findFreeStation() {
+<span class="fc" id="L42">        ArrayList&lt;Integer&gt; stations = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L43">        stations.add(2);</span>
+<span class="fc" id="L44">        stations.add(4);</span>
+<span class="fc" id="L45">        stations.add(1);</span>
+<span class="fc" id="L46">        int freeStation = helpers.findFreeStation(stations);</span>
+<span class="pc bpc" id="L47" title="5 of 6 branches missed.">        assertTrue(freeStation == 0 || freeStation == 3 || freeStation == 5);</span>
+
+<span class="fc" id="L49">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

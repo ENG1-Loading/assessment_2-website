@@ -1,0 +1,1448 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Screens</a> &gt; <span class="el_source">GameScreen.java</span></div><h1>GameScreen.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Screens;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Cursor.SystemCursor;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.*;
+import com.mygdx.game.Clickables.*;
+import com.mygdx.game.Helpers.*;
+
+import com.mygdx.game.Food.Burger;
+import com.mygdx.game.Food.Ingredient;
+import com.mygdx.game.Food.Order;
+import com.mygdx.game.Food.Salad;
+import com.mygdx.game.Clickables.UnlockBaking;
+import com.mygdx.game.Powerups.Powerups;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+
+public class GameScreen implements Screen {
+
+<span class="nc" id="L56">    private int customerNumber = 5;</span>
+    PiazzaPanic game;
+    FitViewport view;
+    Stage gameStage;
+    Money money;
+    Powerups powerups;
+    // map and camera stuff
+    TmxMapLoader mapLoader;
+    TiledMap map;
+    OrthogonalTiledMapRenderer renderer;
+    OrthographicCamera gameCam;
+    // Start the game with 3 reputation points
+<span class="nc" id="L68">    int Rep = 3;</span>
+<span class="nc" id="L69">    Texture RepLabel = new Texture(&quot;REP.png&quot;);</span>
+<span class="nc" id="L70">    Texture RepPoint = new Texture(&quot;REPHeart.png&quot;);</span>
+    // customer number determines how many customers will spawn over the course of
+    // the game
+    // 0 means infinite
+    private final Array&lt;Cook&gt; cooks;
+    private final ArrayList&lt;ArrayList&lt;Customer&gt;&gt; customers;
+    // sprite handling
+<span class="nc" id="L77">    public float[][] locations = {{0, 64}, {32, 64}, {64, 64}, {0, 32}, {48, 28}, {80, 48}, {100000, -1}};</span>
+    Sprite alex;
+    Sprite amelia;
+    Sprite adam;
+    FileHandle charIdles;
+    Skin skin;
+    Skin custSkins;
+<span class="nc" id="L84">    ArrayList&lt;Sprite&gt; idles = new ArrayList&lt;&gt;();</span>
+    // cook and customer control variables
+<span class="nc" id="L86">    int selected = 0;</span>
+<span class="nc" id="L87">    ArrayList&lt;Integer&gt; stationSelected = new ArrayList&lt;&gt;();</span>
+    // control the number of cooks
+<span class="nc" id="L89">    int cookCount = 3; // control how many cooks spawn -&gt; update to allow for the value to increase</span>
+    // take the time at the start of the game to display the time taken to complete
+    // the round
+
+<span class="nc" id="L93">    long gameTime = System.currentTimeMillis();</span>
+
+    // list of active orders
+<span class="nc" id="L96">    ArrayList&lt;Order&gt; orders = new ArrayList&lt;&gt;();</span>
+    // used to count how much time has passed after an order is placed
+<span class="nc" id="L98">    float timeCount = 0;</span>
+    // order timer font
+<span class="nc" id="L100">    BitmapFont font = new BitmapFont();</span>
+    // progress bars
+    HashMap&lt;ProgressBar, Cook&gt; bars;
+    // music
+<span class="nc" id="L104">    Music alienJazz = Gdx.audio.newMusic(Gdx.files.internal(&quot;Alien_Jazz_Ridley_Coyte.mp3&quot;));</span>
+    // stations
+    ImageButton pantryClickable;
+    ImageButton fryingClickable;
+<span class="nc" id="L108">    int fryingClicked = 0;</span>
+<span class="nc" id="L109">    int bakingClicked = 0;</span>
+<span class="nc" id="L110">    boolean pattyAtFrying = false;</span>
+<span class="nc" id="L111">    boolean pizzaAtBaking = false;</span>
+<span class="nc" id="L112">    boolean bakingUnlocked = false;</span>
+<span class="nc" id="L113">    boolean potatoAtBaking = false;</span>
+<span class="nc" id="L114">    Texture flipBtn = new Texture(&quot;flipBtn.png&quot;);</span>
+    ImageButton bakingClickable;
+    ImageButton cuttingClickable;
+    ImageButton binClickable;
+    ImageButton servingClickable;
+    ImageButton extraTimeClickable;
+    // pantry and serving screen frames
+    ImageButton extraChefClickable;
+    TextureRegion pantryScreenFrameRegion;
+    ImageButton pantryScreenFrame;
+    TextureRegion servingScreenFrameRegion;
+    ImageButton servingScreenFrame;
+    // clickables
+    ImageButton XbtnClickable;
+    ImageButton lettuceClickable;
+    ImageButton tomatoClickable;
+    ImageButton bunsClickable;
+    ImageButton pattyClickable;
+    ImageButton burgerClickable;
+    ImageButton saladClickable;
+    ImageButton speedClickable;
+    ImageButton repClickable;
+    ImageButton saveClickable;
+    ImageButton pizzaClickable;
+    ImageButton unlockBakingClickable;
+    ImageButton potatoClickable;
+    ImageButton stationSpeedClickable;
+    ImageButton cheeseClickable;
+    ImageButton pizzaServableClickable;
+    ImageButton potatoServeClickable;
+    Helpers helpers;
+
+    ImageButton doubleMoneyClickable;
+<span class="nc" id="L147">    int NumServed = 0;</span>
+
+    // when you hover over a clickable it changes the cursor to a hand
+    // this listener is added to all clickables
+<span class="nc" id="L151">    ClickListener cursorHovering = new ClickListener() {</span>
+        @Override
+        public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+<span class="nc" id="L154">            Gdx.graphics.setSystemCursor(SystemCursor.Hand);</span>
+<span class="nc" id="L155">        }</span>
+
+        @Override
+        public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+<span class="nc" id="L159">            Gdx.graphics.setSystemCursor(SystemCursor.Arrow);</span>
+<span class="nc" id="L160">        }</span>
+    };
+    // UI elements
+<span class="nc" id="L163">    Texture plateTex = new Texture(&quot;plate.png&quot;);</span>
+<span class="nc" id="L164">    Texture cookStackTitle = new Texture(&quot;cookStackTitle.png&quot;);</span>
+<span class="nc" id="L165">    Texture selectedCook = new Texture(&quot;selected.png&quot;);</span>
+    // Order Textures
+<span class="nc" id="L167">    Texture burgerOrderTexture = new Texture(&quot;orderBurger.png&quot;);</span>
+<span class="nc" id="L168">    Texture saladOrderTexture = new Texture(&quot;orderSalad.png&quot;);</span>
+<span class="nc" id="L169">    Boolean showPantryScreen = false;</span>
+<span class="nc" id="L170">    Boolean showServingScreen = false;</span>
+
+    Utils utils;
+    Frying frying;
+    Bin bin;
+    Pantry pantry;
+    Baking baking;
+    Cutting cutting;
+    Serving serving;
+    SaladClickable saladC;
+    BurgerClickable burger;
+    LettuceClickable lettuce;
+    PotatoClickable potato;
+    TomatoClickable tomato;
+    BunClickable bun;
+    PattyClickable patty;
+    Savegame save;
+    PizzaClickable pizza;
+    UnlockBaking unlock;
+    PizzaServeClickable pizzaServe;
+    PotatoServeClickable potatoServe;
+    SpeedPowerup speedPowerup;
+
+    RepPowerup repPowerup;
+    ExtratimePowerup extratimePowerup;
+    ExtraChef extraChefPowerup;
+
+    DoubleMoneyPowerup doubleMoneyPowerup;
+<span class="nc" id="L198">    Random rand = new Random();</span>
+
+    StationSpeedPowerup stationSpeedPowerup;
+
+<span class="nc" id="L202">    private int customerCount = 0;</span>
+
+<span class="nc" id="L204">    private Boolean endless = false;</span>
+    JSONObject obj;
+    JSONObject config;
+<span class="nc" id="L207">    private HashMap&lt;ProgressBar, Float&gt; pattyTimers = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L208">    private float pattyFryingTime = 0;</span>
+<span class="nc" id="L209">    private float potatoBakingTime = 0;</span>
+<span class="nc" id="L210">    private float pizzaBakingTime = 0;</span>
+
+<span class="nc" id="L212">    boolean isInitialMove = true;</span>
+<span class="nc" id="L213">    boolean thirdChefUnlocked = false;</span>
+    /*
+        * Constructor for the game screen
+        *
+        * @param game the game object
+        * @param port the viewport
+        * @param isEndless whether the game is endless or not
+        * @param isLoad whether the game is being loaded or not
+        * @param Loadfile the file to load from
+        * @param config the config file
+        * @throws IOException
+        *
+        * @return none
+     */
+
+    public GameScreen(PiazzaPanic game, FitViewport port, Boolean isEndless, Boolean isLoad, String Loadfile,
+<span class="nc" id="L229">            JSONObject config) throws IOException {</span>
+
+        // initialise the game
+<span class="nc" id="L232">        this.game = game;</span>
+<span class="nc" id="L233">        this.view = port;</span>
+<span class="nc" id="L234">        this.config = config;</span>
+<span class="nc" id="L235">        this.customerNumber = config.getInt(&quot;customersToServe&quot;);</span>
+<span class="nc" id="L236">        this.helpers = new Helpers(game);</span>
+
+<span class="nc" id="L238">        this.utils = new Utils();</span>
+<span class="nc" id="L239">        this.frying = new Frying(game, utils, this);</span>
+<span class="nc" id="L240">        this.bin = new Bin(game, utils, this);</span>
+<span class="nc" id="L241">        this.pantry = new Pantry(game, utils, this);</span>
+<span class="nc" id="L242">        this.baking = new Baking(game, utils, this);</span>
+<span class="nc" id="L243">        this.cutting = new Cutting(game, utils, this);</span>
+<span class="nc" id="L244">        this.serving = new Serving(game, utils, this);</span>
+<span class="nc" id="L245">        this.saladC = new SaladClickable(game, utils, this);</span>
+<span class="nc" id="L246">        this.burger = new BurgerClickable(game, utils, this);</span>
+<span class="nc" id="L247">        this.bun = new BunClickable(utils, this);</span>
+<span class="nc" id="L248">        this.lettuce = new LettuceClickable(utils, this);</span>
+<span class="nc" id="L249">        this.tomato = new TomatoClickable(utils, this);</span>
+<span class="nc" id="L250">        this.patty = new PattyClickable(utils, this);</span>
+<span class="nc" id="L251">        this.pizza = new PizzaClickable(utils, this);</span>
+<span class="nc" id="L252">        this.potato = new PotatoClickable(utils, this);</span>
+<span class="nc" id="L253">        this.unlock = new UnlockBaking(utils, this);</span>
+<span class="nc" id="L254">        this.pizzaServe = new PizzaServeClickable(game, utils, this);</span>
+<span class="nc" id="L255">        this.potatoServe = new PotatoServeClickable(game, utils, this);</span>
+        try {
+<span class="nc" id="L257">            this.save = new Savegame(game, utils, this);</span>
+<span class="nc" id="L258">        } catch (IOException e) {</span>
+<span class="nc" id="L259">            throw new RuntimeException(e);</span>
+<span class="nc" id="L260">        }</span>
+<span class="nc" id="L261">        money = new Money(game, config.getString(&quot;difficulty&quot;));</span>
+
+<span class="nc" id="L263">        powerups = new Powerups(game, money, this, config.getString(&quot;difficulty&quot;));</span>
+<span class="nc" id="L264">        this.speedPowerup = new SpeedPowerup(utils, this, powerups);</span>
+<span class="nc" id="L265">        this.repPowerup = new RepPowerup(utils, this, powerups);</span>
+<span class="nc" id="L266">        this.stationSpeedPowerup = new StationSpeedPowerup(utils, this, powerups);</span>
+<span class="nc" id="L267">        this.extratimePowerup = new ExtratimePowerup(utils, this, powerups);</span>
+<span class="nc" id="L268">        this.extraChefPowerup = new ExtraChef(utils, this, powerups);</span>
+<span class="nc" id="L269">        this.doubleMoneyPowerup = new DoubleMoneyPowerup(utils, this, powerups);</span>
+
+
+<span class="nc" id="L272">        gameStage = new Stage(view, game.batch);</span>
+
+        // load the map and camera
+<span class="nc" id="L275">        mapLoader = new TmxMapLoader();</span>
+<span class="nc" id="L276">        map = mapLoader.load(&quot;KitchenMap.tmx&quot;);</span>
+<span class="nc" id="L277">        renderer = new OrthogonalTiledMapRenderer(map);</span>
+<span class="nc" id="L278">        gameCam = new OrthographicCamera();</span>
+<span class="nc" id="L279">        view.setCamera(gameCam);</span>
+<span class="nc" id="L280">        view.setWorldSize(192, 144);</span>
+<span class="nc" id="L281">        gameCam.position.set(view.getWorldWidth() / 2, view.getWorldHeight() / 2, 0);</span>
+        // set order timer font color
+<span class="nc" id="L283">        font.setColor(Color.BLACK);</span>
+<span class="nc" id="L284">        font.getData().setScale(0.5f);</span>
+        // sprite information from the texture atlas
+<span class="nc" id="L286">        TextureAtlas atlasIdle = new TextureAtlas(Gdx.files.internal(&quot;charIdle.txt&quot;));</span>
+<span class="nc" id="L287">        TextureAtlas customersLeft = new TextureAtlas(Gdx.files.internal(&quot;customersLeft.txt&quot;));</span>
+<span class="nc" id="L288">        skin = new Skin();</span>
+<span class="nc" id="L289">        skin.addRegions(atlasIdle);</span>
+<span class="nc" id="L290">        custSkins = new Skin();</span>
+<span class="nc" id="L291">        custSkins.addRegions(customersLeft);</span>
+<span class="nc" id="L292">        charIdles = Gdx.files.internal(&quot;charIdle.txt&quot;);</span>
+<span class="nc" id="L293">        adam = skin.getSprite(&quot;Adam&quot;);</span>
+<span class="nc" id="L294">        alex = skin.getSprite(&quot;Alex&quot;);</span>
+<span class="nc" id="L295">        amelia = skin.getSprite(&quot;Amelia&quot;);</span>
+<span class="nc" id="L296">        idles.add(adam);</span>
+<span class="nc" id="L297">        idles.add(alex);</span>
+<span class="nc" id="L298">        idles.add(amelia);</span>
+
+        // music control
+        // music composed by Ridley Coyte
+<span class="nc bnc" id="L302" title="All 2 branches missed.">        if (!config.getBoolean(&quot;muteMusic&quot;)) {</span>
+<span class="nc" id="L303">            alienJazz.setLooping(true);</span>
+<span class="nc" id="L304">            alienJazz.play();</span>
+        }
+
+        // create the instances of the cooks and first customer.
+<span class="nc" id="L308">        cooks = new Array&lt;Cook&gt;();</span>
+<span class="nc" id="L309">        spawnCooks();</span>
+<span class="nc" id="L310">        customers = new ArrayList&lt;ArrayList&lt;Customer&gt;&gt;();</span>
+<span class="nc" id="L311">        ArrayList&lt;Customer&gt; tmp = new ArrayList&lt;Customer&gt;();</span>
+<span class="nc" id="L312">        int tmpI = helpers.CustomersToServe(customerCount);</span>
+
+
+<span class="nc bnc" id="L315" title="All 2 branches missed.">        for (int i = 0; i &lt; tmpI; i++) {</span>
+<span class="nc" id="L316">            tmp.add(new Customer(new Actor(), bakingUnlocked));</span>
+        }
+<span class="nc" id="L318">        System.out.print(tmp);</span>
+<span class="nc" id="L319">        customers.add(tmp);</span>
+<span class="nc" id="L320">        increaseNumServed(tmpI);</span>
+        // array of all progressbars created (used to update all of them in
+        // updateProgressBars function)
+<span class="nc" id="L323">        bars = new HashMap&lt;ProgressBar, Cook&gt;();</span>
+        // pantry station
+<span class="nc" id="L325">        pantryClickable = pantry.getPantryClickable();</span>
+<span class="nc" id="L326">        gameStage.addActor(pantryClickable);</span>
+        // frying station
+<span class="nc" id="L328">        fryingClickable = frying.createFryingClickable();</span>
+<span class="nc" id="L329">        gameStage.addActor(fryingClickable);</span>
+        // baking station
+<span class="nc" id="L331">        bakingClickable = baking.getBakingClickable();</span>
+<span class="nc" id="L332">        gameStage.addActor(bakingClickable);</span>
+        // bin station
+<span class="nc" id="L334">        binClickable = bin.getBinClickable();</span>
+<span class="nc" id="L335">        gameStage.addActor(binClickable);</span>
+        // cutting station
+<span class="nc" id="L337">        cuttingClickable = cutting.getCuttingClickable();</span>
+<span class="nc" id="L338">        gameStage.addActor(cuttingClickable);</span>
+        // serving station
+<span class="nc" id="L340">        servingClickable = serving.getServingClickable();</span>
+<span class="nc" id="L341">        gameStage.addActor(servingClickable);</span>
+        // save game
+<span class="nc" id="L343">        saveClickable = save.getSaveClickable();</span>
+<span class="nc" id="L344">        gameStage.addActor(saveClickable);</span>
+<span class="nc" id="L345">        extraChefClickable = extraChefPowerup.getExtraChefClickable();</span>
+<span class="nc" id="L346">        extraChefClickable.setScale(0.7f);</span>
+<span class="nc" id="L347">        gameStage.addActor(extraChefClickable);</span>
+
+        // unlock baking
+<span class="nc" id="L350">        unlockBakingClickable = unlock.getUnlockBakingButton();</span>
+        // pizza
+        // adding the station clickables to the screen
+<span class="nc" id="L353">        pantryClickable.setPosition(0, 64);</span>
+<span class="nc" id="L354">        fryingClickable.setPosition(32, 64);</span>
+<span class="nc" id="L355">        bakingClickable.setPosition(64, 64);</span>
+<span class="nc" id="L356">        binClickable.setPosition(0, 0);</span>
+<span class="nc" id="L357">        cuttingClickable.setPosition(32, 0);</span>
+<span class="nc" id="L358">        servingClickable.setPosition(96, 16);</span>
+<span class="nc" id="L359">        saveClickable.setPosition(170, 100);</span>
+<span class="nc" id="L360">        extraChefClickable.setPosition(110, 120);</span>
+
+        // close button for station pop ups
+<span class="nc" id="L363">        XbtnClickable = createImageClickable(new Texture(&quot;Xbtn.png&quot;), 16, 16);</span>
+        // function executes after clicking on the close button
+        // hides any menus that pop up
+<span class="nc" id="L366">        XbtnClickable.addListener(new ClickListener() {</span>
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+<span class="nc" id="L369">                hidePantryScreen();</span>
+<span class="nc" id="L370">                hideServingScreen();</span>
+<span class="nc" id="L371">                cooks.get(selected).isBusy = false;</span>
+<span class="nc" id="L372">            }</span>
+        });
+
+        // pantry screen frame
+<span class="nc" id="L376">        pantryScreenFrameRegion = new TextureRegion(new Texture(&quot;pantryFrame.png&quot;));</span>
+<span class="nc" id="L377">        pantryScreenFrame = new ImageButton(new TextureRegionDrawable(pantryScreenFrameRegion));</span>
+<span class="nc" id="L378">        pantryScreenFrame.setSize(140, 92);</span>
+
+        /*
+         * Pantry screen buttons
+         * The functions executes after clicking on any of the ingredient buttons on the
+         * pantry screen
+         * Addes the ingredient to the current cook's stack (if it's less than 5 items)
+         */
+        // unprepared lettuce button
+<span class="nc" id="L387">        lettuceClickable = lettuce.getLettuceClickable();</span>
+        // unprepared tomato button
+<span class="nc" id="L389">        tomatoClickable = tomato.getTomatoClickable();</span>
+        // unprepared buns button
+<span class="nc" id="L391">        bunsClickable = bun.getBunClickable();</span>
+        // unprepared patty button
+<span class="nc" id="L393">        pattyClickable = patty.getPattyClickable();</span>
+<span class="nc" id="L394">        potatoClickable = potato.getPotatoClickable();</span>
+<span class="nc" id="L395">        speedClickable = speedPowerup.getSpeedClickable();</span>
+<span class="nc" id="L396">        repClickable = repPowerup.getRepButton();</span>
+<span class="nc" id="L397">        stationSpeedClickable = stationSpeedPowerup.getStationClickable();</span>
+<span class="nc" id="L398">        extraTimeClickable = extratimePowerup.getExtraTimeClickable();</span>
+<span class="nc" id="L399">        pizzaClickable = pizza.getPizzaClickable();</span>
+<span class="nc" id="L400">        unlockBakingClickable = unlock.getUnlockBakingButton();</span>
+<span class="nc" id="L401">        pizzaServableClickable = pizzaServe.getPizzaServeClickable();</span>
+<span class="nc" id="L402">        potatoServeClickable = potatoServe.getPotatoServeClickable();</span>
+<span class="nc" id="L403">        doubleMoneyClickable = doubleMoneyPowerup.getDoubleMoneyClickable();</span>
+        // serving screen frame
+<span class="nc" id="L405">        servingScreenFrameRegion = new TextureRegion(new Texture(&quot;servingFrame.png&quot;));</span>
+<span class="nc" id="L406">        servingScreenFrame = new ImageButton(new TextureRegionDrawable(servingScreenFrameRegion));</span>
+<span class="nc" id="L407">        servingScreenFrame.setSize(140, 92);</span>
+
+        /*
+         * Serving screen buttons
+         * The functions executes after clicking on any of the ingredient buttons on the
+         * serving screen
+         * Serves the item if all the required prepared ingredients are in the current
+         * cook's stack
+         */
+        // burger button
+<span class="nc" id="L417">        burgerClickable = burger.getBurgerClickable();</span>
+        // salad button
+<span class="nc" id="L419">        saladClickable = saladC.getSaladClickable();</span>
+<span class="nc" id="L420">        this.endless = isEndless;</span>
+<span class="nc bnc" id="L421" title="All 2 branches missed.">        if (isLoad) {</span>
+            try {
+<span class="nc" id="L423">                loadJSON(Loadfile);</span>
+<span class="nc" id="L424">            } catch (IOException e) {</span>
+<span class="nc" id="L425">                throw new RuntimeException(e);</span>
+<span class="nc" id="L426">            }</span>
+        }
+
+<span class="nc" id="L429">    }</span>
+
+    /*
+        * Gets the game time
+        *
+        * @return gameTime
+     */
+    public long getGameTime() {
+<span class="nc" id="L437">        return gameTime;</span>
+    }
+    /*
+        * Gets stations currently being used
+        *
+        * @return none
+     */
+    public void setSationSelected(int value) {
+<span class="nc" id="L445">        stationSelected.set(selected, value);</span>
+<span class="nc" id="L446">    }</span>
+    /*
+        * Gets current cook selected
+        *
+        * @return selected
+     */
+    public int getSelected() {
+<span class="nc" id="L453">        return selected;</span>
+    }
+
+    /*
+       * Gets the array of cooks
+       *
+       * @return cooks
+     */
+    public Array&lt;Cook&gt; getCooks() {
+<span class="nc" id="L462">        return cooks;</span>
+    }
+    /*
+        * Increment frying clicked
+        *
+        * @return none
+     */
+    public void incrementFryingClicked() {
+<span class="nc" id="L470">        fryingClicked++;</span>
+<span class="nc" id="L471">    }</span>
+    /*
+        * Used to buy a third chef
+        *
+        * @param chefCount the number of chefs
+        *
+        * @return none
+     */
+    public void setChef(int chefCount) {
+<span class="nc" id="L480">        thirdChefUnlocked = true;</span>
+<span class="nc" id="L481">        int freeStation = helpers.findFreeStation(stationSelected);</span>
+<span class="nc" id="L482">        isInitialMove = true;</span>
+<span class="nc" id="L483">        stationSelected.set(2, freeStation);</span>
+<span class="nc" id="L484">    }</span>
+
+//    public int findFreeStation() {
+//        ArrayList&lt;Integer&gt; listA = new ArrayList&lt;&gt;();
+//        for (int i=0;i&lt;=5;i++) {
+//            listA.add(i);
+//        }
+//        for (int i : stationSelected) {
+//            for (int j = 0; j &lt; listA.size(); j++) {
+//                if (listA.get(j) == i) {
+//                    listA.remove(j);
+//                }
+//            }
+//        }
+//        return listA.get(0);
+//    }
+
+    /*
+        * Increments the number of times baking is clicked
+        *
+        * @return none
+     */
+    public void incrementBakingClicked() {
+<span class="nc" id="L507">        bakingClicked++;</span>
+<span class="nc" id="L508">    }</span>
+
+    /*
+        * Gets the number of times frying is clicked
+        *
+        * @return fryingClicked
+     */
+    public int getFryingClicked() {
+<span class="nc" id="L516">        return fryingClicked;</span>
+    }
+    /*
+        * Gets the number of times baking is clicked
+        *
+        * @return bakingClicked
+     */
+    public int getBakingClicked() {
+<span class="nc" id="L524">        return bakingClicked;</span>
+    }
+    /*
+        * Gets whether baking is unlocked
+        *
+        * @return bakingUnlocked
+     */
+    public boolean bakingUnlocked() {
+<span class="nc" id="L532">        return bakingUnlocked;</span>
+    }
+    /*
+        * Unlocks baking
+        *
+        * @param value  whether baking is unlocked
+        *
+        * @return none
+     */
+    public void setBakingUnlocked(boolean value) {
+<span class="nc" id="L542">        bakingUnlocked = value;</span>
+<span class="nc" id="L543">    }</span>
+    /*
+        * Sets pizza to bake
+        *
+        * @param isBaking   whether pizza is baking
+        *
+        * @return none
+     */
+    public void setPizzaAtBaking(Boolean isBaking) {
+<span class="nc" id="L552">        pizzaAtBaking = isBaking;</span>
+<span class="nc" id="L553">    }</span>
+    /*
+        * Gets whether pizza is baking
+        *
+        * @return pizzaAtBaking
+     */
+    public boolean getPizzaAtBaking() {
+<span class="nc" id="L560">        return pizzaAtBaking;</span>
+    }
+    /*
+        * Sets the potato to bake
+        *
+        * @param isBaking whether potato is baking
+        *
+        * @return none
+     */
+<span class="nc" id="L569">    public void setAtPotatoBaking(Boolean isBaking) {potatoAtBaking = isBaking;}</span>
+    /*
+        * Gets whether potato is baking
+        *
+        * @return potatoAtBaking
+     */
+<span class="nc" id="L575">    public boolean getAtPotatoBaking() {return potatoAtBaking;}</span>
+    /*
+        * Sets the patty to fry
+        *
+        * @param isFrying whether patty is frying
+        *
+        * @return none
+     */
+    public void setPattyAtFrying(Boolean isFrying) {
+<span class="nc" id="L584">        pattyAtFrying = isFrying;</span>
+<span class="nc" id="L585">    }</span>
+
+    /*
+        * Gets whether patty is frying
+        *
+        * @return pattyAtFrying
+     */
+    public boolean getPattyAtFrying() {
+<span class="nc" id="L593">        return pattyAtFrying;</span>
+    }
+
+    /*
+        * Shows/hides the pantry screen
+        *
+        * @param show whether to show or hide the pantry screen
+        *
+        * @return none
+     */
+    public void setShowPantryScreen(Boolean show) {
+<span class="nc" id="L604">        showPantryScreen = show;</span>
+<span class="nc" id="L605">    }</span>
+
+
+    /*
+        * Shows/hides the serving screen
+        *
+        * @param value whether to show or hide the serving screen
+        *
+        * @return none
+     */
+    public void setShowServingScreen(Boolean value) {
+<span class="nc" id="L616">        showServingScreen = value;</span>
+<span class="nc" id="L617">    }</span>
+
+    /*
+        * Gets customers
+        *
+        * @return customers
+     */
+    public ArrayList&lt;ArrayList&lt;Customer&gt;&gt; getCustomers() {
+<span class="nc" id="L625">        return customers;</span>
+    }
+
+    /*
+        * Gets the number of customers
+        *
+        * @return customerCount
+     */
+    public int getCustomerCount() {
+<span class="nc" id="L634">        return customerCount;</span>
+    }
+
+    /*
+        * Changes the number of customers served
+        *
+        * @param amnt the amount to change by
+        *
+        * @return none
+     */
+    public void increaseNumServed(int amnt) {
+<span class="nc" id="L645">        NumServed += amnt;</span>
+<span class="nc" id="L646">    }</span>
+
+    /*
+        * Changes rep
+        *
+        * @param amount the amount to change rep by
+        *
+        * @return none
+     */
+    public void addRep(int amount) {
+<span class="nc" id="L656">        Rep += amount;</span>
+<span class="nc" id="L657">    }</span>
+
+    /*
+        * Gets the current money
+        *
+        * @param none
+        *
+        * @return money
+        *
+     */
+    public Money getMoney() {
+<span class="nc" id="L668">        return money;</span>
+    }
+
+    /*
+        * Gets the current rep
+        *
+        * @param none
+        *
+        * @return Rep
+        *
+     */
+    public int getRep() {
+<span class="nc" id="L680">        return Rep;</span>
+    }
+
+    /*
+        * Gets the powerups
+        *
+        * @param none
+        *
+        * @return powerups the powerups
+        *
+     */
+    public Powerups getPowerups() {
+<span class="nc" id="L692">        return powerups;</span>
+    }
+
+    /*
+        * Initialises the save file if supplied
+        *
+        * @param obj the JSONObject to initialise from
+        *
+        * @return none
+     */
+    public void initialiseLoad(JSONObject obj) {
+<span class="nc" id="L703">        Rep = obj.optInt(&quot;rep&quot;, 3);</span>
+<span class="nc" id="L704">        int timeTaken = obj.optInt(&quot;timetaken&quot;, 0);</span>
+<span class="nc" id="L705">        gameTime = System.currentTimeMillis() + timeTaken;</span>
+        // customerCount = obj.optInt(&quot;customersLeft&quot;, defaultCustomerCountValue);
+<span class="nc" id="L707">        int moneyToAdd = obj.optInt(&quot;Money&quot;, 0);</span>
+<span class="nc" id="L708">        money.addMoney(moneyToAdd);</span>
+<span class="nc" id="L709">        NumServed = obj.optInt(&quot;NumServed&quot;, 0);</span>
+<span class="nc bnc" id="L710" title="All 2 branches missed.">        if (obj.optBoolean(&quot;bakingUnlocked&quot;, false)) {</span>
+<span class="nc" id="L711">            bakingUnlocked = true;</span>
+        }
+<span class="nc bnc" id="L713" title="All 2 branches missed.">        if (obj.optBoolean(&quot;pizzaAtBaking&quot;, false)) {</span>
+<span class="nc" id="L714">            pizzaAtBaking = true;</span>
+        }
+<span class="nc bnc" id="L716" title="All 2 branches missed.">        if (obj.optBoolean(&quot;Speed&quot;, false)) {</span>
+<span class="nc" id="L717">            powerups.setSpeedMultiplierFree(2);</span>
+        }
+<span class="nc bnc" id="L719" title="All 2 branches missed.">        if (obj.optBoolean(&quot;DoubleMoney&quot;, false)) {</span>
+<span class="nc" id="L720">            powerups.buyDoubleMoneyFree();</span>
+        }
+<span class="nc bnc" id="L722" title="All 2 branches missed.">        if (obj.optBoolean(&quot;ExtraTime&quot;, false)) {</span>
+<span class="nc" id="L723">            powerups.buyExtraTimeFree();</span>
+        }
+<span class="nc bnc" id="L725" title="All 2 branches missed.">        if (obj.optBoolean(&quot;ExtraChef&quot;, false)) {</span>
+<span class="nc" id="L726">            thirdChefUnlocked = true;</span>
+        }
+
+
+<span class="nc" id="L730">    }</span>
+
+    /*
+        * Loads the save file
+        *
+        * @param Loadfile the file to load from
+        *
+        * @return none
+     */
+    public void loadJSON(String Loadfile) throws IOException {
+<span class="nc" id="L740">        String content = new String(Files.readAllBytes(Paths.get(Loadfile)));</span>
+<span class="nc" id="L741">        obj = new JSONObject(content);</span>
+<span class="nc" id="L742">        initialiseLoad(obj);</span>
+<span class="nc" id="L743">    }</span>
+
+    /*
+        * Creates a clickable image
+        *
+        * @param texture the texture to use
+        * @param width the width of the image
+        * @param height the height of the image
+        *
+        * @return clickable the clickable image
+     */
+    private ImageButton createImageClickable(Texture texture, float width, float height) {
+<span class="nc" id="L755">        TextureRegion region = new TextureRegion(texture);</span>
+<span class="nc" id="L756">        ImageButton clickable = new ImageButton(new TextureRegionDrawable(region));</span>
+<span class="nc" id="L757">        clickable.setSize(width, height);</span>
+<span class="nc" id="L758">        clickable.addListener(cursorHovering);</span>
+<span class="nc" id="L759">        return clickable;</span>
+    }
+
+    /*
+        * Renders the game
+        *
+
+        * @param delta the time since the last frame
+        *
+        * @return none
+     */
+    @Override
+    public void render(float delta) {
+<span class="nc" id="L772">        gameCam.update();</span>
+<span class="nc" id="L773">        renderer.setView(gameCam);</span>
+
+<span class="nc" id="L775">        ScreenUtils.clear(0, 0, 0, 0);</span>
+<span class="nc" id="L776">        Gdx.gl.glClearColor(0, 0, 0, 1);</span>
+<span class="nc" id="L777">        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</span>
+<span class="nc" id="L778">        Gdx.input.setInputProcessor(gameStage);</span>
+<span class="nc" id="L779">        renderer.render();</span>
+
+        // call functions which determine key gameplay elements
+<span class="nc" id="L782">        gameStage.act();</span>
+
+<span class="nc" id="L784">        updateProgressBars();</span>
+<span class="nc" id="L785">        updateBatch();</span>
+<span class="nc" id="L786">        showCookStack();</span>
+<span class="nc" id="L787">        showStationScreens();</span>
+<span class="nc" id="L788">        showOrders(delta);</span>
+//        showRepPoints();
+<span class="nc" id="L790">        helpers.showRepPoints(RepLabel, Rep, RepPoint);</span>
+        try {
+<span class="nc" id="L792">            customerOperations();</span>
+<span class="nc" id="L793">        } catch (IOException e) {</span>
+            // TODO Auto-generated catch block
+<span class="nc" id="L795">            e.printStackTrace();</span>
+<span class="nc" id="L796">        }</span>
+        try {
+<span class="nc" id="L798">            processInput();</span>
+<span class="nc" id="L799">        } catch (IOException e) {</span>
+            // TODO Auto-generated catch block
+<span class="nc" id="L801">            e.printStackTrace();</span>
+<span class="nc" id="L802">        }</span>
+//        powerups.render();
+<span class="nc" id="L804">        powerups.checkPowerups();</span>
+<span class="nc" id="L805">        gameStage.draw();</span>
+
+<span class="nc" id="L807">        handlePattyFrying(Gdx.graphics.getDeltaTime());</span>
+<span class="nc" id="L808">        handlePizzaBaking(Gdx.graphics.getDeltaTime());</span>
+<span class="nc" id="L809">        handlePotatoBaking(Gdx.graphics.getDeltaTime());</span>
+
+
+<span class="nc bnc" id="L812" title="All 2 branches missed.">        for (int i = 0; i &lt; cookCount; i++) {</span>
+<span class="nc bnc" id="L813" title="All 2 branches missed.">            if (!cooks.get(i).isBusy) {</span>
+<span class="nc" id="L814">                cooks.get(i).move(stationSelected.get(i), cooks.get(i).CookBody, stationSelected, powerups, selected, isInitialMove);</span>
+
+            }
+
+        }
+<span class="nc bnc" id="L819" title="All 2 branches missed.">        if (isInitialMove) {</span>
+<span class="nc" id="L820">            boolean anynot = false;</span>
+<span class="nc bnc" id="L821" title="All 2 branches missed.">            for (int i = 0; i&lt;cookCount;i++) {</span>
+<span class="nc bnc" id="L822" title="All 4 branches missed.">                if (locations[stationSelected.get(i)][0] - cooks.get(i).CookBody.getX() &gt; 1|| locations[stationSelected.get(i)][1] - cooks.get(i).CookBody.getY() &gt; 1) {</span>
+<span class="nc" id="L823">                    anynot = true;</span>
+                }
+            }
+<span class="nc bnc" id="L826" title="All 2 branches missed.">            if (!anynot) {</span>
+<span class="nc" id="L827">                isInitialMove = false;</span>
+            }
+        }
+
+<span class="nc bnc" id="L831" title="All 2 branches missed.">        if (thirdChefUnlocked) {</span>
+<span class="nc" id="L832">            extraChefClickable.setPosition(100000, -1);</span>
+        }
+
+<span class="nc" id="L835">        money.render();</span>
+
+        // cooks.get(selected).doUserInput(cooks.get(selected));
+
+<span class="nc" id="L839">    }</span>
+    /*
+        * Handles the frying of the patty and controls burning
+        *
+        * @param delta the time since the last frame
+        *
+        * @return none
+     */
+    public void handlePattyFrying(float delta) {
+<span class="nc bnc" id="L848" title="All 2 branches missed.">        if (pattyAtFrying) {</span>
+
+<span class="nc" id="L850">            pattyFryingTime += delta;</span>
+<span class="nc" id="L851">            game.batch.begin();</span>
+<span class="nc" id="L852">            game.batch.draw(flipBtn, 30, 80);</span>
+<span class="nc" id="L853">            game.batch.end();</span>
+        } else {
+<span class="nc bnc" id="L855" title="All 2 branches missed.">            if (pattyFryingTime &gt;= 10) {</span>
+<span class="nc" id="L856">                Ingredient flippedPatty = cooks.get(selected).CookStack.peek();</span>
+<span class="nc" id="L857">                flippedPatty.setBurnt();</span>
+<span class="nc" id="L858">                flippedPatty.updateCurrentTexture();</span>
+            }
+<span class="nc" id="L860">            pattyFryingTime = 0;</span>
+        }
+<span class="nc" id="L862">    }</span>
+
+    /*
+        * Handles the baking of the potato and controls burning
+        *
+        * @param delta the time since the last frame
+        *
+        * @return none
+     */
+    public void handlePotatoBaking(float delta) {
+<span class="nc bnc" id="L872" title="All 2 branches missed.">            if (potatoAtBaking) {</span>
+
+<span class="nc" id="L874">                potatoBakingTime += delta;</span>
+<span class="nc" id="L875">                game.batch.begin();</span>
+<span class="nc" id="L876">                game.batch.draw(flipBtn, 85, 78);</span>
+<span class="nc" id="L877">                game.batch.end();</span>
+            } else {
+<span class="nc bnc" id="L879" title="All 2 branches missed.">                if (potatoBakingTime &gt;= 10) {</span>
+<span class="nc" id="L880">                    Ingredient flippedPotato = cooks.get(selected).CookStack.peek();</span>
+<span class="nc" id="L881">                    flippedPotato.setBurnt();</span>
+<span class="nc" id="L882">                    flippedPotato.updateCurrentTexture();</span>
+                }
+<span class="nc" id="L884">                potatoBakingTime = 0;</span>
+            }
+<span class="nc" id="L886">    }</span>
+    /*
+        * Handles the baking of the pizza and controls burning
+        *
+        * @param delta the time since the last frame
+        *
+        * @return none
+     */
+    public void handlePizzaBaking(float delta) {
+<span class="nc bnc" id="L895" title="All 2 branches missed.">        if (pizzaAtBaking) {</span>
+<span class="nc" id="L896">            pizzaBakingTime += delta;</span>
+<span class="nc" id="L897">            game.batch.begin();</span>
+<span class="nc" id="L898">            game.batch.draw(flipBtn, 85, 78);</span>
+<span class="nc" id="L899">            game.batch.end();</span>
+        } else {
+<span class="nc bnc" id="L901" title="All 2 branches missed.">            if (pizzaBakingTime &gt;= 10) {</span>
+<span class="nc" id="L902">                Ingredient flippedPizza = cooks.get(selected).CookStack.peek();</span>
+<span class="nc" id="L903">                flippedPizza.setBurnt();</span>
+<span class="nc" id="L904">                flippedPizza.updateCurrentTexture();</span>
+            }
+        }
+<span class="nc" id="L907">    }</span>
+
+    /*
+        * Controls the customers and their movement and actions
+        *
+        * @param none
+        *
+        * @throws IOException
+        *
+        * @return none
+     */
+    private void customerOperations() throws IOException {
+        // Check if all customers have been served
+<span class="nc" id="L920">        boolean allComplete = false;</span>
+<span class="nc bnc" id="L921" title="All 2 branches missed.">        for (Customer c : customers.get(customerCount)) {</span>
+<span class="nc bnc" id="L922" title="All 2 branches missed.">            if (!c.selfComplete) {</span>
+<span class="nc" id="L923">                allComplete = false;</span>
+<span class="nc" id="L924">                break;</span>
+            } else {
+<span class="nc" id="L926">                allComplete = true;</span>
+            }
+<span class="nc" id="L928">        }</span>
+
+        // move the customers to the counter
+<span class="nc bnc" id="L931" title="All 2 branches missed.">        for (int i = 0; i &lt; customers.get(customerCount).size(); i++) {</span>
+<span class="nc bnc" id="L932" title="All 2 branches missed.">            if (!customers.get(customerCount).get(i).atCounter) {</span>
+<span class="nc" id="L933">                customers.get(customerCount).get(i).move();</span>
+<span class="nc bnc" id="L934" title="All 2 branches missed.">            } else if (allComplete) {</span>
+                // make the customer leave
+<span class="nc" id="L936">                customers.get(customerCount).get(i).move();</span>
+
+<span class="nc bnc" id="L938" title="All 2 branches missed.">                if (customers.get(customerCount).get(i).body.getX() &gt; 148) {</span>
+<span class="nc" id="L939">                    customers.get(customerCount).get(i).body.remove();</span>
+<span class="nc bnc" id="L940" title="All 2 branches missed.">                    if (!endless) {</span>
+                        // check if the game is in endless mode or not
+<span class="nc bnc" id="L942" title="All 2 branches missed.">                        if (NumServed &lt; customerNumber) {</span>
+                            // spawn new customer
+
+<span class="nc" id="L945">                            ArrayList&lt;Customer&gt; tmp = new ArrayList&lt;Customer&gt;();</span>
+<span class="nc" id="L946">                            int tmpI = helpers.CustomersToServe(customerCount);</span>
+<span class="nc bnc" id="L947" title="All 2 branches missed.">                            for (int j = 0; j &lt; tmpI; j++) {</span>
+<span class="nc" id="L948">                                tmp.add(new Customer(new Actor(), bakingUnlocked));</span>
+                            }
+<span class="nc bnc" id="L950" title="All 2 branches missed.">                            if (powerups.hasExtraTime()) {</span>
+<span class="nc bnc" id="L951" title="All 2 branches missed.">                                for (Customer c : tmp) {</span>
+<span class="nc" id="L952">                                    c.customerOrder.setOrderTime(c.customerOrder.getOrderTime() + 10);</span>
+<span class="nc" id="L953">                                }</span>
+                            } else {
+                            }
+
+<span class="nc" id="L957">                            customers.add(tmp);</span>
+<span class="nc" id="L958">                            customerCount += 1;</span>
+<span class="nc" id="L959">                            increaseNumServed(tmpI);</span>
+<span class="nc" id="L960">                        } else {</span>
+                            // end game by taking the time at the game end and going to the time screen
+
+<span class="nc" id="L963">                            long timeTaken = System.currentTimeMillis() - gameTime;</span>
+<span class="nc" id="L964">                            alienJazz.stop();</span>
+<span class="nc bnc" id="L965" title="All 2 branches missed.">                            if (endless) {</span>
+<span class="nc" id="L966">                                int tosub = 0;</span>
+<span class="nc bnc" id="L967" title="All 2 branches missed.">                                for (Customer c : customers.get(customerCount)) {</span>
+<span class="nc bnc" id="L968" title="All 2 branches missed.">                                    if (!c.selfComplete) {</span>
+<span class="nc" id="L969">                                        tosub += 1;</span>
+                                    }
+<span class="nc" id="L971">                                }</span>
+<span class="nc" id="L972">                                game.setScreen(new EndGameScreen(game, timeTaken, 0, true, NumServed- tosub));</span>
+<span class="nc" id="L973">                            } else {</span>
+<span class="nc" id="L974">                                game.setScreen(new EndGameScreen(game, timeTaken, Rep, false, 0));</span>
+                            }
+
+<span class="nc" id="L977">                        }</span>
+                    } else {
+                        // TODO endless mode
+<span class="nc" id="L980">                        ArrayList&lt;Customer&gt; tmp = new ArrayList&lt;Customer&gt;();</span>
+<span class="nc" id="L981">                        int tmpI = helpers.CustomersToServe(customerCount);</span>
+
+<span class="nc bnc" id="L983" title="All 2 branches missed.">                        for (int j = 0; j &lt; tmpI; j++) {</span>
+<span class="nc" id="L984">                            tmp.add(new Customer(new Actor(), bakingUnlocked));</span>
+                        }
+<span class="nc" id="L986">                        customers.add(tmp);</span>
+<span class="nc" id="L987">                        customerCount += 1;</span>
+<span class="nc" id="L988">                        increaseNumServed(tmpI);</span>
+                    }
+                }
+            }
+        }
+
+<span class="nc" id="L994">    }</span>
+
+    /*
+        * Spawn the cooks and add them to the stage
+        *
+        * @param none
+        *
+        * @return none
+     */
+    private void spawnCooks() {
+<span class="nc bnc" id="L1004" title="All 2 branches missed.">        for (int i = 0; i &lt; cookCount; i++) {</span>
+<span class="nc" id="L1005">            Cook cook = new Cook(new Actor());</span>
+<span class="nc" id="L1006">            cook.CookBody.setWidth(16);</span>
+<span class="nc" id="L1007">            cook.CookBody.setHeight(23);</span>
+            // scale information
+<span class="nc" id="L1009">            cook.CookBody.setScaleX(game.GAME_WIDTH / 16f);</span>
+<span class="nc" id="L1010">            cook.CookBody.setScaleY(game.GAME_HEIGHT / 23f);</span>
+            // cooks are stored in an array to make it easier to keep track of all things
+            // relating to them
+            // I love arrays so much
+<span class="nc" id="L1014">            cooks.add(cook);</span>
+<span class="nc" id="L1015">            gameStage.addActor(cook.CookBody);</span>
+<span class="nc bnc" id="L1016" title="All 2 branches missed.">            if (i == 2) {</span>
+<span class="nc" id="L1017">                stationSelected.add(6);</span>
+            } else {
+<span class="nc" id="L1019">                stationSelected.add(i);</span>
+            }
+        }
+<span class="nc" id="L1022">    }</span>
+
+
+    /*
+        * Handles the input from the user
+        *
+        * @param none
+        *
+        * @throws IOException
+        *
+        * @return none
+     */
+    private void processInput() throws IOException {
+        // number keys are used to select which cook is being controlled currently
+<span class="nc bnc" id="L1036" title="All 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {</span>
+<span class="nc" id="L1037">            selected = 0;</span>
+<span class="nc bnc" id="L1038" title="All 2 branches missed.">        } else if (Gdx.input.isKeyPressed(Input.Keys.NUM_2)) {</span>
+<span class="nc" id="L1039">            selected = 1;</span>
+        }
+
+        // TODO add statements for adding more cooks here
+<span class="nc bnc" id="L1043" title="All 6 branches missed.">        if (cookCount &gt; 2 &amp;&amp; Gdx.input.isKeyPressed(Input.Keys.NUM_3) &amp;&amp; thirdChefUnlocked) {</span>
+<span class="nc" id="L1044">            selected = 2;</span>
+        }
+<span class="nc bnc" id="L1046" title="All 2 branches missed.">        for (int i = 0; i &lt; cooks.size; i++) {</span>
+<span class="nc bnc" id="L1047" title="All 2 branches missed.">            if (cooks.get(i).CookBody.isTouchFocusTarget()) {</span>
+<span class="nc" id="L1048">                selected = i;</span>
+            }
+        }
+
+
+<span class="nc bnc" id="L1053" title="All 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {</span>
+            // return to main menu
+<span class="nc" id="L1055">            game.setScreen(new MainMenuScreen(game));</span>
+        }
+
+<span class="nc bnc" id="L1058" title="All 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.L)) {</span>
+<span class="nc" id="L1059">            Rep--;</span>
+        }
+
+<span class="nc" id="L1062">    }</span>
+
+    /*
+        * Updates the batch with the sprites for the cooks
+        *
+        * @param none
+        *
+        * @return none
+     */
+    private void updateBatch() {
+        // this section assigns each cook a sprite from the list idles
+        // you could potentially update this to allow for animations for the cooks when
+        // they move
+<span class="nc" id="L1075">        game.batch.begin();</span>
+<span class="nc" id="L1076">        int index = 0;</span>
+<span class="nc bnc" id="L1077" title="All 2 branches missed.">        for (Cook cook : cooks) {</span>
+<span class="nc" id="L1078">            game.batch.draw(idles.get(index), cook.CookBody.getX(), cook.CookBody.getY());</span>
+<span class="nc" id="L1079">            index++;</span>
+<span class="nc" id="L1080">        }</span>
+<span class="nc" id="L1081">        game.batch.draw(plateTex, 164, 25);</span>
+<span class="nc" id="L1082">        game.batch.draw(cookStackTitle, 164, 120);</span>
+<span class="nc" id="L1083">        game.batch.draw(idles.get(selected), 168, 1);</span>
+<span class="nc bnc" id="L1084" title="All 2 branches missed.">        for (int i = 0; i &lt; customers.get(customerCount).size(); i++) {</span>
+<span class="nc" id="L1085">            game.batch.draw(custSkins.getSprite(customers.get(customerCount).get(i).name),</span>
+<span class="nc" id="L1086">                    customers.get(customerCount).get(i).body.getX(), customers.get(customerCount).get(i).body.getY());</span>
+        }
+<span class="nc" id="L1088">        game.batch.end();</span>
+<span class="nc" id="L1089">    }</span>
+
+    /*
+        * Shows the orders at the top of the screen
+        *
+        * @param dt the time since the last frame
+        *
+        * @return none
+     */
+    private void showOrders(float dt) {
+        // displays the orders at the top of the screen
+<span class="nc" id="L1100">        int x = 1;</span>
+<span class="nc" id="L1101">        int y = 112;</span>
+
+<span class="nc" id="L1103">        timeCount += dt;</span>
+<span class="nc" id="L1104">        boolean shouldUpdateTimers = false; // Add a new flag to indicate whether timers should be updated</span>
+
+        // Check if one second has passed
+<span class="nc bnc" id="L1107" title="All 2 branches missed.">        if (timeCount &gt;= 1) {</span>
+<span class="nc" id="L1108">            shouldUpdateTimers = true;</span>
+<span class="nc" id="L1109">            timeCount = 0; // Reset timeCount outside the customer loop</span>
+        }
+
+<span class="nc bnc" id="L1112" title="All 2 branches missed.">        for (ArrayList&lt;Customer&gt; customerArr : customers) {</span>
+<span class="nc bnc" id="L1113" title="All 2 branches missed.">            for (Customer customer : customerArr) {</span>
+<span class="nc bnc" id="L1114" title="All 4 branches missed.">                if ((customer.atCounter) &amp;&amp; (!customer.selfComplete)) {</span>
+                    // Update order timer only if shouldUpdateTimers is true
+<span class="nc bnc" id="L1116" title="All 2 branches missed.">                    if (shouldUpdateTimers) {</span>
+<span class="nc bnc" id="L1117" title="All 2 branches missed.">                        if (customer.customerOrder.getOrderTime() &gt;= 0) {</span>
+<span class="nc" id="L1118">                            customer.customerOrder.orderTime--;</span>
+                        }
+                    }
+
+<span class="nc bnc" id="L1122" title="All 6 branches missed.">                    if (customer.customerOrder.getOrderTime() == 0 &amp;&amp; !customer.selfComplete</span>
+                            &amp;&amp; !customer.orderExpired) {
+                        // Uncomment line below if you want the customer to leave after the order timer
+                        // is gone
+                        // customer.orderComplete = true;
+<span class="nc" id="L1127">                        customer.orderExpired = true;</span>
+<span class="nc" id="L1128">                        Rep--;</span>
+<span class="nc bnc" id="L1129" title="All 2 branches missed.">                        if (Rep &lt;= 0) {</span>
+<span class="nc" id="L1130">                            long timeTaken = System.currentTimeMillis() - gameTime;</span>
+                            try {
+<span class="nc" id="L1132">                                int tosub = 0;</span>
+<span class="nc bnc" id="L1133" title="All 2 branches missed.">                                for (Customer c : customers.get(customerCount)) {</span>
+<span class="nc bnc" id="L1134" title="All 2 branches missed.">                                    if (!c.selfComplete) {</span>
+<span class="nc" id="L1135">                                        tosub += 1;</span>
+                                    }
+<span class="nc" id="L1137">                                }</span>
+<span class="nc" id="L1138">                                game.setScreen(new EndGameScreen(game, timeTaken, 0, true, NumServed - tosub));</span>
+<span class="nc" id="L1139">                            } catch (IOException e) {</span>
+                                // TODO Auto-generated catch block
+<span class="nc" id="L1141">                                e.printStackTrace();</span>
+<span class="nc" id="L1142">                            }</span>
+                        }
+                    }
+
+<span class="nc" id="L1146">                    game.batch.begin();</span>
+<span class="nc bnc" id="L1147" title="All 2 branches missed.">                    if (!customer.selfComplete) {</span>
+<span class="nc" id="L1148">                        game.batch.draw(customer.customerOrder.getOrderTexture(), x, y);</span>
+<span class="nc" id="L1149">                        game.batch.draw(customer.customerOrder.getRecipe().getSpeechBubbleTexture(),</span>
+<span class="nc" id="L1150">                                customer.body.getX() - 10, customer.body.getY() + 17);</span>
+<span class="nc bnc" id="L1151" title="All 2 branches missed.">                        if (customer.customerOrder.getOrderTime() &gt; -1) {</span>
+<span class="nc" id="L1152">                            font.draw(game.batch, Integer.toString(customer.customerOrder.getOrderTime()), x + 30,</span>
+                                    y + 10);
+                        } else {
+<span class="nc" id="L1155">                            font.draw(game.batch, &quot;0&quot;, x + 30, y + 10);</span>
+                        }
+                    }
+                    // order timer sets to 0 when it reaches -1
+
+<span class="nc" id="L1160">                    game.batch.end();</span>
+                    // increase x value if there is more than one current order
+<span class="nc" id="L1162">                    x += 41;</span>
+                }
+<span class="nc" id="L1164">            }</span>
+<span class="nc" id="L1165">        }</span>
+<span class="nc" id="L1166">    }</span>
+    /*
+        * Shows the selected cook's stack of ingredients
+        *
+        * @param none
+        *
+        * @return none
+     */
+    private void showCookStack() {
+        // display the stack of ingredients being held by the current cook
+<span class="nc" id="L1176">        float x = 164;</span>
+<span class="nc" id="L1177">        float y = 32;</span>
+<span class="nc" id="L1178">        game.batch.begin();</span>
+<span class="nc bnc" id="L1179" title="All 2 branches missed.">        for (Ingredient ingredient : cooks.get(selected).CookStack) {</span>
+<span class="nc" id="L1180">            game.batch.draw(ingredient.getCurrentTexture(), x, y);</span>
+<span class="nc" id="L1181">            y += 18;</span>
+<span class="nc" id="L1182">        }</span>
+<span class="nc" id="L1183">        game.batch.end();</span>
+<span class="nc" id="L1184">    }</span>
+
+    /*
+        * Shows the station screens
+        *
+        * @param none
+        *
+        * @return none
+     */
+    private void showStationScreens() {
+<span class="nc bnc" id="L1194" title="All 2 branches missed.">        for (Cook cook : cooks) {</span>
+<span class="nc bnc" id="L1195" title="All 4 branches missed.">            if ((Math.abs(cook.CookBody.getY() - 64f) &lt; 2) &amp;&amp; (Math.abs(cook.CookBody.getX() - 0f) &lt; 2)) {</span>
+<span class="nc" id="L1196">                showPantryScreen();</span>
+            }
+<span class="nc bnc" id="L1198" title="All 4 branches missed.">            if ((Math.abs(cook.CookBody.getY() - 48f) &lt; 2) &amp;&amp; (Math.abs(cook.CookBody.getX() - 80f) &lt; 2)) {</span>
+<span class="nc" id="L1199">                showServingScreen();</span>
+            }
+<span class="nc" id="L1201">        }</span>
+<span class="nc" id="L1202">    }</span>
+
+    /*
+        * Shows the serving screen
+        *
+        * @param none
+        *
+        * @return none
+     */
+    private void showServingScreen() {
+<span class="nc bnc" id="L1212" title="All 2 branches missed.">        if (showServingScreen) {</span>
+<span class="nc" id="L1213">            gameStage.addActor(servingScreenFrame);</span>
+<span class="nc" id="L1214">            gameStage.addActor(XbtnClickable);</span>
+<span class="nc" id="L1215">            XbtnClickable.toFront();</span>
+<span class="nc" id="L1216">            gameStage.addActor(burgerClickable);</span>
+<span class="nc" id="L1217">            gameStage.addActor(saladClickable);</span>
+<span class="nc" id="L1218">            gameStage.addActor(pizzaServableClickable);</span>
+<span class="nc" id="L1219">            gameStage.addActor(potatoServeClickable);</span>
+<span class="nc" id="L1220">            servingScreenFrame.setPosition(10, 10);</span>
+<span class="nc" id="L1221">            XbtnClickable.setPosition(7, 88);</span>
+<span class="nc" id="L1222">            burgerClickable.setPosition(25, 66);</span>
+<span class="nc" id="L1223">            saladClickable.setPosition(53, 66);</span>
+<span class="nc" id="L1224">            pizzaServableClickable.setPosition(77, 66);</span>
+<span class="nc" id="L1225">            potatoServeClickable.setPosition(100, 66);</span>
+<span class="nc" id="L1226">            pizzaServableClickable.toFront();</span>
+<span class="nc" id="L1227">            showServingScreen = false;</span>
+        }
+<span class="nc" id="L1229">    }</span>
+
+    /*
+        * Shows the pantry screen
+        *
+        * @param none
+        *
+        * @return none
+     */
+    private void showPantryScreen() {
+<span class="nc bnc" id="L1239" title="All 2 branches missed.">        if (showPantryScreen) {</span>
+<span class="nc" id="L1240">            gameStage.addActor(pantryScreenFrame);</span>
+<span class="nc" id="L1241">            gameStage.addActor(XbtnClickable);</span>
+<span class="nc" id="L1242">            XbtnClickable.toFront();</span>
+<span class="nc" id="L1243">            gameStage.addActor(lettuceClickable);</span>
+<span class="nc" id="L1244">            gameStage.addActor(tomatoClickable);</span>
+<span class="nc" id="L1245">            gameStage.addActor(bunsClickable);</span>
+<span class="nc" id="L1246">            gameStage.addActor(pattyClickable);</span>
+<span class="nc" id="L1247">            gameStage.addActor(speedClickable);</span>
+<span class="nc" id="L1248">            gameStage.addActor(repClickable);</span>
+<span class="nc" id="L1249">            gameStage.addActor(stationSpeedClickable);</span>
+<span class="nc" id="L1250">            gameStage.addActor(extraTimeClickable);</span>
+<span class="nc" id="L1251">            gameStage.addActor(pizzaClickable);</span>
+<span class="nc" id="L1252">            gameStage.addActor(unlockBakingClickable);</span>
+<span class="nc" id="L1253">            gameStage.addActor(potatoClickable);</span>
+//            gameStage.addActor(cheeseClickable);
+<span class="nc" id="L1255">            gameStage.addActor(doubleMoneyClickable);</span>
+<span class="nc" id="L1256">            pantryScreenFrame.setPosition(10, 10);</span>
+<span class="nc" id="L1257">            XbtnClickable.setPosition(7, 88);</span>
+<span class="nc" id="L1258">            lettuceClickable.setPosition(25, 66);</span>
+<span class="nc" id="L1259">            tomatoClickable.setPosition(53, 66);</span>
+<span class="nc" id="L1260">            bunsClickable.setPosition(81, 66);</span>
+<span class="nc" id="L1261">            pattyClickable.setPosition(110, 72);</span>
+<span class="nc" id="L1262">            speedClickable.setPosition(25, 40);</span>
+<span class="nc" id="L1263">            repClickable.setPosition(53, 40);</span>
+<span class="nc" id="L1264">            stationSpeedClickable.setPosition(75, 40);</span>
+<span class="nc" id="L1265">            extraTimeClickable.setPosition(110, 40);</span>
+<span class="nc" id="L1266">            pizzaClickable.setPosition(25, 17);</span>
+<span class="nc" id="L1267">            potatoClickable.setPosition(81, 17);</span>
+//            cheeseClickable.setPosition(110, 17);
+<span class="nc" id="L1269">            doubleMoneyClickable.setPosition(110, 17);</span>
+<span class="nc bnc" id="L1270" title="All 2 branches missed.">            if (bakingUnlocked) {</span>
+<span class="nc" id="L1271">                unlockBakingClickable.setPosition(10000, -1);</span>
+            } else {
+<span class="nc" id="L1273">                unlockBakingClickable.setPosition(53, 17);</span>
+            }
+
+<span class="nc" id="L1276">            showPantryScreen = false;</span>
+        }
+<span class="nc" id="L1278">    }</span>
+    /*
+        * Hides the pantry screen
+        *
+        * @param none
+        *
+        * @return none
+     */
+    private void hidePantryScreen() {
+        // moves pantry screen offscreen
+<span class="nc" id="L1288">        pantryScreenFrame.setPosition(10000, -1);</span>
+<span class="nc" id="L1289">        XbtnClickable.setPosition(10000, -1);</span>
+<span class="nc" id="L1290">        lettuceClickable.setPosition(10000, -1);</span>
+<span class="nc" id="L1291">        tomatoClickable.setPosition(10000, -1);</span>
+<span class="nc" id="L1292">        bunsClickable.setPosition(10000, -1);</span>
+<span class="nc" id="L1293">        pattyClickable.setPosition(10000, -1);</span>
+<span class="nc" id="L1294">        speedClickable.setPosition(10000, -1);</span>
+<span class="nc" id="L1295">        repClickable.setPosition(10000, -1);</span>
+<span class="nc" id="L1296">        stationSpeedClickable.setPosition(10000, -1);</span>
+<span class="nc" id="L1297">        extraTimeClickable.setPosition(100000, -1);</span>
+<span class="nc" id="L1298">        pizzaClickable.setPosition(10000, -1);</span>
+<span class="nc" id="L1299">        unlockBakingClickable.setPosition(10000, -1);</span>
+<span class="nc" id="L1300">        potatoClickable.setPosition(10000, -1);</span>
+//        cheeseClickable.setPosition(10000, -1);
+<span class="nc" id="L1302">        doubleMoneyClickable.setPosition(10000, -1);</span>
+<span class="nc" id="L1303">    }</span>
+    /*
+        * Hides the serving screen
+        *
+        * @param none
+        *
+        * @return none
+     */
+    public void hideServingScreen() {
+        // moves serving screen offscreen
+<span class="nc" id="L1313">        servingScreenFrame.setPosition(10000, -1);</span>
+<span class="nc" id="L1314">        XbtnClickable.setPosition(10000, -1);</span>
+<span class="nc" id="L1315">        burgerClickable.setPosition(10000, -1);</span>
+<span class="nc" id="L1316">        saladClickable.setPosition(10000, -1);</span>
+<span class="nc" id="L1317">        pizzaServableClickable.setPosition(100000,-1);</span>
+<span class="nc" id="L1318">        potatoServeClickable.setPosition(100000, -1);</span>
+<span class="nc" id="L1319">    }</span>
+
+    /*
+        * Creates a progress bar for the selected cook
+        *
+        * @param x - x position of the progress bar
+        *
+        * @param y - y position of the progress bar
+        *
+        * @param selectedCook - the cook that the progress bar is for
+        *
+        * @return none
+     */
+    public void createProgressBar(float x, float y, Cook selectedCook) {
+<span class="nc" id="L1333">        ProgressBarStyle style = new ProgressBarStyle();</span>
+<span class="nc" id="L1334">        style.background = helpers.getColoredDrawable(20, 5, Color.GREEN);</span>
+<span class="nc" id="L1335">        style.knob = helpers.getColoredDrawable(0, 5, Color.WHITE);</span>
+<span class="nc" id="L1336">        style.knobAfter = helpers.getColoredDrawable(20, 5, Color.WHITE);</span>
+<span class="nc" id="L1337">        float stepSize = powerups.getStationSpeed() * 0.05f;</span>
+<span class="nc" id="L1338">        ProgressBar bar = new ProgressBar(0, 7, stepSize, false, style);</span>
+<span class="nc" id="L1339">        bar.setWidth(30);</span>
+<span class="nc" id="L1340">        bar.setHeight(5);</span>
+<span class="nc" id="L1341">        bar.setValue(15f);</span>
+<span class="nc" id="L1342">        bar.setX(x);</span>
+<span class="nc" id="L1343">        bar.setY(y);</span>
+<span class="nc" id="L1344">        gameStage.addActor(bar);</span>
+<span class="nc" id="L1345">        bars.put(bar, selectedCook);</span>
+<span class="nc" id="L1346">    }</span>
+
+    /*
+        * Updates the progress bars
+        *
+        * @param none
+        *
+        * @return none
+     */
+    private void updateProgressBars() {
+<span class="nc bnc" id="L1356" title="All 2 branches missed.">        if (!bars.isEmpty()) {</span>
+<span class="nc bnc" id="L1357" title="All 2 branches missed.">            for (ProgressBar bar : bars.keySet()) {</span>
+<span class="nc" id="L1358">                bar.setValue(bar.getValue() - bar.getStepSize());</span>
+<span class="nc bnc" id="L1359" title="All 2 branches missed.">                if (bar.getValue() == 0) {</span>
+<span class="nc" id="L1360">                    gameStage.getActors().removeValue(bar, false);</span>
+                    // unbusy the cook
+<span class="nc" id="L1362">                    bars.get(bar).isBusy = false;</span>
+<span class="nc" id="L1363">                    bars.remove(bar);</span>
+                }
+<span class="nc" id="L1365">            }</span>
+        }
+<span class="nc" id="L1367">    }</span>
+
+    /*
+        * Add a multiplier to the money
+        *
+        * @param none
+        *
+        * @return none
+     */
+    public void incMoneyMult() {
+<span class="nc" id="L1377">        money.addMultiplier();</span>
+<span class="nc" id="L1378">    }</span>
+
+    /*
+        * Controls window resizing
+        *
+        * @param width - width of the window
+        *
+        * @param height - height of the window
+        *
+        * @return none
+     */
+    @Override
+    public void resize(int width, int height) {
+<span class="nc" id="L1391">        view.update(width, height);</span>
+<span class="nc" id="L1392">    }</span>
+    /*
+        * Renders the game
+        *
+        * @param none
+        *
+        * @return none
+     */
+    @Override
+    public void show() {
+<span class="nc" id="L1402">    }</span>
+    /*
+        * Pauses the game
+        *
+        * @param none
+        *
+        * @return none
+     */
+    @Override
+    public void pause() {
+<span class="nc" id="L1412">    }</span>
+
+    /*
+        * Resumes the game
+        *
+        * @param none
+        *
+        * @return none
+     */
+    @Override
+    public void resume() {
+<span class="nc" id="L1423">    }</span>
+    /*
+        * Hides the game
+        *
+        * @param none
+        *
+        * @return none
+     */
+    @Override
+    public void hide() {
+<span class="nc" id="L1433">    }</span>
+    /*
+        * Disposes of the game
+        *
+        * @param none
+        *
+        * @return none
+     */
+    @Override
+    public void dispose() {
+<span class="nc" id="L1443">        game.batch.dispose();</span>
+<span class="nc" id="L1444">        gameStage.dispose();</span>
+<span class="nc" id="L1445">        alienJazz.dispose();</span>
+<span class="nc" id="L1446">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

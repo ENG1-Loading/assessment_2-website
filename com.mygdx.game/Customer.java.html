@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Customer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game</a> &gt; <span class="el_source">Customer.java</span></div><h1>Customer.java</h1><pre class="source lang-java linenums">package com.mygdx.game;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.mygdx.game.Food.FoodMenu;
+import com.mygdx.game.Food.Order;
+
+import java.io.IOException;
+
+public class Customer {
+    // god we love using arrays for dealing with this stuff
+
+<span class="fc" id="L14">    private final float targetY = MathUtils.random(16, 48);</span>
+<span class="fc" id="L15">    public boolean orderComplete = false;</span>
+<span class="fc" id="L16">    public boolean selfComplete = false;</span>
+<span class="fc" id="L17">    public boolean atCounter = false;</span>
+<span class="fc" id="L18">    public boolean orderExpired = false;</span>
+    public Actor body;
+    public String name;
+    public Order customerOrder;
+<span class="fc" id="L22">    public boolean bakingUnlocked = false;</span>
+    /*
+        * Constructor for the cook
+        * @param skin the actor to be used as the cook
+        * @param _bakingUnlocked whether baking is unlocked
+        * @return none
+     */
+<span class="fc" id="L29">    public Customer(Actor skin, boolean _bakingUnlocked) throws IOException {</span>
+<span class="fc" id="L30">        String[] names = { &quot;Blue&quot;, &quot;Red&quot;, &quot;White&quot;, &quot;Yellow&quot; };</span>
+<span class="fc" id="L31">        this.name = names[MathUtils.random(0, 3)];</span>
+<span class="fc" id="L32">        this.body = skin;</span>
+<span class="fc" id="L33">        this.body.setWidth(16);</span>
+<span class="fc" id="L34">        this.body.setHeight(23);</span>
+<span class="fc" id="L35">        this.body.setX(144);</span>
+<span class="fc" id="L36">        this.body.setY(80);</span>
+<span class="fc" id="L37">        bakingUnlocked = _bakingUnlocked;</span>
+
+        // TODO add all possible orders here
+
+<span class="fc" id="L41">        this.customerOrder = generateOrder();</span>
+<span class="fc" id="L42">    }</span>
+    /*
+        * Method to move a customer from their current position to where they need to be
+        * @param none
+        * @return none
+     */
+    public void move() {
+        // method to move a cook from their current position to a station
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        if (!atCounter) {</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">            if (body.getY() != targetY) {</span>
+<span class="nc" id="L52">                body.setY(body.getY() - 50 * Gdx.graphics.getDeltaTime());</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">                if (Math.abs(body.getY() - targetY) &lt; 1) {</span>
+<span class="nc" id="L54">                    body.setY(targetY);</span>
+                }
+            } else {
+                // once close enough to the target positions snap the customer to it
+<span class="nc bnc" id="L58" title="All 2 branches missed.">                if (body.getX() != 128) {</span>
+<span class="nc" id="L59">                    body.setX(body.getX() - 1);</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">                    if (Math.abs(body.getX() - 128) &lt; 1) {</span>
+<span class="nc" id="L61">                        body.setX(128);</span>
+                    }
+                } else {
+<span class="nc" id="L64">                    atCounter = true;</span>
+                }
+            }
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        } else if (selfComplete) {</span>
+            // if an order is complete, move the customer offscreen to the right
+<span class="nc" id="L69">            body.setX(body.getX() + 50 * Gdx.graphics.getDeltaTime());</span>
+        } else {
+        }
+<span class="nc" id="L72">    }</span>
+    /*
+        * Method to generate a random order
+        * @param none
+        * @return none
+     */
+    private Order generateOrder() throws IOException {
+<span class="fc" id="L79">        FoodMenu menu = new FoodMenu(bakingUnlocked);</span>
+<span class="fc" id="L80">        return menu.getRandomOrder();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

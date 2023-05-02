@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Powerup.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Powerups</a> &gt; <span class="el_source">Powerup.java</span></div><h1>Powerup.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Powerups;
+
+public class Powerup {
+    private String name;
+    private long duration;
+    private long initialisedTime;
+    private float value;
+    private int price;
+    private int timesBought;
+    /*
+        * Constructor for the powerup
+        * @param name the name of the powerup
+        * @param duration the duration of the powerup
+        * @param initialisedTime the time the powerup was initialised
+        * @param value the value of the powerup
+        * @param price the price of the powerup
+        * @param timesBought the number of times the powerup has been bought
+        * @return none
+     */
+    public Powerup(String name, long duration, long initialisedTime, float value, int price, int timesBought,
+<span class="fc" id="L21">            int _priceIncrease) {</span>
+<span class="fc" id="L22">        this.name = name;</span>
+<span class="fc" id="L23">        this.duration = duration;</span>
+<span class="fc" id="L24">        this.initialisedTime = initialisedTime;</span>
+<span class="fc" id="L25">        this.value = value;</span>
+<span class="fc" id="L26">        this.price = price + _priceIncrease;</span>
+<span class="fc" id="L27">        this.timesBought = timesBought;</span>
+
+<span class="fc" id="L29">    }</span>
+    /*
+        * Increments the number of times the powerup has been bought
+        * @param none
+        * @return none
+     */
+    public void incrementTimesBought() {
+<span class="fc" id="L36">        timesBought++;</span>
+<span class="fc" id="L37">    }</span>
+    /*
+        * Returns the number of times the powerup has been bought
+        * @param none
+        * @return timesBought the number of times the powerup has been bought
+     */
+    public int getTimesBought() {
+<span class="fc" id="L44">        return timesBought;</span>
+    }
+    /*
+        * Returns the name of the powerup
+        * @param none
+        * @return name the name of the powerup
+     */
+    public String getName() {
+<span class="nc" id="L52">        return name;</span>
+    }
+    /*
+        * Returns the value of the powerup
+        * @param none
+        * @return value the value of the powerup
+     */
+    public float getValue() {
+<span class="fc" id="L60">        return value;</span>
+    }
+    /*
+        * Sets the value of the powerup
+        * @param _value the value of the powerup
+        * @return none
+     */
+    public void setValue(float _value) {
+<span class="fc" id="L68">        value = _value;</span>
+<span class="fc" id="L69">    }</span>
+    /*
+        * Sets the duration of the powerup
+        * @param _duration the duration of the powerup
+        * @return none
+     */
+    public void setInitialisedTime(long initialisedTime) {
+<span class="fc" id="L76">        this.initialisedTime = initialisedTime;</span>
+<span class="fc" id="L77">    }</span>
+    /*
+        * Returns the price of the powerup
+        * @param none
+        * @return price the price of the powerup
+     */
+    public int getPrice() {
+<span class="fc" id="L84">        return price;</span>
+    }
+    /*
+        * Returns the duration of the powerup
+        * @param none
+        * @return duration the duration of the powerup
+     */
+    public long getDuration() {
+<span class="nc" id="L92">        return duration;</span>
+    }
+    /*
+        * Returns the time the powerup was initialised
+        * @param none
+        * @return initialisedTime the time the powerup was initialised
+     */
+    public long getInitialisedTime() {
+<span class="fc" id="L100">        return initialisedTime;</span>
+    }
+    /*
+        * Returns the time the powerup will expire
+        * @param none
+        * @return initialisedTime + duration the time the powerup will expire
+     */
+    public long getExpiryTime() {
+<span class="nc" id="L108">        return initialisedTime + duration;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

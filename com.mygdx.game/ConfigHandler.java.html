@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConfigHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game</a> &gt; <span class="el_source">ConfigHandler.java</span></div><h1>ConfigHandler.java</h1><pre class="source lang-java linenums">package com.mygdx.game;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import org.json.JSONObject;
+
+import com.badlogic.gdx.Gdx;
+
+import static java.nio.file.Files.writeString;
+import static java.nio.file.Path.of;
+
+public class ConfigHandler {
+    JSONObject config;
+<span class="fc" id="L18">    String configPath = &quot;./config.json&quot;;</span>
+    /*
+        * Creates a new config handler
+        *
+        * @throws IOException if the config file cannot be created or read
+        *
+        * @param none
+        *
+        * @return none
+
+        *
+     */
+<span class="fc" id="L30">    public ConfigHandler() throws IOException {</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        if (!Files.exists(Paths.get(configPath))) {</span>
+<span class="nc" id="L32">            Files.createFile(Paths.get(configPath));</span>
+<span class="nc" id="L33">            Files.write(Paths.get(configPath), &quot;{\&quot;difficulty\&quot;:\&quot;Easy\&quot;,\&quot;muteMusic\&quot;:false,\&quot;customersToServe\&quot;:5,\&quot;maxTimeToServe\&quot;:10}&quot;.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);</span>
+        }
+<span class="fc" id="L35">        String content = new String(Files.readAllBytes(Paths.get(configPath)));</span>
+<span class="fc" id="L36">        config = new JSONObject(content);</span>
+<span class="fc" id="L37">    }</span>
+
+    /*
+     * Creates a new config handler
+     *
+     * @throws IOException if the config file cannot be created or read
+     *
+     * @param path the path to the config file
+     *
+     * @return none
+     *
+     */
+<span class="fc" id="L49">    public ConfigHandler(String path) throws IOException {</span>
+<span class="fc" id="L50">        configPath = path;</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (!Files.exists(Paths.get(configPath))) {</span>
+<span class="fc" id="L52">            Files.createFile(Paths.get(configPath));</span>
+<span class="fc" id="L53">            Files.write(Paths.get(configPath), &quot;{\&quot;difficulty\&quot;:\&quot;Easy\&quot;,\&quot;muteMusic\&quot;:false,\&quot;customersToServe\&quot;:5,\&quot;maxTimeToServe\&quot;:10}&quot;.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);</span>
+        }
+<span class="fc" id="L55">        String content = new String(Files.readAllBytes(Paths.get(configPath)));</span>
+<span class="fc" id="L56">        config = new JSONObject(content);</span>
+<span class="fc" id="L57">    }</span>
+
+<span class="fc" id="L59">    public ConfigHandler(JSONObject config) {</span>
+<span class="fc" id="L60">        this.config = config;</span>
+<span class="fc" id="L61">    }</span>
+
+    /*
+        * Sets the config (used for testing)
+        *
+        * @param config the config
+        * @return none
+     */
+    public void setConfig(JSONObject config) {
+<span class="nc" id="L70">        this.config = config;</span>
+<span class="nc" id="L71">    }</span>
+
+    /*
+        * Gets the config
+        *
+        * @param none
+        * @return the config
+     */
+    public JSONObject getConfig() {
+<span class="fc" id="L80">        return config;</span>
+    }
+    /*
+        * Gets the customers to serve
+        *
+        * @param none
+        * @return the customers to serve
+     */
+    public int getCustomersToServe() {
+<span class="fc" id="L89">        return config.getInt(&quot;customersToServe&quot;);</span>
+    }
+
+    /*
+        * Gets the difficulty
+        *
+        * @param none
+        * @return difficulty
+     */
+    public String getDifficulty() {
+<span class="fc" id="L99">        return config.getString(&quot;difficulty&quot;);</span>
+    }
+    /*
+        * Gets the mute mode
+        *
+        * @param none
+        * @return mute mode
+     */
+    public boolean muteMode() {
+<span class="fc" id="L108">        return config.getBoolean(&quot;muteMusic&quot;);</span>
+    }
+    /*
+        * Sets the customers to serve
+        *
+        * @param customersToServe the customers to serve
+        * @return none
+     */
+    public void setCustomersToServe(int customersToServe) {
+<span class="fc" id="L117">        config.put(&quot;customersToServe&quot;, customersToServe);</span>
+<span class="fc" id="L118">        saveConfig();</span>
+<span class="fc" id="L119">    }</span>
+    /*
+        * Sets the mute mode
+        *
+        * @param muteMode the mute mode
+        * @return none
+     */
+    public void setMuteMode(boolean muteMode) {
+<span class="fc" id="L127">        config.put(&quot;muteMusic&quot;, muteMode);</span>
+<span class="fc" id="L128">        saveConfig();</span>
+<span class="fc" id="L129">    }</span>
+    /*
+        * Sets the difficulty
+        *
+        * @param difficulty the difficulty
+        * @return none
+     */
+    public void setDifficulty(String difficulty) {
+<span class="nc" id="L137">        config.put(&quot;difficulty&quot;, difficulty);</span>
+<span class="nc" id="L138">        saveConfig();</span>
+<span class="nc" id="L139">    }</span>
+    /*
+        * Saves the config
+        *
+        * @param none
+        * @return none
+     */
+    private void saveConfig() {
+        try {
+<span class="fc" id="L148">            Files.write(Paths.get(configPath), config.toString().getBytes(), StandardOpenOption.TRUNCATE_EXISTING);</span>
+<span class="nc" id="L149">        } catch (IOException e) {</span>
+<span class="nc" id="L150">            System.err.println(&quot;Error saving config: &quot; + e.getMessage());</span>
+<span class="fc" id="L151">        }</span>
+<span class="fc" id="L152">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

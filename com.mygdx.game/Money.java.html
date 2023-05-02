@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Money.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game</a> &gt; <span class="el_source">Money.java</span></div><h1>Money.java</h1><pre class="source lang-java linenums">package com.mygdx.game;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.mygdx.game.Screens.GameScreen;
+
+public class Money {
+
+    private int currentMoney;
+    private BitmapFont font;
+    private PiazzaPanic game;
+    private String difficulty;
+
+    private double multiplier;
+
+    /*
+        * Constructor for the Money class
+        * @param _game the game object
+        * @param difficulty the difficulty of the game
+     */
+<span class="fc" id="L21">    public Money(PiazzaPanic _game, String difficulty) {</span>
+<span class="fc" id="L22">        this.font = new BitmapFont();</span>
+<span class="fc" id="L23">        font.setColor(new Color(0.0f, 1.0f, 0.39607844f, 1.0f));</span>
+<span class="fc" id="L24">        font.getData().setScale(0.45f);</span>
+<span class="fc" id="L25">        this.currentMoney = 0;</span>
+<span class="fc" id="L26">        this.game = _game;</span>
+<span class="fc" id="L27">        this.difficulty = difficulty;</span>
+<span class="fc" id="L28">        this.multiplier = 1.0;</span>
+<span class="fc" id="L29">    }</span>
+    /*
+        * Constructor for the Money class
+        * @param _game the game object
+        * @param difficulty the difficulty of the game
+     */
+<span class="nc" id="L35">    public Money(PiazzaPanic _game, BitmapFont font) {</span>
+<span class="nc" id="L36">        this.font = font;</span>
+<span class="nc" id="L37">        font.setColor(new Color(0.52156866f, 0.73333335f, 0.39607844f, 1.0f));</span>
+<span class="nc" id="L38">        font.getData().setScale(0.45f);</span>
+<span class="nc" id="L39">        this.currentMoney = 0;</span>
+<span class="nc" id="L40">        this.game = _game;</span>
+<span class="nc" id="L41">        this.multiplier = 1.0;</span>
+<span class="nc" id="L42">    }</span>
+    /*
+        * Adds money to the current money
+        * @param amount the amount of money to add
+     */
+    public void addMoney(int amount) {
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        if (difficulty.equals(&quot;Easy&quot;)) {</span>
+<span class="fc" id="L49">            currentMoney += amount;</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        } else if (difficulty.equals(&quot;Medium&quot;)) {</span>
+<span class="nc" id="L51">            currentMoney += amount * 0.9;</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        } else if (difficulty.equals(&quot;Hard&quot;)) {</span>
+<span class="nc" id="L53">            currentMoney += amount * 0.7;</span>
+        }
+<span class="fc" id="L55">    }</span>
+    /*
+        * Gets the current money
+        * @return the current money
+     */
+    public int getCurrentMoney() {
+<span class="fc" id="L61">        return currentMoney;</span>
+    }
+    /*
+        * Removes money from the current money
+        * @param amount the amount of money to remove
+     */
+    public void removeMoney(int amount) {
+<span class="fc" id="L68">        currentMoney -= amount;</span>
+<span class="fc" id="L69">    }</span>
+    /*
+        * Adds a multiplier to the current multiplier
+     */
+    public void addMultiplier() {
+<span class="nc" id="L74">        multiplier = multiplier + 0.5;</span>
+<span class="nc" id="L75">    }</span>
+    /*
+        * Render method for the money class
+        *
+        * @param none
+        * @return none
+     */
+    public void render() {
+<span class="nc" id="L83">        game.batch.begin();</span>
+<span class="nc" id="L84">        font.draw(game.batch, &quot;$&quot; + currentMoney, 127, 132);</span>
+<span class="nc" id="L85">        game.batch.end();</span>
+<span class="nc" id="L86">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
