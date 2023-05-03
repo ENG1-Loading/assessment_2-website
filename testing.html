@@ -241,8 +241,46 @@
            <br>
            <h3>Manual testing</h3>
 
-           <p>We achieved 77% coverage for our automated testing, the testing that was not covered is due to mainly the fact that they are ui components, such as render functions or functions whos primary job is to manipulate UI components. For example instead of writing automated tests for things like click events we went the much more efficient way of testing during development by running the game clicking the button and then iterating this process during any changes and then ultimately testing at the end of the functions development. This made more sense to use that an automated test due to the fact that everytime we tested a different function it was likely that we would have to click one of these clickables and that would tell use whether it was working as expected as expected. To test the functional aspect of click components we refactored the click events to move the code used in the click to its own seperate function, then we can write tests for the functionality and manually test that the actual click action works.</p>
-           <p>In the screen package, most notabely the gamescreen class we wrote automated tests for all functions whose sole purpose was something other than modifying how the game looks. Then for things that did modify the UI we observed what changes were present in the UI upon running and doing different actions. We also used print statements to see what was happening in the internal runnings. For example when implementing the third chef the station collision was broken, a criticial part in finding the solution to this was using print statements to print out current stations this way we could see where things were going wrong and what we needed to modify to fix the bug.</p>
+           <p>We achieved 77% coverage for our automated testing, the testing that was not covered is 
+            due to mainly the fact that they are ui components, such as render functions or functions 
+            whose primary job is to manipulate UI components. For example instead of writing 
+            automated tests for things like click events we went the much more efficient way of testing 
+            during development by running the game clicking the button and then iterating this process 
+            during any changes and then ultimately testing at the end of the functions development. This 
+            made more sense to use than an automated test due to the fact that everytime we tested a 
+            different function it was likely that we would have to click one of these clickables and that 
+            would tell us whether it was working as expected. To test the functional aspect of click 
+            components we refactored the click events to move the code used in the click to its own 
+            separate function, then we can write tests for the functionality and manually test that the 
+            actual click action works.<br>
+            In the screen package, most notably the gamescreen class, we wrote automated tests for all 
+            functions whose sole purpose was something other than modifying how the game looks. 
+            Then for things that did modify the UI we observed what changes were present in the UI 
+            upon running and doing different actions. We also used print statements to see what was 
+            happening in the internal runnings. For example when implementing the third chef the station 
+            collision was broken, a critical part in finding the solution to this was using print statements to 
+            print out current stations this way we could see where things were going wrong and what we 
+            needed to modify to fix the bug.<br>
+            There were some components of our project that we could not test due to our headless 
+            testing environment, these tests were all either methods used by the UI or UI components 
+            themselves. To get around this we used forms of manual testing to verify that what the 
+            components did is what was expected of them. One way we did this was using a mixture of 
+            Tiled to open our map, along with printing co-ordinates of cooks/customers to verify that they 
+            were going to the correct place. The process of this was as follows, we opened up our 
+            pixmap in Tiled, hovered our mouse where we expected the player to be, noted down the 
+            coordinates of that place, made the action that would make the cook move to that place and 
+            then print out the cooks current coordinates to cross reference. <br>
+            Another way we manually tested was to add a line to the code that would perform an action. 
+            An example of this would be to verify that the rep was being displayed correctly. We added a 
+            key listener that upon being clicked would decrement the rep counter variable and we looked 
+            to make sure that it was visually being decremented too. <br>
+            We verified all the textures were being shown correctly by adding them in, bringing them to 
+            the front and making sure there were no visual bugs with it. Then moving them to where they 
+            needed to be, performing the action that should show them, and then verifying that they 
+            were there.<br>
+            We also slightly refactored the gamescreen code to move functions that weren’t 
+            manipulating the UI (like our customersToServe()) function to a helpers class that let us test 
+            the functionality of the function without having to interact with the UI</p>
            
            </div>
           </div>
